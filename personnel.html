@@ -399,8 +399,8 @@
     badge.classList.remove('hidden');
   }
   // Mesaj badge
-  const userId0 = user ? user.id : null;
-  const unreadMsgCount = MESSAGES.filter(m => m.to === userId0 && !m.read).length;
+  const currentUserId = user ? user.id : null;
+  const unreadMsgCount = MESSAGES.filter(m => m.to === currentUserId && !m.read).length;
   if (unreadMsgCount > 0) {
     const msgBadge = document.getElementById('msg-badge');
     if (msgBadge) { msgBadge.textContent = unreadMsgCount; msgBadge.classList.remove('hidden'); }
@@ -789,14 +789,22 @@
     // Fill recipient select in modal
     const toSel = document.getElementById('new-msg-to');
     if (toSel && toSel.options.length === 1) {
-      PERSONNEL.filter(p => p.id !== userId).forEach(p => {
-        toSel.innerHTML += `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName)}</option>`;
-      });
+      const opts = PERSONNEL.filter(p => p.id !== userId).map(p =>
+        `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName)}</option>`
+      ).join('');
+      toSel.innerHTML += opts;
     }
     const projSelMsg = document.getElementById('new-msg-project');
     if (projSelMsg && projSelMsg.options.length === 1) {
-      PROJECTS.forEach(p => {
-        projSelMsg.innerHTML += `<option value="${p.id}">${escapeHtml(p.name)}</option>`;
+      projSelMsg.innerHTML += PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    }
+    // File attachment listener (registered once during init)
+    const fileInput = document.getElementById('new-msg-file');
+    if (fileInput) {
+      fileInput.addEventListener('change', function() {
+        const names = Array.from(this.files).map(f => f.name).join(', ');
+        const fileNameEl = document.getElementById('new-msg-file-name');
+        if (fileNameEl) fileNameEl.textContent = names || '';
       });
     }
     showMsgTab('inbox');
@@ -857,18 +865,15 @@
     const toSel = document.getElementById('new-msg-to');
     if (toSel && toSel.options.length === 1) {
       const userId = user ? user.id : null;
-      PERSONNEL.filter(p => p.id !== userId).forEach(p => {
-        toSel.innerHTML += `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName)}</option>`;
-      });
+      const opts = PERSONNEL.filter(p => p.id !== userId).map(p =>
+        `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName)}</option>`
+      ).join('');
+      toSel.innerHTML += opts;
     }
     const projSelMsg = document.getElementById('new-msg-project');
     if (projSelMsg && projSelMsg.options.length === 1) {
-      PROJECTS.forEach(p => { projSelMsg.innerHTML += `<option value="${p.id}">${escapeHtml(p.name)}</option>`; });
+      projSelMsg.innerHTML += PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
     }
-    document.getElementById('new-msg-file').addEventListener('change', function() {
-      const names = Array.from(this.files).map(f => f.name).join(', ');
-      document.getElementById('new-msg-file-name').textContent = names || '';
-    });
   };
 
   window.submitNewMessage = function() {
@@ -883,7 +888,7 @@
     document.getElementById('new-msg-to').value = '';
     document.getElementById('new-msg-subject').value = '';
     document.getElementById('new-msg-text').value = '';
-    showToast(`✅ Mesajınız ${escapeHtml(toP ? toP.name : 'alıcı')}ya gönderildi!`, 'success');
+    showToast(`✅ Mesajınız ${escapeHtml(toP ? toP.name : 'alıcıya')} gönderildi!`, 'success');
   };
 
   // ---- AI SOHBET (Personel) ----
