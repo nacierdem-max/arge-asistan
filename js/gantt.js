@@ -78,6 +78,15 @@ const GanttChart = {
     const months = GANTT_MONTHS.slice(GANTT_START_OFFSET, GANTT_START_OFFSET + GANTT_VISIBLE_MONTHS);
     const totalCols = GANTT_VISIBLE_MONTHS;
 
+    // Dynamic today position
+    const demoToday = new Date('2026-05-01');
+    const ganttStartDate = new Date(2026, GANTT_START_OFFSET, 1);
+    const ganttEndDate = new Date(2026, GANTT_START_OFFSET + GANTT_VISIBLE_MONTHS, 1);
+    const ganttTotalMs = ganttEndDate - ganttStartDate;
+    const todayMs = demoToday - ganttStartDate;
+    const todayPct = Math.max(0, Math.min(100, (todayMs / ganttTotalMs) * 100)).toFixed(1);
+    const todayVisible = todayMs >= 0 && todayMs <= ganttTotalMs;
+
     let html = `
     <div class="overflow-x-auto">
       <div class="min-w-[900px]">
@@ -88,17 +97,18 @@ const GanttChart = {
             ${months.map(m => `<div class="text-center text-xs font-semibold text-gray-500 py-1 border-l border-gray-200">${m} '26</div>`).join('')}
           </div>
         </div>
-        <!-- Today indicator helper text -->
+        <!-- Today indicator header -->
         <div class="flex mb-3">
           <div class="w-56 flex-shrink-0"></div>
           <div class="flex-1 relative h-1 bg-gray-100 rounded">
-            <!-- May = index 4, offset from start (1) = 3, position = 3.5/8 -->
-            <div class="absolute top-0 h-full w-0.5 bg-red-400" style="left:${((3.5 / totalCols) * 100).toFixed(1)}%">
+            ${todayVisible ? `<div class="absolute top-0 h-full w-0.5 bg-red-400" style="left:${todayPct}%">
               <span class="absolute -top-5 left-1 text-xs text-red-500 whitespace-nowrap font-medium">▼ Bugün</span>
-            </div>
+            </div>` : ''}
           </div>
         </div>
-        <!-- Project rows -->
+        <!-- Project rows container with today line overlay -->
+        <div class="relative">
+          ${todayVisible ? `<div class="absolute top-0 bottom-0 w-0.5 bg-red-400/40 z-10 pointer-events-none" style="left: calc(224px + ${todayPct}% * (100% - 224px) / 100)" title="Bugün"></div>` : ''}
     `;
 
     if (this.filtered.length === 0) {
@@ -152,6 +162,7 @@ const GanttChart = {
     }
 
     html += `
+        </div>
       </div>
     </div>
     <!-- Legend -->
@@ -160,6 +171,7 @@ const GanttChart = {
       <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-blue-500"></div><span class="text-xs text-gray-600">Devam Ediyor</span></div>
       <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-gray-400"></div><span class="text-xs text-gray-600">Planlanan</span></div>
       <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded bg-red-500"></div><span class="text-xs text-gray-600">Riskli</span></div>
+      ${todayVisible ? `<div class="flex items-center gap-1.5"><div class="w-0.5 h-3 bg-red-400"></div><span class="text-xs text-gray-600">Bugün</span></div>` : ''}
     </div>
     `;
 

@@ -101,6 +101,7 @@ body {
 /* Kart hover efekti */
 .stat-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .stat-card:hover {
@@ -363,5 +364,66 @@ body {
   .kanban-board {
     flex-direction: column;
   }
+}
+
+/* View mode buttons */
+.view-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.view-btn:hover { background: #f3f4f6; }
+.view-btn.active { background: #1d4ed8; color: white; border-color: #1d4ed8; }
+
+/* Notification bar pulse */
+@keyframes notifPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0); }
+}
+.notif-pulse { animation: notifPulse 2s ease-in-out infinite; }
+
+/* Clickable section header */
+.section-header-link {
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.section-header-link:hover {
+  color: #1d4ed8;
+}
+
+/* Medium view timeline bars */
+.timeline-bar-wrap {
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+.timeline-bar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 5px;
+  min-width: 3px;
+}
+
+/* Wide view cards */
+.wide-person-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: white;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: box-shadow 0.15s;
+}
+.wide-person-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 

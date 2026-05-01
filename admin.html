@@ -82,11 +82,22 @@
 
     <!-- ===== DASHBOARD ===== -->
     <div id="section-dashboard" class="section-panel hidden">
-      <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-gray-800">📊 Ar-Ge Dashboard</h2>
         <button onclick="openNewProjectModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
           ➕ Yeni Proje
         </button>
+      </div>
+      <!-- Bildirim Barı -->
+      <div id="notification-bar" onclick="openNotifPanel()" class="notif-pulse bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 mb-5 flex items-center justify-between cursor-pointer hover:shadow-md transition-all">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">🔔</span>
+          <div>
+            <span id="notif-count" class="font-semibold text-amber-800">3 yeni bildirim</span>
+            <span class="text-sm text-amber-600 ml-2">— Tıklayın</span>
+          </div>
+        </div>
+        <span class="text-amber-400 text-lg font-bold">→</span>
       </div>
       <!-- KPI Kartlar (JS ile doldurulur) -->
       <div id="kpi-cards" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
@@ -114,11 +125,11 @@
       <!-- Departman özeti -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <h3 class="font-semibold text-gray-800 mb-4">👥 Departman Özeti</h3>
+          <h3 onclick="Nav.show('personnel')" class="font-semibold text-gray-800 mb-4 section-header-link">👥 Departman Özeti <span class="text-xs text-blue-500 font-normal">→</span></h3>
           <div id="dashboard-departments"></div>
         </div>
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <h3 class="font-semibold text-gray-800 mb-4">⚠️ Son Riskler</h3>
+          <h3 onclick="Nav.show('risks')" class="font-semibold text-gray-800 mb-4 section-header-link">⚠️ Son Riskler <span class="text-xs text-blue-500 font-normal">→</span></h3>
           <div id="dashboard-risks"></div>
         </div>
       </div>
@@ -264,6 +275,12 @@
           </button>
         </div>
       </div>
+      <!-- Görünüm Modu Butonları -->
+      <div class="flex items-center gap-2 mb-4">
+        <button onclick="setPersonnelView('compact')" id="view-compact" class="view-btn active">≡ Kompakt</button>
+        <button onclick="setPersonnelView('medium')" id="view-medium" class="view-btn">▤ Orta</button>
+        <button onclick="setPersonnelView('wide')" id="view-wide" class="view-btn">▦ Geniş</button>
+      </div>
       <!-- Filtreler -->
       <div class="filter-bar p-4 mb-4">
         <div class="grid grid-cols-2 gap-3">
@@ -405,6 +422,17 @@
   </div>
 </div>
 
+<!-- Bildirim Paneli -->
+<div id="modal-notif" class="hidden fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[80vh] flex flex-col">
+    <div class="flex items-center justify-between px-5 py-4 border-b flex-shrink-0">
+      <h3 class="font-bold text-gray-800">🔔 Bildirimler</h3>
+      <button onclick="document.getElementById('modal-notif').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
+    </div>
+    <div id="notif-panel-content" class="p-4 space-y-2 overflow-y-auto flex-1"></div>
+  </div>
+</div>
+
 <script>
   // Auth check
   Auth.checkAuth();
@@ -413,8 +441,70 @@
   // Init navigasyon — dashboard başlangıç
   Nav.init('dashboard');
 
+  // ---- BİLDİRİM PANELİ ----
+  window.openNotifPanel = function() {
+    const unread = NOTIFICATIONS.filter(n => !n.read);
+    const icons = { risk: '🔴', warning: '🟡', info: '🚀', deadline: '⏰', file: '📁' };
+    const colors = {
+      risk: 'border-red-200 bg-red-50',
+      warning: 'border-yellow-200 bg-yellow-50',
+      info: 'border-blue-200 bg-blue-50',
+      deadline: 'border-orange-200 bg-orange-50',
+      file: 'border-gray-200 bg-gray-50'
+    };
+    function getNavTarget(n) {
+      if (n.type === 'risk' || n.type === 'warning') return "Nav.show('risks')";
+      if (n.type === 'deadline') return "Nav.show('gantt')";
+      if (n.type === 'file') return "Nav.show('files')";
+      return "Nav.show('all-notes')";
+    }
+    document.getElementById('notif-panel-content').innerHTML = NOTIFICATIONS.map(n => `
+      <div onclick="${getNavTarget(n)}; document.getElementById('modal-notif').classList.add('hidden');"
+           class="rounded-xl p-3 border ${colors[n.type] || colors.info} cursor-pointer hover:shadow-md transition-all ${n.read ? 'opacity-70' : ''}">
+        <div class="flex items-start gap-3">
+          <span class="text-lg mt-0.5 flex-shrink-0">${icons[n.type] || 'ℹ️'}</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-semibold text-gray-800">${escapeHtml(n.title)}</span>
+              <span class="text-xs text-gray-400 flex-shrink-0">${n.time}</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-0.5">${escapeHtml(n.text)}</p>
+          </div>
+          ${!n.read ? '<span class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>' : ''}
+        </div>
+      </div>
+    `).join('');
+    document.getElementById('modal-notif').classList.remove('hidden');
+    // Mark all as read after opening
+    NOTIFICATIONS.forEach(n => { n.read = true; });
+    const bar = document.getElementById('notification-bar');
+    if (bar) {
+      document.getElementById('notif-count').textContent = '0 yeni bildirim';
+      bar.classList.remove('notif-pulse');
+    }
+  };
+
+  // ---- PERSONEL GÖRÜNÜM MODU ----
+  let personnelViewMode = 'compact';
+  window.setPersonnelView = function(mode) {
+    personnelViewMode = mode;
+    ['compact', 'medium', 'wide'].forEach(m => {
+      const btn = document.getElementById('view-' + m);
+      if (btn) {
+        btn.classList.toggle('active', m === mode);
+      }
+    });
+    renderPersonnel();
+  };
+
   // ---- DASHBOARD INIT ----
   window.init_dashboard = function() {
+    // --- Bildirim barı güncelle ---
+    const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
+    const notifCountEl = document.getElementById('notif-count');
+    if (notifCountEl) {
+      notifCountEl.textContent = unreadCount > 0 ? `${unreadCount} yeni bildirim` : 'Tüm bildirimler okundu';
+    }
     // --- KPI Kartları ---
     const totalProjects = PROJECTS.length;
     const inProgress = PROJECTS.filter(p => p.status === 'devam').length;
@@ -425,7 +515,7 @@
     const leadCount = PERSONNEL.filter(p => p.role_level === 'lead').length;
 
     document.getElementById('kpi-cards').innerHTML = `
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-blue-200" onclick="Nav.show('gantt')" title="Gantt'a git">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Aktif Proje</span>
           <span class="text-2xl">🚀</span>
@@ -434,7 +524,7 @@
         <div class="text-xs text-gray-400 mt-1">Toplam proje sayısı</div>
         <div class="text-xs mt-2 kpi-trend-up">↑ ${inProgress} devam ediyor</div>
       </div>
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-blue-200" onclick="Nav.show('gantt')" title="Gantt'a git">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Devam Eden</span>
           <span class="text-2xl">⚙️</span>
@@ -443,7 +533,7 @@
         <div class="text-xs text-gray-400 mt-1">Aktif geliştirme</div>
         <div class="text-xs mt-2 ${completed > 0 ? 'kpi-trend-up' : 'text-gray-400'}">✅ ${completed} tamamlandı</div>
       </div>
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-red-200" onclick="Nav.show('risks')" title="Riskler'e git">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Risk</span>
           <span class="text-2xl">⚠️</span>
@@ -452,7 +542,7 @@
         <div class="text-xs text-gray-400 mt-1">Aktif risk bildirimi</div>
         <div class="text-xs mt-2 ${highRisks > 0 ? 'kpi-trend-down' : 'text-gray-400'}">🔴 ${highRisks} yüksek öncelik</div>
       </div>
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-purple-200" onclick="Nav.show('personnel')" title="Personel Yönetimi'ne git">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ar-Ge Kadrosu</span>
           <span class="text-2xl">👥</span>
@@ -772,8 +862,24 @@
       if (person) { renderPersonDetail(person, container); return; }
     }
 
-    // Özet tablo — tüm personel veya departman filtreli
+    // Özet — tüm personel veya departman filtreli
     const list = deptId ? PERSONNEL.filter(p => p.dept === parseInt(deptId)) : PERSONNEL;
+
+    if (personnelViewMode === 'medium') {
+      renderPersonnelMedium(list, container);
+    } else if (personnelViewMode === 'wide') {
+      renderPersonnelWide(list, container);
+    } else {
+      renderPersonnelCompact(list, container);
+    }
+  }
+
+  function renderPersonnelCompact(list, container) {
+    // Gantt date helpers for mini progress
+    const ganttStart = new Date('2026-02-01');
+    const ganttEnd = new Date('2026-11-30');
+    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
+    const today = new Date('2026-05-01');
 
     container.innerHTML = `
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
@@ -782,7 +888,7 @@
             <tr>
               <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">İsim</th>
               <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Aktif Proje(ler)</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">İlerleme</th>
               <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Devam</th>
               <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Planlanan</th>
               <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Tamamlanan</th>
@@ -792,21 +898,29 @@
           <tbody>
             ${list.map(p => {
               const tasks = p.tasks || [];
-              const inProgress = tasks.filter(t => t.status === 'in_progress').length;
+              const inPr = tasks.filter(t => t.status === 'in_progress').length;
               const planned = tasks.filter(t => t.status === 'planned').length;
               const done = tasks.filter(t => t.status === 'done').length;
-              const activeProjects = [...new Set(tasks.map(t => t.project))].slice(0, 2).join(', ') || '—';
+              const total = tasks.length;
+              const donePct = total > 0 ? Math.round(done / total * 100) : 0;
               return `<tr class="border-b border-gray-50 hover:bg-blue-50 cursor-pointer transition-colors" onclick="document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();">
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-full ${p.role_level === 'lead' ? 'bg-purple-100' : 'bg-blue-100'} flex items-center justify-center text-xs font-bold ${p.role_level === 'lead' ? 'text-purple-700' : 'text-blue-700'} flex-shrink-0" aria-label="${escapeHtml(p.name)} avatarı">${escapeHtml(p.avatar)}</div>
+                    <div class="w-7 h-7 rounded-full ${p.role_level === 'lead' ? 'bg-purple-100' : 'bg-blue-100'} flex items-center justify-center text-xs font-bold ${p.role_level === 'lead' ? 'text-purple-700' : 'text-blue-700'} flex-shrink-0">${escapeHtml(p.avatar)}</div>
                     <a href="#" data-modal-person-id="${p.id}" onclick="event.stopPropagation()" class="font-medium text-gray-800 hover:text-blue-600 hover:underline">${escapeHtml(p.name)}</a>
                   </div>
                 </td>
                 <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</td>
-                <td class="px-4 py-3 hidden lg:table-cell text-xs text-blue-700 max-w-xs truncate">${escapeHtml(activeProjects)}</td>
+                <td class="px-4 py-3 hidden lg:table-cell">
+                  <div class="flex items-center gap-2">
+                    <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden" style="min-width:60px">
+                      <div class="h-full bg-blue-500 rounded-full" style="width:${donePct}%"></div>
+                    </div>
+                    <span class="text-xs text-gray-400">${donePct}%</span>
+                  </div>
+                </td>
                 <td class="px-3 py-3 text-center">
-                  ${inProgress > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">${inProgress}</span>` : '<span class="text-gray-300">—</span>'}
+                  ${inPr > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">${inPr}</span>` : '<span class="text-gray-300">—</span>'}
                 </td>
                 <td class="px-3 py-3 text-center hidden sm:table-cell">
                   ${planned > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">${planned}</span>` : '<span class="text-gray-300">—</span>'}
@@ -820,8 +934,171 @@
           </tbody>
         </table>
       </div>
-      <div class="text-xs text-gray-400 mt-2 text-right">${list.length} kişi listeleniyor. Satıra tıklayarak kişi detayını görüntüleyin.</div>
+      <div class="text-xs text-gray-400 mt-2 text-right">${list.length} kişi listeleniyor. Satıra tıklayarak detay görüntüleyin.</div>
     `;
+  }
+
+  function renderPersonnelMedium(list, container) {
+    // Timeline helpers
+    const ganttStart = new Date('2026-02-01');
+    const ganttEnd = new Date('2026-11-30');
+    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
+    const months = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+
+    function pctLeft(dateStr) {
+      const d = new Date(dateStr);
+      return Math.max(0, Math.min(100, Math.round((d - ganttStart) / (1000 * 60 * 60 * 24) / totalDays * 100)));
+    }
+    function pctWidth(startStr, endStr) {
+      const s = new Date(startStr);
+      const e = new Date(endStr);
+      const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
+      return Math.max(2, Math.round(days / totalDays * 100));
+    }
+
+    container.innerHTML = list.map(p => {
+      const tasks = p.tasks || [];
+      return `
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-3 cursor-pointer hover:border-blue-200 transition-all"
+           onclick="document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full ${p.role_level === 'lead' ? 'bg-purple-600' : 'bg-blue-600'} flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${escapeHtml(p.avatar)}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-semibold text-gray-800 text-sm">${escapeHtml(p.name)}</span>
+              ${getRoleBadge(p.role_level)}
+            </div>
+            <div class="text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])} — ${tasks.length} görev</div>
+          </div>
+          <div class="flex gap-3 text-center flex-shrink-0">
+            <div><div class="text-sm font-bold text-blue-600">${tasks.filter(t=>t.status==='in_progress').length}</div><div class="text-xs text-gray-400">Devam</div></div>
+            <div><div class="text-sm font-bold text-emerald-600">${tasks.filter(t=>t.status==='done').length}</div><div class="text-xs text-gray-400">Bitti</div></div>
+          </div>
+        </div>
+        ${tasks.length > 0 ? `
+        <div class="border-t border-gray-50 pt-2">
+          <div class="flex mb-1">
+            ${months.map(m => `<div class="flex-1 text-xs text-gray-300 text-center">${m}</div>`).join('')}
+          </div>
+          <div class="space-y-1.5">
+            ${tasks.map(t => {
+              const left = pctLeft(t.startDate);
+              const w = pctWidth(t.startDate, t.endDate);
+              const color = t.status === 'done' ? 'bg-emerald-400' : t.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300';
+              return `<div class="relative h-2 bg-gray-100 rounded-full overflow-hidden" title="${escapeHtml(t.title)}">
+                <div class="${color} absolute h-full rounded-full" style="left:${left}%; width:${w}%; min-width:4px;"></div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div class="flex gap-3 mt-1.5">
+            <span class="flex items-center gap-1 text-xs text-gray-400"><span class="w-2.5 h-1.5 rounded bg-emerald-400 inline-block"></span>Bitti</span>
+            <span class="flex items-center gap-1 text-xs text-gray-400"><span class="w-2.5 h-1.5 rounded bg-blue-500 inline-block"></span>Devam</span>
+            <span class="flex items-center gap-1 text-xs text-gray-400"><span class="w-2.5 h-1.5 rounded bg-gray-300 inline-block"></span>Plan</span>
+          </div>
+        </div>` : '<div class="text-xs text-gray-400 border-t border-gray-50 pt-2">Görev atanmamış</div>'}
+      </div>`;
+    }).join('') + `<div class="text-xs text-gray-400 mt-1 text-right">${list.length} kişi listeleniyor.</div>`;
+  }
+
+  function renderPersonnelWide(list, container) {
+    const today = new Date('2026-05-01');
+    const ganttStart = new Date('2026-02-01');
+    const ganttEnd = new Date('2026-11-30');
+    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
+    const months = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+
+    function pctLeft(dateStr) {
+      const d = new Date(dateStr);
+      return Math.max(0, Math.min(100, Math.round((d - ganttStart) / (1000 * 60 * 60 * 24) / totalDays * 100)));
+    }
+    function pctWidth(startStr, endStr) {
+      const s = new Date(startStr);
+      const e = new Date(endStr);
+      return Math.max(2, Math.round(Math.ceil((e - s) / (1000 * 60 * 60 * 24)) / totalDays * 100));
+    }
+    function remainBadge(endDate, status) {
+      if (status === 'done') return '<span class="text-xs text-emerald-600 font-medium">✅ Tamamlandı</span>';
+      const days = Math.ceil((new Date(endDate) - today) / (1000 * 60 * 60 * 24));
+      if (days < 0) return `<span class="text-xs text-red-500 font-semibold">⚠️ ${Math.abs(days)}g geçti</span>`;
+      if (days <= 7) return `<span class="text-xs text-orange-500 font-semibold">⏰ ${days}g kaldı</span>`;
+      return `<span class="text-xs text-gray-500">${days}g kaldı</span>`;
+    }
+    function taskBadge(s) {
+      if (s === 'in_progress') return '<span class="px-1.5 py-0.5 rounded text-xs bg-blue-100 text-blue-700">🔄</span>';
+      if (s === 'planned') return '<span class="px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600">📅</span>';
+      return '<span class="px-1.5 py-0.5 rounded text-xs bg-emerald-100 text-emerald-700">✅</span>';
+    }
+
+    container.innerHTML = list.map(p => {
+      const tasks = p.tasks || [];
+      const ip = tasks.filter(t => t.status === 'in_progress');
+      const pl = tasks.filter(t => t.status === 'planned');
+      const dn = tasks.filter(t => t.status === 'done');
+      return `
+      <div class="wide-person-card">
+        <!-- Kişi başlık -->
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-full ${p.role_level === 'lead' ? 'bg-purple-600' : 'bg-blue-600'} flex items-center justify-center text-white text-lg font-bold flex-shrink-0">${escapeHtml(p.avatar)}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-bold text-gray-800">${escapeHtml(p.name)}</span>
+              ${getRoleBadge(p.role_level)}
+            </div>
+            <div class="text-sm text-gray-500">${escapeHtml(p.role)}</div>
+            <div class="text-xs text-blue-600 mt-0.5">${escapeHtml(p.deptName)}</div>
+          </div>
+          <div class="flex gap-4">
+            <div class="text-center"><div class="text-lg font-bold text-blue-600">${ip.length}</div><div class="text-xs text-gray-400">Devam</div></div>
+            <div class="text-center"><div class="text-lg font-bold text-slate-500">${pl.length}</div><div class="text-xs text-gray-400">Plan</div></div>
+            <div class="text-center"><div class="text-lg font-bold text-emerald-600">${dn.length}</div><div class="text-xs text-gray-400">Bitti</div></div>
+          </div>
+          <button onclick="event.stopPropagation(); document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();"
+            class="text-xs text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors flex-shrink-0">
+            Detay →
+          </button>
+        </div>
+        ${tasks.length > 0 ? `
+        <!-- Görev tablosu -->
+        <div class="overflow-x-auto mb-3">
+          <table class="w-full text-xs data-table">
+            <thead><tr>
+              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Görev</th>
+              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold hidden sm:table-cell">Proje</th>
+              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Durum</th>
+              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold hidden sm:table-cell">Bitiş</th>
+              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Kalan</th>
+            </tr></thead>
+            <tbody>
+              ${[...ip, ...pl, ...dn].map(t => `<tr class="border-b border-gray-50">
+                <td class="px-2 py-1.5 font-medium text-gray-800">${escapeHtml(t.title)}</td>
+                <td class="px-2 py-1.5 hidden sm:table-cell">${t.projectId ? clickableProject(t.projectId, t.project) : escapeHtml(t.project || '')}</td>
+                <td class="px-2 py-1.5">${taskBadge(t.status)}</td>
+                <td class="px-2 py-1.5 text-gray-400 hidden sm:table-cell">${t.endDate || '—'}</td>
+                <td class="px-2 py-1.5">${remainBadge(t.endDate, t.status)}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+        <!-- Mini Gantt -->
+        <div class="bg-gray-50 rounded-xl p-3">
+          <div class="flex mb-1">
+            ${months.map(m => `<div class="flex-1 text-xs text-gray-400 text-center">${m}</div>`).join('')}
+          </div>
+          <div class="space-y-1.5">
+            ${tasks.map(t => {
+              const left = pctLeft(t.startDate);
+              const w = pctWidth(t.startDate, t.endDate);
+              const color = t.status === 'done' ? 'bg-emerald-400' : t.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300';
+              return `<div class="relative h-5 bg-white rounded-full overflow-hidden border border-gray-200" title="${escapeHtml(t.title)}">
+                <div class="${color} absolute h-full rounded-full flex items-center px-1 overflow-hidden" style="left:${left}%; width:${w}%; min-width:4px;">
+                  <span class="text-white text-xs truncate hidden sm:block">${escapeHtml(t.title)}</span>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>` : '<div class="text-xs text-gray-400 text-center py-3">Bu kişiye henüz görev atanmamış.</div>'}
+      </div>`;
+    }).join('') + `<div class="text-xs text-gray-400 mt-1 text-right">${list.length} kişi listeleniyor.</div>`;
   }
 
   function renderPersonDetail(person, container) {
