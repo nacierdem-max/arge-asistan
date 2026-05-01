@@ -177,6 +177,162 @@ const Modal = {
   }
 };
 
+// Tıklanabilir personel linki
+function clickablePerson(personId, name) {
+  const id = parseInt(personId, 10);
+  if (!id) return escapeHtml(name);
+  return `<a href="#" data-modal-person-id="${id}" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
+}
+
+// Tıklanabilir proje linki
+function clickableProject(projectId, name) {
+  const id = parseInt(projectId, 10);
+  if (!id) return escapeHtml(name);
+  return `<a href="#" data-modal-project-id="${id}" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
+}
+
+// Personel detay modal
+function showPersonDetail(personId) {
+  const person = PERSONNEL.find(p => p.id === personId);
+  if (!person) return;
+  const tasks = person.tasks || [];
+  const inProgress = tasks.filter(t => t.status === 'in_progress');
+  const planned = tasks.filter(t => t.status === 'planned');
+  const done = tasks.filter(t => t.status === 'done');
+  const notes = NOTES.filter(n => n.authorId === personId).slice(0, 5);
+  const risks = NOTES.filter(n => n.authorId === personId && n.category === 'risk');
+  const projects = PROJECTS.filter(p => p.members.includes(personId));
+
+  const content = `
+    <div class="space-y-4">
+      <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+        <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">${escapeHtml(person.avatar)}</div>
+        <div>
+          <div class="text-sm text-gray-600">${escapeHtml(person.role)}</div>
+          <div class="text-xs text-blue-600 mt-0.5">${escapeHtml(person.deptName)}</div>
+        </div>
+      </div>
+      ${projects.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">📊 Projeleri</div>
+        <div class="space-y-1.5">
+          ${projects.map(p => `
+          <div class="flex items-start justify-between gap-2 py-1 border-b border-gray-50 last:border-0">
+            <div class="min-w-0">${clickableProject(p.id, p.name)}</div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              ${getStatusBadge(p.status)}
+              <span class="text-xs text-gray-400 whitespace-nowrap hidden sm:block">${p.endDate}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      ${tasks.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">✅ Görevleri</div>
+        <div class="space-y-1">
+          ${[...inProgress, ...planned, ...done.slice(0, 2)].map(t => `
+          <div class="flex items-center justify-between py-1 border-b border-gray-50 last:border-0">
+            <span class="text-sm text-gray-700 truncate mr-2">${escapeHtml(t.title)}</span>
+            <span class="text-xs flex-shrink-0 ${t.status === 'done' ? 'text-green-600' : t.status === 'in_progress' ? 'text-blue-600' : 'text-gray-500'}">${t.status === 'done' ? '✅ Tamamlandı' : t.status === 'in_progress' ? '🔄 Devam' : '📅 Planlanan'}</span>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      ${notes.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">📝 Son Notları</div>
+        <div class="space-y-2">
+          ${notes.map(n => `
+          <div class="border-l-2 border-blue-200 pl-2">
+            <div class="text-xs text-gray-600">${escapeHtml(n.text.replace('⚠️ ', '').slice(0, 100))}${n.text.length > 100 ? '...' : ''}</div>
+            <div class="text-xs text-gray-400 mt-0.5">${n.date} — ${n.projectId ? clickableProject(n.projectId, n.project) : escapeHtml(n.project)}</div>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      ${risks.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">⚠️ Riskleri</div>
+        <div class="space-y-1.5">
+          ${risks.map(r => `
+          <div class="border border-red-100 bg-red-50 rounded-lg p-2">
+            <div class="text-xs text-red-700">${escapeHtml(r.text.replace('⚠️ ', '').slice(0, 100))}${r.text.length > 100 ? '...' : ''}</div>
+            <div class="text-xs text-gray-500 mt-0.5">${r.projectId ? clickableProject(r.projectId, r.project) : escapeHtml(r.project)}</div>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+    </div>
+  `;
+  Modal.show(person.name, content);
+}
+
+// Proje detay modal
+function showProjectDetail(projectId) {
+  const project = PROJECTS.find(p => p.id === projectId);
+  if (!project) return;
+  const members = project.members.map(id => PERSONNEL.find(x => x.id === id)).filter(Boolean);
+  const risks = NOTES.filter(n => n.category === 'risk' && n.projectId === projectId);
+  const notes = NOTES.filter(n => n.projectId === projectId && n.category !== 'risk').slice(0, 5);
+  const files = typeof FILES !== 'undefined' ? FILES.filter(f => f.project === project.name) : [];
+  const depts = project.depts.map(d => DEPARTMENTS.find(x => x.id === d)).filter(Boolean).map(d => d.short).join(', ');
+
+  const content = `
+    <div class="space-y-4">
+      <div class="flex items-center gap-3 flex-wrap pb-3 border-b border-gray-100">
+        ${getStatusBadge(project.status)}
+        <span class="text-sm text-gray-500">${project.startDate} — ${project.endDate}</span>
+        ${depts ? `<span class="text-xs text-gray-400">${escapeHtml(depts)}</span>` : ''}
+      </div>
+      <p class="text-sm text-gray-600">${escapeHtml(project.desc)}</p>
+      ${members.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">👥 Çalışan Personel (${members.length} kişi)</div>
+        <div class="flex flex-wrap gap-2">
+          ${members.map(m => `
+          <div class="flex items-center gap-1.5 bg-gray-50 hover:bg-blue-50 rounded-full px-2.5 py-1 transition-colors">
+            <div class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">${escapeHtml(m.avatar.slice(0, 2))}</div>
+            ${clickablePerson(m.id, m.name)}
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      ${notes.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">📝 Son Notlar</div>
+        <div class="space-y-2">
+          ${notes.map(n => `
+          <div class="border-l-2 border-blue-300 pl-2 text-xs text-gray-600">
+            ${escapeHtml(n.text.slice(0, 100))}${n.text.length > 100 ? '...' : ''}
+            <span class="text-gray-400 ml-1">— ${clickablePerson(n.authorId, n.author)}</span>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      ${risks.length > 0 ? `
+      <div class="bg-red-50 rounded-lg p-3">
+        <div class="text-sm font-semibold text-red-800 mb-2">⚠️ Riskler</div>
+        ${risks.map(r => `
+        <div class="text-xs text-red-700 mb-1.5">
+          • ${escapeHtml(r.text.replace('⚠️ ', '').slice(0, 100))}${r.text.length > 100 ? '...' : ''}
+          <span class="text-red-500 ml-1">— ${clickablePerson(r.authorId, r.author)}</span>
+        </div>`).join('')}
+      </div>` : ''}
+      ${files.length > 0 ? `
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">📁 Dosyalar</div>
+        <div class="space-y-1">
+          ${files.map(f => `
+          <div class="flex items-center gap-2 text-xs text-gray-600 py-0.5">
+            <span>${getFileIcon(f.type)}</span>
+            <span class="truncate">${escapeHtml(f.name)}</span>
+            <span class="text-gray-400 flex-shrink-0">${f.size}</span>
+          </div>`).join('')}
+        </div>
+      </div>` : ''}
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        ${project.tags.map(t => `<span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">${escapeHtml(t)}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  Modal.show(project.name, content);
+}
+
 // Toast bildirim
 function showToast(message, type = 'success') {
   const toast = document.createElement('div');
@@ -268,5 +424,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (modalClose) modalClose.addEventListener('click', () => Modal.hide());
   if (modalOverlay) modalOverlay.addEventListener('click', e => {
     if (e.target === modalOverlay) Modal.hide();
+  });
+  // Tıklanabilir personel ve proje linkleri için event delegation
+  document.addEventListener('click', e => {
+    const personLink = e.target.closest('[data-modal-person-id]');
+    if (personLink) {
+      e.preventDefault();
+      Modal.hide();
+      const pid = parseInt(personLink.getAttribute('data-modal-person-id'), 10);
+      setTimeout(() => showPersonDetail(pid), 100);
+      return;
+    }
+    const projectLink = e.target.closest('[data-modal-project-id]');
+    if (projectLink) {
+      e.preventDefault();
+      Modal.hide();
+      const pid = parseInt(projectLink.getAttribute('data-modal-project-id'), 10);
+      setTimeout(() => showProjectDetail(pid), 100);
+    }
   });
 });
