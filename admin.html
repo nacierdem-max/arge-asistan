@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliar Ar-Ge — Yönetici Paneli</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/gantt.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/speech.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- Sidebar -->
+<div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-blue-900 text-white z-30 flex flex-col shadow-xl lg:translate-x-0 -translate-x-full overflow-y-auto">
+  <!-- Logo -->
+  <div class="px-4 py-5 border-b border-blue-800 flex-shrink-0">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">🧠</span>
+      <div>
+        <div class="font-bold text-sm">ELİAR Ar-Ge</div>
+        <div class="text-blue-300 text-xs">Yönetici Paneli</div>
+      </div>
+    </div>
+  </div>
+  <!-- Nav links -->
+  <nav class="flex-1 px-2 py-3 space-y-0.5">
+    <a href="#" data-nav="dashboard" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📊</span> Dashboard
+    </a>
+    <a href="#" data-nav="gantt" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📅</span> Zaman Tablosu
+    </a>
+    <a href="#" data-nav="chat" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>💬</span> AI Sohbet
+    </a>
+    <a href="#" data-nav="all-notes" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📝</span> Tüm Notlar
+    </a>
+    <a href="#" data-nav="risks" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>⚠️</span> Riskler
+    </a>
+    <a href="#" data-nav="files" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📁</span> Dosyalar
+    </a>
+    <a href="#" data-nav="audit" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📋</span> Audit Log
+    </a>
+    <a href="#" data-nav="cost" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>💰</span> Maliyet
+    </a>
+    <a href="#" data-nav="supply" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📦</span> Tedarik
+    </a>
+    <a href="#" data-nav="performance" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>📈</span> Performans
+    </a>
+    <a href="#" data-nav="dependencies" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
+      <span>🔗</span> Bağımlılıklar
+    </a>
+  </nav>
+  <!-- Logout -->
+  <div class="px-4 py-3 border-t border-blue-800 flex-shrink-0">
+    <button onclick="Auth.logout()" class="flex items-center gap-2 text-blue-300 hover:text-white text-sm w-full">
+      <span>🚪</span> Çıkış Yap
+    </button>
+  </div>
+</div>
+
+<!-- Mobile header -->
+<header class="lg:hidden fixed top-0 left-0 right-0 z-20 bg-blue-900 text-white px-4 py-3 flex items-center justify-between shadow-md">
+  <button id="sidebar-toggle" class="text-white p-1">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+  <span class="font-semibold text-sm">🧠 ELİAR Yönetici</span>
+  <button onclick="Auth.logout()" class="text-blue-300 text-xs">Çıkış</button>
+</header>
+
+<!-- Main content -->
+<div class="lg:ml-64 min-h-screen">
+  <div class="pt-16 lg:pt-0 p-4 md:p-6">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="section-dashboard" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">📊 Ar-Ge Dashboard</h2>
+      <!-- KPI Kartlar -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-gray-500 uppercase">Aktif Proje</span>
+            <span class="text-2xl">🚀</span>
+          </div>
+          <div class="text-3xl font-bold text-blue-600">12</div>
+          <div class="text-xs text-gray-400 mt-1">Toplam proje sayısı</div>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-gray-500 uppercase">Devam Eden</span>
+            <span class="text-2xl">⚙️</span>
+          </div>
+          <div class="text-3xl font-bold text-green-600">8</div>
+          <div class="text-xs text-gray-400 mt-1">Aktif geliştirme</div>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-gray-500 uppercase">Risk</span>
+            <span class="text-2xl">⚠️</span>
+          </div>
+          <div class="text-3xl font-bold text-red-600">7</div>
+          <div class="text-xs text-gray-400 mt-1">Aktif risk bildirimi</div>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-gray-500 uppercase">Ar-Ge Kadrosu</span>
+            <span class="text-2xl">👥</span>
+          </div>
+          <div class="text-3xl font-bold text-purple-600">85</div>
+          <div class="text-xs text-gray-400 mt-1">7 departman</div>
+        </div>
+      </div>
+
+      <!-- Projeler özet tablosu -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <h3 class="font-semibold text-gray-800 mb-4">📋 Proje Durumları</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm data-table">
+            <thead>
+              <tr>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Proje</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Durum</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Bütçe</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Bitiş</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${PROJECTS.map(p => {
+                const progress = p.total > 0 ? Math.round(p.spent / p.total * 100) : 0;
+                const depts = p.depts.map(d => DEPARTMENTS.find(x => x.id === d)?.short || '').join(', ');
+                const isRisky = NOTES.some(n => n.category === 'risk' && n.projectId === p.id);
+                return `<tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="GanttChart.showProjectDetail(${p.id})">
+                  <td class="px-3 py-2.5">
+                    <div class="font-medium text-gray-800">${escapeHtml(p.name)}</div>
+                    ${isRisky ? '<span class="text-xs text-red-500">⚠️ Risk var</span>' : ''}
+                  </td>
+                  <td class="px-3 py-2.5 hidden md:table-cell text-gray-500 text-xs">${escapeHtml(depts)}</td>
+                  <td class="px-3 py-2.5">${getStatusBadge(isRisky ? 'riskli' : p.status)}</td>
+                  <td class="px-3 py-2.5 hidden lg:table-cell">
+                    <div class="flex items-center gap-2">
+                      <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-blue-500 h-1.5 rounded-full" style="width:${progress}%"></div>
+                      </div>
+                      <span class="text-xs text-gray-500">%${progress}</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-2.5 hidden lg:table-cell text-xs text-gray-500">${p.endDate}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Departman özeti -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 class="font-semibold text-gray-800 mb-4">👥 Departman Özeti</h3>
+          ${DEPARTMENTS.map(d => `
+            <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full" style="background:${d.color}"></div>
+                <span class="text-sm text-gray-700">${escapeHtml(d.name)}</span>
+              </div>
+              <span class="text-sm font-semibold text-gray-600">${d.count} kişi</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 class="font-semibold text-gray-800 mb-4">⚠️ Son Riskler</h3>
+          ${NOTES.filter(n => n.category === 'risk').slice(0, 5).map(n => `
+            <div class="flex items-start gap-2 py-2 border-b border-gray-50 last:border-0">
+              <span class="text-xs mt-0.5">${n.severity === 'yüksek' ? '🔴' : n.severity === 'orta' ? '🟡' : '🟢'}</span>
+              <div>
+                <div class="text-xs font-medium text-gray-700">${escapeHtml(n.project)}</div>
+                <div class="text-xs text-gray-500 mt-0.5">${escapeHtml(n.text.replace('⚠️ ', '').slice(0, 70))}...</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GANTT ===== -->
+    <div id="section-gantt" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">📅 Zaman Tablosu (Gantt)</h2>
+      <!-- Filtreler -->
+      <div class="filter-bar p-4 mb-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Departman</label>
+            <select id="gantt-dept" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Proje</label>
+            <select id="gantt-project" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Durum</label>
+            <select id="gantt-status" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+              <option value="">Hepsi</option>
+              <option value="devam">Devam Ediyor</option>
+              <option value="tamamlandi">Tamamlandı</option>
+              <option value="planlanan">Planlanan</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Kişi Ara</label>
+            <input id="gantt-person" type="text" placeholder="İsim ile ara..."
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+          </div>
+        </div>
+      </div>
+      <!-- Gantt container -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <div id="gantt-container"></div>
+      </div>
+    </div>
+
+    <!-- ===== AI SOHBET ===== -->
+    <div id="section-chat" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">💬 AI Sohbet</h2>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col" style="height:calc(100vh - 200px); min-height:500px;">
+        <!-- Chat mesajları -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-1"></div>
+        <!-- Input -->
+        <div class="border-t border-gray-100 p-3">
+          <div class="flex gap-2">
+            <input id="chat-input" type="text"
+              placeholder="Soru sorun... (T9, Teleskop, risk, maliyet, performans...)"
+              class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+            <button id="chat-mic-btn"
+              title="Sesli sor (Türkçe)"
+              class="p-2.5 text-gray-400 hover:text-blue-600 rounded-xl hover:bg-blue-50 transition-colors text-lg">
+              🎤
+            </button>
+            <button id="chat-send-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow">
+              Gönder →
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <span class="text-xs text-gray-400">Hızlı:</span>
+            ${['T9 durumu', 'Teleskop raporu', 'Riskler', 'Bütçe özeti', 'Performans grafiği', 'Tedarik durumu'].map(q =>
+              `<button onclick="document.getElementById('chat-input').value='${q}'; AIChat.send();"
+                class="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 py-0.5 rounded-full transition-colors">${q}</button>`
+            ).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TÜM NOTLAR ===== -->
+    <div id="section-all-notes" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">📝 Tüm Notlar</h2>
+      <!-- Filtreler -->
+      <div class="filter-bar p-4 mb-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <select id="filter-notes-dept" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+            <option value="">Tüm Departmanlar</option>
+            ${DEPARTMENTS.map(d => `<option value="${escapeHtml(d.short)}">${escapeHtml(d.name)}</option>`).join('')}
+          </select>
+          <select id="filter-notes-project" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+            <option value="">Tüm Projeler</option>
+            ${PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('')}
+          </select>
+          <select id="filter-notes-cat" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+            <option value="">Tüm Kategoriler</option>
+            <option value="proje">Proje</option>
+            <option value="plan">Plan</option>
+            <option value="bilgi">Bilgi Bankası</option>
+            <option value="risk">Risk</option>
+          </select>
+          <input id="filter-notes-search" type="text" placeholder="Not içeriği ara..."
+            class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+        </div>
+      </div>
+      <div id="all-notes-list"></div>
+    </div>
+
+    <!-- ===== RİSKLER ===== -->
+    <div id="section-risks" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-2">⚠️ Risk Yönetimi</h2>
+      <p class="text-sm text-gray-500 mb-5">Aktif riskler ve blocker'lar</p>
+      <div id="risks-content"></div>
+    </div>
+
+    <!-- ===== DOSYALAR ===== -->
+    <div id="section-files" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">📁 Tüm Dosyalar</h2>
+      <div class="filter-bar p-4 mb-4 flex flex-wrap gap-3">
+        <select id="filter-files-dept" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+          <option value="">Tüm Departmanlar</option>
+          ${DEPARTMENTS.map(d => `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)}</option>`).join('')}
+        </select>
+        <select id="filter-files-type" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+          <option value="">Tüm Tipler</option>
+          <option value="pdf">PDF</option>
+          <option value="xlsx">Excel</option>
+          <option value="docx">Word</option>
+          <option value="step">CAD/STEP</option>
+          <option value="png">Görsel</option>
+          <option value="md">Markdown</option>
+        </select>
+      </div>
+      <div id="all-files-list"></div>
+    </div>
+
+    <!-- ===== AUDIT LOG ===== -->
+    <div id="section-audit" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">📋 Audit Log</h2>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <div id="audit-list" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- ===== MALİYET ===== -->
+    <div id="section-cost" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">💰 Maliyet Yönetimi</h2>
+      <div id="cost-content"></div>
+    </div>
+
+    <!-- ===== TEDARİK ===== -->
+    <div id="section-supply" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">📦 Tedarik Takibi</h2>
+      <div id="supply-content"></div>
+    </div>
+
+    <!-- ===== PERFORMANS ===== -->
+    <div id="section-performance" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">📈 Performans Analizi</h2>
+      <div id="performance-content"></div>
+    </div>
+
+    <!-- ===== BAĞIMLILIKLAR ===== -->
+    <div id="section-dependencies" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">🔗 Proje Bağımlılıkları</h2>
+      <div id="dependencies-content"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h3 id="modal-title" class="font-bold text-gray-800"></h3>
+      <button id="modal-close" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
+    </div>
+    <div id="modal-content" class="px-5 py-4"></div>
+  </div>
+</div>
+
+<script>
+  // Auth check
+  Auth.checkAuth();
+  if (Auth.role !== 'admin') window.location.href = 'index.html';
+
+  // Init navigasyon — dashboard başlangıç
+  Nav.init('dashboard');
+
+  // ---- GANTT INIT ----
+  window.init_gantt = function() {
+    GanttChart.init();
+  };
+
+  // ---- AI CHAT INIT ----
+  window.init_chat = function() {
+    AIChat.init('chat-messages', 'chat-input', 'chat-send-btn', 'chat-mic-btn');
+    SpeechInput.init('chat-input', 'chat-mic-btn', () => AIChat.send());
+  };
+
+  // ---- TÜM NOTLAR INIT ----
+  window.init_all_notes = function() {
+    renderAllNotes();
+    ['filter-notes-dept','filter-notes-project','filter-notes-cat'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderAllNotes);
+    });
+    document.getElementById('filter-notes-search').addEventListener('input', renderAllNotes);
+  };
+
+  function renderAllNotes() {
+    const dept = document.getElementById('filter-notes-dept').value;
+    const proj = document.getElementById('filter-notes-project').value;
+    const cat = document.getElementById('filter-notes-cat').value;
+    const search = document.getElementById('filter-notes-search').value.toLowerCase();
+
+    let notes = [...NOTES];
+    if (dept) notes = notes.filter(n => n.dept && n.dept.toLowerCase().includes(dept.toLowerCase()));
+    if (proj) notes = notes.filter(n => n.projectId === parseInt(proj));
+    if (cat) notes = notes.filter(n => n.category === cat);
+    if (search) notes = notes.filter(n =>
+      n.text.toLowerCase().includes(search) ||
+      n.author.toLowerCase().includes(search) ||
+      n.project.toLowerCase().includes(search)
+    );
+
+    const container = document.getElementById('all-notes-list');
+    if (notes.length === 0) {
+      container.innerHTML = '<div class="text-center text-gray-400 py-10">Filtre kriterlerine uygun not bulunamadı.</div>';
+      return;
+    }
+    container.innerHTML = `<div class="text-xs text-gray-400 mb-3">${notes.length} not gösteriliyor</div>` +
+      notes.map(n => `
+      <div class="bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">
+            ${escapeHtml(n.author.split(' ').map(w => w[0]).slice(0,2).join(''))}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span class="text-sm font-medium text-gray-800">${escapeHtml(n.author)}</span>
+              <span class="text-xs text-gray-400">${n.dept}</span>
+              ${getCategoryBadge(n.category)}
+              ${n.severity ? getSeverityBadge(n.severity) : ''}
+            </div>
+            <p class="text-sm text-gray-700 mb-2">${escapeHtml(n.text)}</p>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-medium text-blue-600">${escapeHtml(n.project)}</span>
+              <div class="flex items-center gap-2">
+                ${n.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-xs">${escapeHtml(t)}</span>`).join('')}
+                <span class="text-xs text-gray-400">${n.date}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ---- RİSKLER INIT ----
+  window.init_risks = function() {
+    const risks = NOTES.filter(n => n.category === 'risk');
+    const high = risks.filter(r => r.severity === 'yüksek');
+    const med = risks.filter(r => r.severity === 'orta');
+    const low = risks.filter(r => r.severity === 'düşük');
+
+    document.getElementById('risks-content').innerHTML = `
+      <div class="grid grid-cols-3 gap-4 mb-5">
+        <div class="bg-red-50 rounded-2xl p-4 text-center border border-red-100">
+          <div class="text-2xl font-bold text-red-600">${high.length}</div>
+          <div class="text-xs text-red-500 mt-1">🔴 Yüksek Öncelik</div>
+        </div>
+        <div class="bg-yellow-50 rounded-2xl p-4 text-center border border-yellow-100">
+          <div class="text-2xl font-bold text-yellow-600">${med.length}</div>
+          <div class="text-xs text-yellow-600 mt-1">🟡 Orta Öncelik</div>
+        </div>
+        <div class="bg-green-50 rounded-2xl p-4 text-center border border-green-100">
+          <div class="text-2xl font-bold text-green-600">${low.length}</div>
+          <div class="text-xs text-green-600 mt-1">🟢 Düşük Öncelik</div>
+        </div>
+      </div>
+      ${[...high, ...med, ...low].map(r => `
+        <div class="risk-card ${r.severity === 'yüksek' ? 'high bg-red-50 border-red-200' : r.severity === 'orta' ? 'medium bg-yellow-50 border-yellow-200' : 'low bg-green-50 border-green-200'} rounded-xl p-4 mb-3 border">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+            <div class="flex items-center gap-2">
+              ${getSeverityBadge(r.severity)}
+              <span class="text-sm font-semibold text-gray-800">${escapeHtml(r.project)}</span>
+            </div>
+            <span class="text-xs text-gray-400">${r.date}</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-2">${escapeHtml(r.text)}</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-gray-500">👤 ${escapeHtml(r.author)} — ${escapeHtml(r.dept)}</span>
+            <div class="flex gap-1">
+              ${r.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-white/60 rounded text-xs text-gray-600">${escapeHtml(t)}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    `;
+  };
+
+  // ---- DOSYALAR INIT ----
+  window.init_files = function() {
+    renderAllFiles();
+    document.getElementById('filter-files-dept').addEventListener('change', renderAllFiles);
+    document.getElementById('filter-files-type').addEventListener('change', renderAllFiles);
+  };
+
+  function renderAllFiles() {
+    const dept = document.getElementById('filter-files-dept').value;
+    const type = document.getElementById('filter-files-type').value;
+    let files = [...FILES];
+    if (dept) files = files.filter(f => f.dept === dept);
+    if (type) files = files.filter(f => f.type === type);
+
+    document.getElementById('all-files-list').innerHTML = `
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm data-table">
+          <thead>
+            <tr>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Dosya</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Kişi</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Boyut</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Tarih</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${files.map(f => `
+              <tr class="border-b border-gray-50 hover:bg-gray-50">
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <span class="text-lg">${getFileIcon(f.type)}</span>
+                    <span class="font-medium text-gray-800 text-xs">${escapeHtml(f.name)}</span>
+                  </div>
+                </td>
+                <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(f.dept)}</td>
+                <td class="px-4 py-3 hidden lg:table-cell text-xs text-gray-600">${escapeHtml(f.author)}</td>
+                <td class="px-4 py-3 text-xs text-gray-500">${f.size}</td>
+                <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-400">${f.date}</td>
+                <td class="px-4 py-3">
+                  <button onclick="showToast('Demo: İndirme simüle edildi', 'info')"
+                    class="text-xs text-blue-600 hover:text-blue-700 font-medium hover:bg-blue-50 px-2 py-1 rounded-lg transition-colors">
+                    ⬇️
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // ---- AUDIT LOG INIT ----
+  window.init_audit = function() {
+    const colors = {
+      note: 'bg-blue-100 text-blue-700',
+      file: 'bg-green-100 text-green-700',
+      project: 'bg-purple-100 text-purple-700',
+      risk: 'bg-red-100 text-red-700'
+    };
+    const icons = { note: '📝', file: '📁', project: '🚀', risk: '⚠️' };
+    document.getElementById('audit-list').innerHTML = AUDIT_LOG.map((item, i) => `
+      <div class="audit-item relative flex gap-4 pb-4 ${i < AUDIT_LOG.length - 1 ? 'border-b border-gray-50' : ''}">
+        <div class="w-6 h-6 rounded-full ${colors[item.category] || 'bg-gray-100 text-gray-600'} flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
+          ${icons[item.category] || '●'}
+        </div>
+        <div class="flex-1">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-sm font-medium text-gray-800">${escapeHtml(item.user)}</span>
+              <span class="text-sm text-gray-500 ml-1">${escapeHtml(item.action)}</span>
+            </div>
+            <span class="text-xs text-gray-400">${item.time}</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-0.5">${escapeHtml(item.detail)}</div>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  // ---- MALİYET INIT ----
+  window.init_cost = function() {
+    const totalBudget = COST_DATA.reduce((a, b) => a + b.total, 0);
+    const totalSpent = COST_DATA.reduce((a, b) => a + b.spent, 0);
+    const remaining = totalBudget - totalSpent;
+    const overallPct = Math.round(totalSpent / totalBudget * 100);
+
+    document.getElementById('cost-content').innerHTML = `
+      <!-- Özet kartlar -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Toplam Bütçe</div>
+          <div class="text-2xl font-bold text-gray-800">${formatCurrency(totalBudget)}</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Harcanan</div>
+          <div class="text-2xl font-bold text-blue-600">${formatCurrency(totalSpent)}</div>
+          <div class="text-xs text-gray-400 mt-1">%${overallPct} kullanıldı</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div class="text-xs font-semibold text-gray-500 uppercase mb-1">Kalan</div>
+          <div class="text-2xl font-bold text-green-600">${formatCurrency(remaining)}</div>
+        </div>
+      </div>
+      <!-- Proje tablo -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Proje Bazlı Harcamalar</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm data-table">
+            <thead>
+              <tr>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Proje</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Bütçe</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Harcanan</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-32">İlerleme</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Kalan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${COST_DATA.map(c => {
+                const pct = c.total > 0 ? Math.round(c.spent / c.total * 100) : 0;
+                const remaining = c.total - c.spent;
+                const color = pct >= 100 ? 'bg-green-500' : pct >= 75 ? 'bg-orange-500' : 'bg-blue-500';
+                return `<tr class="border-b border-gray-50 hover:bg-gray-50">
+                  <td class="px-3 py-2.5">
+                    <span class="font-medium text-gray-800">${escapeHtml(c.project)}</span>
+                    ${pct >= 100 ? ' <span class="text-xs text-green-600">✅ Tamamlandı</span>' : ''}
+                  </td>
+                  <td class="px-3 py-2.5 text-right text-gray-600">${formatCurrency(c.total)}</td>
+                  <td class="px-3 py-2.5 text-right font-medium text-blue-600">${formatCurrency(c.spent)}</td>
+                  <td class="px-3 py-2.5">
+                    <div class="flex items-center gap-2">
+                      <div class="flex-1 bg-gray-200 rounded-full h-2">
+                        <div class="${color} h-2 rounded-full progress-bar" style="width:${pct}%"></div>
+                      </div>
+                      <span class="text-xs text-gray-500 w-8">%${pct}</span>
+                    </div>
+                  </td>
+                  <td class="px-3 py-2.5 text-right text-green-600 font-medium">${formatCurrency(remaining)}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+            <tfoot>
+              <tr class="bg-gray-50 font-bold">
+                <td class="px-3 py-2.5 text-gray-800">TOPLAM</td>
+                <td class="px-3 py-2.5 text-right text-gray-800">${formatCurrency(totalBudget)}</td>
+                <td class="px-3 py-2.5 text-right text-blue-700">${formatCurrency(totalSpent)}</td>
+                <td class="px-3 py-2.5">
+                  <div class="flex items-center gap-2">
+                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                      <div class="bg-blue-600 h-2 rounded-full" style="width:${overallPct}%"></div>
+                    </div>
+                    <span class="text-xs text-gray-600 w-8">%${overallPct}</span>
+                  </div>
+                </td>
+                <td class="px-3 py-2.5 text-right text-green-700">${formatCurrency(remaining)}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <!-- Chart -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Bütçe Kullanım Grafiği</h3>
+        <canvas id="cost-chart" height="120"></canvas>
+      </div>
+    `;
+    setTimeout(() => {
+      const ctx = document.getElementById('cost-chart');
+      if (ctx && window.Chart) {
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: COST_DATA.map(c => c.project.split(' ').slice(0,3).join(' ')),
+            datasets: [
+              { label: 'Toplam Bütçe', data: COST_DATA.map(c => c.total), backgroundColor: 'rgba(59,130,246,0.3)', borderColor: 'rgb(59,130,246)', borderWidth: 1 },
+              { label: 'Harcanan', data: COST_DATA.map(c => c.spent), backgroundColor: 'rgba(16,185,129,0.8)', borderColor: 'rgb(16,185,129)', borderWidth: 1 }
+            ]
+          },
+          options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { ticks: { callback: v => (v/1000) + 'K₺' } } } }
+        });
+      }
+    }, 100);
+  };
+
+  // ---- TEDARİK INIT ----
+  window.init_supply = function() {
+    const critical = SUPPLY_DATA.filter(s => s.critical).length;
+    const waiting = SUPPLY_DATA.filter(s => ['beklemede', 'alternatif', 'onay'].includes(s.status)).length;
+
+    document.getElementById('supply-content').innerHTML = `
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <div class="text-xl font-bold text-gray-800">${SUPPLY_DATA.length}</div>
+          <div class="text-xs text-gray-500 mt-1">Toplam Kalem</div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <div class="text-xl font-bold text-red-600">${critical}</div>
+          <div class="text-xs text-gray-500 mt-1">Kritik Kalem</div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <div class="text-xl font-bold text-orange-500">${waiting}</div>
+          <div class="text-xs text-gray-500 mt-1">Bekleyen</div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-center">
+          <div class="text-xl font-bold text-green-600">${SUPPLY_DATA.filter(s => s.status === 'stokta').length}</div>
+          <div class="text-xs text-gray-500 mt-1">Stokta Hazır</div>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm data-table">
+          <thead>
+            <tr>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Malzeme</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Tedarikçi</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Durum</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Proje</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">ETA</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${SUPPLY_DATA.map(s => `
+              <tr class="border-b border-gray-50 hover:bg-gray-50 ${s.critical ? 'bg-red-50/30' : ''}">
+                <td class="px-4 py-3">
+                  <div class="font-medium text-gray-800 text-xs">${escapeHtml(s.item)}</div>
+                  ${s.critical ? '<span class="text-xs text-red-500">⚠️ Kritik</span>' : ''}
+                </td>
+                <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(s.supplier)}</td>
+                <td class="px-4 py-3">${getSupplyStatusBadge(s.status)}</td>
+                <td class="px-4 py-3 hidden lg:table-cell text-xs text-blue-600">${escapeHtml(s.project)}</td>
+                <td class="px-4 py-3 text-xs font-medium ${s.status === 'beklemede' || s.status === 'alternatif' ? 'text-red-600' : 'text-gray-600'}">${s.eta}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  };
+
+  // ---- PERFORMANS INIT ----
+  window.init_performance = function() {
+    document.getElementById('performance-content').innerHTML = `
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 class="font-semibold text-gray-800 mb-4">Q1 vs Q2 Tamamlanan Görev</h3>
+          <canvas id="perf-chart-1" height="200"></canvas>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <h3 class="font-semibold text-gray-800 mb-4">Departman Not Girişi (son 3 ay)</h3>
+          <canvas id="perf-chart-2" height="200"></canvas>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Departman Detay Tablosu</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm data-table">
+            <thead>
+              <tr>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Departman</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Personel</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Q1 Tamamlanan</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Q2 Hedef</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Notlar</th>
+                <th class="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Risk</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${PERFORMANCE_DATA.departments.map((d, i) => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50">
+                  <td class="px-3 py-2.5 font-medium text-gray-800">${escapeHtml(d)}</td>
+                  <td class="px-3 py-2.5 text-right text-gray-600">${DEPARTMENTS[i]?.count || '—'}</td>
+                  <td class="px-3 py-2.5 text-right text-blue-600 font-semibold">${PERFORMANCE_DATA.q1Completed[i]}</td>
+                  <td class="px-3 py-2.5 text-right text-green-600 font-semibold">${PERFORMANCE_DATA.q2Planned[i]}</td>
+                  <td class="px-3 py-2.5 text-right text-gray-600">${PERFORMANCE_DATA.noteCount[i]}</td>
+                  <td class="px-3 py-2.5 text-right ${PERFORMANCE_DATA.riskCount[i] > 0 ? 'text-red-500 font-semibold' : 'text-gray-400'}">${PERFORMANCE_DATA.riskCount[i]}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+    setTimeout(() => {
+      if (!window.Chart) return;
+      new Chart(document.getElementById('perf-chart-1'), {
+        type: 'bar',
+        data: {
+          labels: PERFORMANCE_DATA.departments,
+          datasets: [
+            { label: 'Q1 2026 Tamamlanan', data: PERFORMANCE_DATA.q1Completed, backgroundColor: 'rgba(59,130,246,0.8)', borderColor: 'rgb(59,130,246)', borderWidth: 1 },
+            { label: 'Q2 2026 Hedef', data: PERFORMANCE_DATA.q2Planned, backgroundColor: 'rgba(16,185,129,0.8)', borderColor: 'rgb(16,185,129)', borderWidth: 1 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'top' } } }
+      });
+      new Chart(document.getElementById('perf-chart-2'), {
+        type: 'doughnut',
+        data: {
+          labels: PERFORMANCE_DATA.departments,
+          datasets: [{
+            data: PERFORMANCE_DATA.noteCount,
+            backgroundColor: ['#3b82f6','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#6b7280']
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'right' } } }
+      });
+    }, 100);
+  };
+
+  // ---- BAĞIMLILIKLAR INIT ----
+  window.init_dependencies = function() {
+    const typeColors = {
+      bekliyor: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200', line: '#f97316' },
+      entegrasyon: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200', line: '#3b82f6' },
+      paralel: { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', line: '#8b5cf6' }
+    };
+
+    const projectColors = {};
+    PROJECTS.forEach((p, i) => {
+      const colors = ['bg-blue-500','bg-purple-500','bg-green-500','bg-yellow-500','bg-red-500','bg-cyan-500','bg-indigo-500','bg-pink-500','bg-teal-500','bg-orange-500','bg-lime-500','bg-rose-500'];
+      projectColors[p.name] = colors[i % colors.length];
+    });
+
+    document.getElementById('dependencies-content').innerHTML = `
+      <!-- Bağımlılık listesi -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
+        ${DEPENDENCIES.map(dep => {
+          const c = typeColors[dep.type] || typeColors.bekliyor;
+          return `
+          <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors">
+            <div class="flex items-center gap-3 mb-2">
+              <div class="flex-1 text-sm font-medium text-gray-800 text-right truncate">${escapeHtml(dep.from)}</div>
+              <div class="flex-shrink-0">
+                <span class="px-2 py-0.5 rounded-full text-xs font-medium ${c.bg} ${c.text} border ${c.border}">
+                  ${dep.type === 'bekliyor' ? '⏳ Bekliyor' : dep.type === 'entegrasyon' ? '🔗 Entegrasyon' : '⚡ Paralel'}
+                </span>
+              </div>
+              <div class="flex-1 text-sm font-medium text-blue-700 truncate">${escapeHtml(dep.to)}</div>
+            </div>
+            <p class="text-xs text-gray-500 text-center">${escapeHtml(dep.desc)}</p>
+          </div>
+          `;
+        }).join('')}
+      </div>
+
+      <!-- Görsel bağımlılık haritası (SVG) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <h3 class="font-semibold text-gray-800 mb-4">Bağımlılık Haritası</h3>
+        <div class="overflow-x-auto">
+          <svg id="dep-svg" width="800" height="340" viewBox="0 0 800 340" class="w-full">
+            <!-- Arka plan -->
+            <rect width="800" height="340" fill="#f8fafc" rx="12"/>
+
+            <!-- Proje düğümleri — sol kolon (bağımlı) -->
+            ${[
+              { name: "T7PAC Firmware v6", x: 30, y: 30 },
+              { name: "IIoT Gateway & Bulut", x: 30, y: 100 },
+              { name: "LABx Next Laboratuvar", x: 30, y: 170 },
+              { name: "LABx Next Laboratuvar", x: 30, y: 240 },
+              { name: "PPD Baskı Boya Mutfağı v3", x: 30, y: 310 }
+            ].map((n, i) => `
+              <rect x="${n.x}" y="${n.y}" width="160" height="28" rx="6" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
+              <text x="${n.x + 80}" y="${n.y + 17}" text-anchor="middle" font-size="9" fill="#1e40af" font-family="system-ui">${escapeHtml(n.name.slice(0,22))}</text>
+            `).join('')}
+
+            <!-- Hedef düğümler — sağ kolon -->
+            ${[
+              { name: "T7 Operatör Panel 10\"", x: 610, y: 30 },
+              { name: "Teleskop v5 Boyahane", x: 610, y: 100 },
+              { name: "PMT140 pH Sensörü v2", x: 610, y: 170 },
+              { name: "ICT200 İletkenlik", x: 610, y: 240 },
+              { name: "T9 PLC v3 Ana Kart", x: 610, y: 310 }
+            ].map(n => `
+              <rect x="${n.x}" y="${n.y}" width="160" height="28" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
+              <text x="${n.x + 80}" y="${n.y + 17}" text-anchor="middle" font-size="9" fill="#166534" font-family="system-ui">${escapeHtml(n.name.slice(0,22))}</text>
+            `).join('')}
+
+            <!-- Oklar -->
+            <defs>
+              <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#3b82f6" opacity="0.7"/>
+              </marker>
+              <marker id="arrowOrange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#f97316" opacity="0.7"/>
+              </marker>
+            </defs>
+            <line x1="190" y1="44" x2="608" y2="44" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
+            <line x1="190" y1="114" x2="608" y2="114" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
+            <line x1="190" y1="184" x2="608" y2="184" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
+            <line x1="190" y1="254" x2="608" y2="254" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
+            <line x1="190" y1="324" x2="608" y2="324" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
+
+            <!-- Etiketler -->
+            <text x="400" y="40" text-anchor="middle" font-size="8" fill="#92400e" font-family="system-ui">⏳ bekliyor</text>
+            <text x="400" y="110" text-anchor="middle" font-size="8" fill="#1e3a8a" font-family="system-ui">🔗 entegrasyon</text>
+            <text x="400" y="180" text-anchor="middle" font-size="8" fill="#92400e" font-family="system-ui">⏳ bekliyor</text>
+            <text x="400" y="250" text-anchor="middle" font-size="8" fill="#1e3a8a" font-family="system-ui">🔗 entegrasyon</text>
+            <text x="400" y="320" text-anchor="middle" font-size="8" fill="#92400e" font-family="system-ui">⏳ bekliyor</text>
+          </svg>
+        </div>
+
+        <!-- Açıklama -->
+        <div class="flex flex-wrap gap-4 mt-3">
+          <div class="flex items-center gap-2"><div class="w-6 h-0.5 border-t-2 border-orange-400 border-dashed"></div><span class="text-xs text-gray-600">Bekliyor</span></div>
+          <div class="flex items-center gap-2"><div class="w-6 h-0.5 border-t-2 border-blue-400 border-dashed"></div><span class="text-xs text-gray-600">Entegrasyon</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></div><span class="text-xs text-gray-600">Bağımlı Proje</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-green-100 border border-green-300"></div><span class="text-xs text-gray-600">Hedef Proje</span></div>
+        </div>
+      </div>
+    `;
+  };
+</script>
+</body>
+</html>
