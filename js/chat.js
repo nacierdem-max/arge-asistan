@@ -425,6 +425,51 @@ Detaylı bilgi için **Tedarik** bölümüne gidin.`
       };
     }
 
+    // Görev atama
+    if (lower.includes('görev at') || (lower.includes('ata') && (lower.includes('görev') || lower.includes('task')))) {
+      setTimeout(() => typeof showToast === 'function' && showToast('✅ Görev atandı!', 'success'), 500);
+      return { text: `**Görev Atama İşlemi** ✅\n\nKomutunuz alındı. Görev sisteme kaydedildi.\n\n**Detaylar:**\n• Atanan kişi tespit edildi\n• Proje ile ilişkilendirildi\n• Deadline belirlendi\n• Personele bildirim gönderildi\n\nGörevi detaylı görmek için **Projeler & Görevler → Kanban** görünümüne gidin.` };
+    }
+
+    // Mesaj gönder
+    if (lower.includes('mesaj gönder') || lower.includes('mesaj yaz') || (lower.includes('söyle') && lower.includes('mesaj'))) {
+      setTimeout(() => typeof showToast === 'function' && showToast('📨 Mesaj gönderildi!', 'success'), 500);
+      return { text: `**Mesaj Gönderildi** 📨\n\nMesajınız başarıyla iletildi.\n\n**Durum:**\n• Alıcı belirlendi ✅\n• Mesaj iletildi ✅\n• Bildirim gönderildi ✅\n• Okunma bildirimi açık ✅\n\nMesaj geçmişi için **Mesajlar** bölümünü inceleyebilirsiniz.` };
+    }
+
+    // Yeni proje
+    if (lower.includes('yeni proje') || lower.includes('proje aç') || lower.includes('proje oluştur')) {
+      setTimeout(() => typeof showToast === 'function' && showToast('🚀 Proje oluşturuldu!', 'success'), 500);
+      return { text: `**Yeni Proje Oluşturuldu** 🚀\n\nProje sisteme kaydedildi.\n\n**Yapılan İşlemler:**\n• Proje adı kaydedildi ✅\n• Departman atandı ✅\n• Başlangıç/bitiş tarihleri belirlendi ✅\n• Ekip üyeleri atanmaya hazır\n\nProjeyi düzenlemek için **Projeler & Görevler** bölümünden erişebilirsiniz.\n\nEkip üyelerini atamamı ister misiniz?` };
+    }
+
+    // Risk bildir
+    if (lower.includes('risk bildir') || lower.includes('risk ekle') || lower.includes('risk var')) {
+      setTimeout(() => typeof showToast === 'function' && showToast('⚠️ Risk kaydedildi!', 'warning'), 500);
+      return { text: `**Risk Kaydedildi** ⚠️\n\nRisk bildirimi sisteme eklendi.\n\n**İşlem Özeti:**\n• Risk seviyesi belirlendi 🔴\n• İlgili proje ile ilişkilendirildi ✅\n• Yöneticiye bildirim gönderildi ✅\n• Audit log'a kaydedildi ✅\n\n**Önerilen Aksiyon:**\nRiski çözmek için alternatif tedarikçi araştırın veya proje zaman çizelgesini güncelleyin.\n\nRisk yönetimi için AI'ya "riskler" yazabilirsiniz.` };
+    }
+
+    // Haftalık özet
+    if (lower.includes('bu hafta') || lower.includes('haftalık') || lower.includes('özet')) {
+      return { text: `**Haftalık Özet — 28 Nisan - 1 Mayıs 2026** 📋\n\n**Tamamlanan Görevler:** 12\n**Devam Eden:** 28\n**Yeni Risk Bildirimi:** 3\n**Mesaj Trafiği:** 15 mesaj\n\n**✅ Bu Hafta Öne Çıkanlar:**\n• T9 PLC Rev4 şematik review tamamlandı — Ahmet Yılmaz\n• ICT200 kalibrasyon final onaylandı — Kadir Varol\n• SAT210 müşteri demo başarılı — 3 tekstil fabrikası ilgilendi\n• IIoT AWS IAM rolleri güvenlik sertifikasyonu — Berk Çağlar\n\n**⚠️ Dikkat Edilmesi Gerekenler:**\n• FPGA tedarik hâlâ 8 hafta beklemede\n• T7 Panel LCD alternatif tedarikçi araştırması devam ediyor\n• ADW Temmuz teslimi için Beckhoff sürücü bekleniyor\n\n**📊 Departman Performansı:**\n• Elektronik: %91 ↑\n• Gömülü Yazılım: %88\n• Sensör: %94 ↑ (en yüksek)\n• Mekatronik: %79 (RD96 kapandı, ADW devam)` };
+    }
+
+    // İş yükü / personel
+    if (lower.includes('yoğun') || lower.includes('iş yükü') || lower.includes('workload') || lower.includes('müsait')) {
+      return { text: `**Personel İş Yükü Analizi** 👥\n\n🔴 **En Yoğun (3+ aktif görev):**\n1. Ahmet Yılmaz — 4 aktif görev (T9 PLC + T7 Panel)\n2. Onur Tekin — 4 aktif görev (T7 Panel + T7PAC v6)\n3. Serkan Ateş — 3 aktif görev (T9 EtherCAT)\n4. Kaan Yıldırım — 3 aktif görev (Teleskop + IIoT)\n\n🟡 **Orta Yoğunluk (2 aktif görev):**\n5. Burak Demir — 2 görev, T9 PLC PCB layout\n6. Ali Rıza Çam — 2 görev, ADW\n7. Fikret Akbulut — 2 görev, PMT140\n\n🟢 **Uygun (1 görev veya az):**\n• Kemal Turan — 1 görev, yeni görev alabilir\n• Ramazan Acar — Test kapasitesi var\n• Lale Demirtaş — Hafif iş yükü\n\n**Öneri:** Fatih Şahin'e ek görev atanabilir. Mevcut görevi Nisan'da tamamlandı.\n\nBirisi için görev atamamı ister misiniz?` };
+    }
+
+    // Bağımlılıklar
+    if (lower.includes('bağımlılık') || lower.includes('bağımlı') || lower.includes('bekleme')) {
+      return { text: `**Proje Bağımlılık Durumu** 🔗\n\n**Kritik Bağımlılıklar:**\n\n🔴 **T7PAC Firmware v6 → T7 Panel:**\n• T7PAC panel donanım tamamlanmayı bekliyor\n• Panel %67 tamamlandı → firmware başlangıcı Haziran'a kayabilir\n• Etki: 2-3 hafta gecikme riski\n\n🟡 **IIoT Gateway → Teleskop v5:**\n• Teleskop IoT verilerini gateway üzerinden buluta gönderecek\n• IIoT %43 tamamlandı → Teleskop Temmuz'da bu entegrasyona hazır olacak\n• Durum: Paralel geliştirme sürebilir ✅\n\n🟡 **LABx → PMT140 + ICT200:**\n• LABx pH ve iletkenlik için bu sensörleri kullanacak\n• ICT200 tamamlandı ✅ — PMT140 Temmuz'a kadar hazır olacak\n\n🟢 **ADW → T9 PLC:**\n• PPD kontrol sistemi T9 PLC kullanacak\n• T9 PLC Temmuz'da hazır → ADW Aralık hedefi için yeterli\n\n**Genel Değerlendirme:** 2 kritik bağımlılık yakın takip gerektiriyor.` };
+    }
+
+    // Not ekle
+    if (lower.includes('not ekle') || lower.includes('not yaz') || lower.includes('kaydet')) {
+      setTimeout(() => typeof showToast === 'function' && showToast('📝 Not kaydedildi!', 'success'), 500);
+      return { text: `**Not Kaydedildi** 📝\n\nNotunuz sisteme eklendi.\n\n**İşlem Özeti:**\n• Yazar: ${typeof Auth !== 'undefined' && Auth.currentUser ? Auth.currentUser.name : 'Kullanıcı'} ✅\n• Tarih: ${DEMO_TODAY.toLocaleDateString('tr-TR')} ✅\n• Proje ile ilişkilendirildi ✅\n• Audit log'a kaydedildi ✅\n• İlgili personele bildirim gönderildi ✅\n\nNotlar Tüm Notlar bölümünde görüntülenebilir.` };
+    }
+
     // Genel soru / bilinmeyen
     const activeProjects = PROJECTS.filter(p => p.status === 'devam').length;
     const completedProjects = PROJECTS.filter(p => p.status === 'tamamlandi').length;

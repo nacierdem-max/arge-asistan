@@ -366,21 +366,28 @@ function showProjectDetail(projectId) {
 }
 
 // Toast bildirim
-function showToast(message, type = 'success') {
-  const toast = document.createElement('div');
-  const colors = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    info: 'bg-blue-500',
-    warning: 'bg-yellow-500'
-  };
-  toast.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg ${colors[type] || colors.info} transition-all duration-300`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
+function showToast(message, type) {
+  const tc = document.getElementById('toast-container');
+  if (!tc) {
+    // Fallback: create a simple top-right toast if container missing
+    const fb = document.createElement('div');
+    const fbColors = { success: '#34C759', error: '#FF3B30', info: '#007AFF', warning: '#FF9500' };
+    const t = type || 'success';
+    fb.style.cssText = `position:fixed;top:16px;right:16px;z-index:9999;background:white;border-left:4px solid ${fbColors[t]||fbColors.info};padding:12px 16px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);font-size:14px;font-weight:500;color:#1a1a2e;min-width:200px;max-width:320px;`;
+    fb.textContent = message;
+    document.body.appendChild(fb);
+    setTimeout(() => { fb.style.opacity = '0'; fb.style.transition = '0.3s'; setTimeout(() => fb.remove(), 300); }, 3000);
+    return;
+  }
+  const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+  const colors = { success: '#34C759', error: '#FF3B30', info: '#007AFF', warning: '#FF9500' };
+  const t = type || 'success';
+  const div = document.createElement('div');
+  div.className = 'toast';
+  div.style.borderLeft = `4px solid ${colors[t] || colors.info}`;
+  div.innerHTML = `<span style="font-size:18px">${icons[t] || icons.info}</span><span style="font-size:14px;font-weight:500;color:#1a1a2e">${escapeHtml(message)}</span>`;
+  tc.appendChild(div);
+  setTimeout(() => { div.style.opacity = '0'; div.style.transform = 'translateY(10px)'; div.style.transition = '0.3s'; setTimeout(() => div.remove(), 300); }, 3000);
 }
 
 // AI Analiz simülasyonu
