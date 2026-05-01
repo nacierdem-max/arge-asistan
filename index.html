@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliar Akıllı Ar-Ge Asistanı</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</head>
+<body class="eliar-login-bg flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="text-6xl mb-3 eliar-logo-glow">🧠</div>
+      <h1 class="text-3xl font-bold text-white mb-1">ELİAR</h1>
+      <h2 class="text-xl font-semibold text-blue-200 mb-2">Akıllı Ar-Ge Asistanı</h2>
+      <p class="text-blue-300 text-sm">Eliar Elektronik — Endüstriyel Otomasyon Çözümleri</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-white rounded-2xl shadow-2xl p-8">
+      <!-- Tabs -->
+      <div class="flex rounded-xl bg-gray-100 p-1 mb-6">
+        <button id="tab-personnel" onclick="switchTab('personnel')"
+          class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all bg-white shadow text-blue-700">
+          👷 Personel Girişi
+        </button>
+        <button id="tab-admin" onclick="switchTab('admin')"
+          class="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all text-gray-500 hover:text-gray-700">
+          👔 Yönetici Girişi
+        </button>
+      </div>
+
+      <!-- Personnel Login -->
+      <div id="panel-personnel">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Departmanınızı ve adınızı seçin</label>
+        <select id="personnel-select"
+          class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-gray-50 mb-4">
+          <option value="">— Personel seçin —</option>
+        </select>
+        <button onclick="loginPersonnel()"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md hover:shadow-lg text-sm">
+          Giriş Yap →
+        </button>
+        <p class="text-xs text-gray-400 text-center mt-3">Not girişi, dosya paylaşımı ve bildirimler için personel girişi yapın.</p>
+      </div>
+
+      <!-- Admin Login -->
+      <div id="panel-admin" class="hidden">
+        <div class="bg-blue-50 rounded-xl p-4 mb-4 text-center">
+          <div class="text-3xl mb-2">👔</div>
+          <p class="text-sm text-blue-700 font-medium">Yönetici Paneli</p>
+          <p class="text-xs text-blue-500 mt-1">Tüm projeler, Gantt, AI sohbet, riskler ve raporlara erişim</p>
+        </div>
+        <button onclick="loginAdmin()"
+          class="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 rounded-xl transition-all shadow-md hover:shadow-lg text-sm">
+          Yönetici Olarak Giriş Yap →
+        </button>
+        <p class="text-xs text-gray-400 text-center mt-3">Demo: Şifre gerektirmez — tüm veriler mock'tur.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-6">
+      <p class="text-blue-300 text-xs">eliar.com/tr — 85 kişilik Ar-Ge merkezi</p>
+      <p class="text-blue-400/50 text-xs mt-1">Demo Uygulama — Tüm veriler mock/sahte</p>
+    </div>
+  </div>
+
+  <script>
+    const DEPT_ORDER = [1, 2, 3, 4, 5, 6, 7];
+
+    function initPersonnelSelect() {
+      const sel = document.getElementById('personnel-select');
+      DEPT_ORDER.forEach(deptId => {
+        const dept = DEPARTMENTS.find(d => d.id === deptId);
+        const members = PERSONNEL.filter(p => p.dept === deptId);
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = dept.name + ` (${dept.count} kişi)`;
+        members.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = p.name + ' — ' + p.role;
+          optgroup.appendChild(opt);
+        });
+        sel.appendChild(optgroup);
+      });
+    }
+
+    function switchTab(tab) {
+      document.getElementById('panel-personnel').classList.toggle('hidden', tab !== 'personnel');
+      document.getElementById('panel-admin').classList.toggle('hidden', tab !== 'admin');
+
+      const tabPersonnel = document.getElementById('tab-personnel');
+      const tabAdmin = document.getElementById('tab-admin');
+
+      if (tab === 'personnel') {
+        tabPersonnel.classList.add('bg-white', 'shadow', 'text-blue-700');
+        tabPersonnel.classList.remove('text-gray-500', 'hover:text-gray-700');
+        tabAdmin.classList.remove('bg-white', 'shadow', 'text-blue-700');
+        tabAdmin.classList.add('text-gray-500', 'hover:text-gray-700');
+      } else {
+        tabAdmin.classList.add('bg-white', 'shadow', 'text-blue-700');
+        tabAdmin.classList.remove('text-gray-500', 'hover:text-gray-700');
+        tabPersonnel.classList.remove('bg-white', 'shadow', 'text-blue-700');
+        tabPersonnel.classList.add('text-gray-500', 'hover:text-gray-700');
+      }
+    }
+
+    function loginPersonnel() {
+      const sel = document.getElementById('personnel-select');
+      if (!sel.value) {
+        sel.classList.add('border-red-400', 'ring-2', 'ring-red-100');
+        setTimeout(() => sel.classList.remove('border-red-400', 'ring-2', 'ring-red-100'), 1500);
+        return;
+      }
+      Auth.login('personnel', sel.value);
+      window.location.href = 'personnel.html';
+    }
+
+    function loginAdmin() {
+      Auth.login('admin', null);
+      window.location.href = 'admin.html';
+    }
+
+    initPersonnelSelect();
+  </script>
+</body>
+</html>

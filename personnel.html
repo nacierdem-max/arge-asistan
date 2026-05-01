@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliar Ar-Ge — Personel Paneli</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/speech.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- Sidebar -->
+<div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-blue-800 text-white z-30 flex flex-col shadow-xl lg:translate-x-0 -translate-x-full">
+  <!-- Logo -->
+  <div class="px-4 py-5 border-b border-blue-700">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">🧠</span>
+      <div>
+        <div class="font-bold text-sm">ELİAR Ar-Ge</div>
+        <div class="text-blue-300 text-xs">Personel Paneli</div>
+      </div>
+    </div>
+  </div>
+  <!-- User info -->
+  <div id="sidebar-user" class="px-4 py-3 border-b border-blue-700 bg-blue-900/30">
+    <div class="flex items-center gap-2">
+      <div id="user-avatar" class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold"></div>
+      <div>
+        <div id="user-name" class="text-sm font-medium"></div>
+        <div id="user-dept" class="text-blue-300 text-xs truncate max-w-[130px]"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Nav links -->
+  <nav class="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto">
+    <a href="#" data-nav="dashboard" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">📊</span> Dashboard
+    </a>
+    <a href="#" data-nav="note-input" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">✏️</span> Not Gir
+    </a>
+    <a href="#" data-nav="my-notes" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">📝</span> Notlarım
+    </a>
+    <a href="#" data-nav="my-files" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">📁</span> Dosyalarım
+    </a>
+    <a href="#" data-nav="notifications" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">🔔</span> Bildirimler
+      <span id="notif-badge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">3</span>
+    </a>
+  </nav>
+  <!-- Logout -->
+  <div class="px-4 py-3 border-t border-blue-700">
+    <button onclick="Auth.logout()" class="flex items-center gap-2 text-blue-200 hover:text-white text-sm w-full">
+      <span>🚪</span> Çıkış Yap
+    </button>
+  </div>
+</div>
+
+<!-- Mobile header -->
+<header class="lg:hidden fixed top-0 left-0 right-0 z-20 bg-blue-800 text-white px-4 py-3 flex items-center justify-between shadow-md">
+  <button id="sidebar-toggle" class="text-white p-1">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+  <span class="font-semibold text-sm">🧠 ELİAR Ar-Ge Personel</span>
+  <button onclick="Auth.logout()" class="text-blue-200 text-xs">Çıkış</button>
+</header>
+
+<!-- Main content -->
+<div class="lg:ml-64 min-h-screen">
+  <div class="pt-16 lg:pt-0 p-4 md:p-6 max-w-5xl mx-auto">
+
+    <!-- Dashboard -->
+    <div id="section-dashboard" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">📊 Dashboard</h2>
+      <div id="dashboard-content"></div>
+    </div>
+
+    <!-- Not Girişi -->
+    <div id="section-note-input" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-5">✏️ Not Gir</h2>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <!-- Proje seç -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Proje</label>
+          <select id="note-project" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-gray-50"></select>
+        </div>
+        <!-- Metin -->
+        <div class="mb-4 relative">
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Not</label>
+          <textarea id="note-text" rows="5"
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-gray-50"
+            placeholder="Proje notu, teknik bilgi, plan veya risk bildir..."></textarea>
+          <button id="note-mic-btn"
+            title="Sesli not gir (Türkçe)"
+            class="absolute right-3 bottom-3 p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+            🎤
+          </button>
+        </div>
+        <!-- Dosya ekle -->
+        <div class="mb-5 flex items-center gap-3">
+          <label for="note-file" class="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-100 transition-colors">
+            📎 Dosya Ekle
+            <input type="file" id="note-file" class="hidden" multiple accept=".pdf,.xlsx,.docx,.png,.jpg,.step,.md">
+          </label>
+          <span id="note-file-name" class="text-xs text-gray-400"></span>
+        </div>
+        <!-- Gönder -->
+        <button id="note-submit-btn" onclick="submitNote()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl transition-all shadow text-sm">
+          📤 Gönder
+        </button>
+      </div>
+      <!-- AI Analiz sonucu -->
+      <div id="ai-result" class="hidden mt-4 bg-blue-50 border border-blue-100 rounded-2xl p-5 fade-in">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xl">🧠</span>
+          <span class="font-semibold text-blue-800 text-sm">AI Analiz Sonucu</span>
+          <span id="ai-confidence" class="ml-auto text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full"></span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <span class="text-gray-500 text-xs">Kategori</span>
+            <div id="ai-category" class="mt-0.5 font-medium"></div>
+          </div>
+          <div>
+            <span class="text-gray-500 text-xs">Proje</span>
+            <div id="ai-project" class="mt-0.5 font-medium text-blue-700"></div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <span class="text-gray-500 text-xs">Etiketler</span>
+          <div id="ai-tags" class="mt-1 flex flex-wrap gap-1.5"></div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-blue-100">
+          <span class="text-xs text-green-600 font-medium">✅ Not kaydedildi!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notlarım -->
+    <div id="section-my-notes" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">📝 Notlarım</h2>
+      <!-- Filtre sekmeleri -->
+      <div class="flex flex-wrap gap-2 mb-5">
+        <button class="note-filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white" data-filter="all">Hepsi</button>
+        <button class="note-filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200" data-filter="proje">📋 Proje</button>
+        <button class="note-filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200" data-filter="plan">📅 Plan</button>
+        <button class="note-filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200" data-filter="bilgi">💡 Bilgi</button>
+        <button class="note-filter-btn px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200" data-filter="risk">⚠️ Risk</button>
+      </div>
+      <div id="my-notes-list"></div>
+    </div>
+
+    <!-- Dosyalarım -->
+    <div id="section-my-files" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">📁 Dosyalarım</h2>
+      <div id="my-files-list"></div>
+    </div>
+
+    <!-- Bildirimler -->
+    <div id="section-notifications" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">🔔 Bildirimler</h2>
+      <div id="notifications-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h3 id="modal-title" class="font-bold text-gray-800"></h3>
+      <button id="modal-close" class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none">×</button>
+    </div>
+    <div id="modal-content" class="px-5 py-4"></div>
+  </div>
+</div>
+
+<script>
+  // Auth check
+  Auth.checkAuth();
+  if (Auth.role !== 'personnel') window.location.href = 'index.html';
+
+  // Sidebar kullanıcı bilgisi
+  const user = Auth.currentUser;
+  if (user) {
+    document.getElementById('user-avatar').textContent = user.avatar.slice(0, 2);
+    document.getElementById('user-name').textContent = user.name;
+    document.getElementById('user-dept').textContent = user.deptName || '';
+  }
+
+  // Bildirim badge
+  const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
+  if (unreadCount > 0) {
+    const badge = document.getElementById('notif-badge');
+    badge.textContent = unreadCount;
+    badge.classList.remove('hidden');
+  }
+
+  // Proje select doldur
+  const projSel = document.getElementById('note-project');
+  projSel.innerHTML = '<option value="">— Proje seçin (opsiyonel) —</option>';
+  PROJECTS.forEach(p => {
+    projSel.innerHTML += `<option value="${p.id}">${escapeHtml(p.name)}</option>`;
+  });
+
+  // Dosya adı güster
+  document.getElementById('note-file').addEventListener('change', function() {
+    const names = Array.from(this.files).map(f => f.name).join(', ');
+    document.getElementById('note-file-name').textContent = names || '';
+  });
+
+  // Speech init
+  SpeechInput.init('note-text', 'note-mic-btn', null);
+
+  // Navigation init
+  Nav.init('dashboard');
+
+  // ---- Init functions ----
+
+  window.init_dashboard = function() {
+    const userId = user ? user.id : null;
+    const userNotes = NOTES.filter(n => n.authorId === userId);
+    const userFiles = FILES.filter(f => f.authorId === userId);
+    const userProjects = [...new Set(userNotes.map(n => n.projectId))].filter(Boolean);
+    const activeDeadlines = PROJECTS.filter(p => p.status === 'devam').slice(0, 4);
+
+    document.getElementById('dashboard-content').innerHTML = `
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="stat-card bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div class="text-2xl font-bold text-blue-600">${userProjects.length}</div>
+          <div class="text-xs text-gray-500 mt-1">Aktif Proje</div>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div class="text-2xl font-bold text-green-600">${userNotes.length}</div>
+          <div class="text-xs text-gray-500 mt-1">Toplam Not</div>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div class="text-2xl font-bold text-purple-600">${userFiles.length}</div>
+          <div class="text-xs text-gray-500 mt-1">Dosya</div>
+        </div>
+        <div class="stat-card bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div class="text-2xl font-bold text-orange-500">${unreadCount}</div>
+          <div class="text-xs text-gray-500 mt-1">Bildirim</div>
+        </div>
+      </div>
+      <!-- Yaklaşan Deadlineler -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
+        <h3 class="font-semibold text-gray-800 mb-3">📅 Yaklaşan Deadlineler</h3>
+        <div class="space-y-2">
+          ${activeDeadlines.map(p => `
+          <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+            <div>
+              <div class="text-sm font-medium text-gray-700">${escapeHtml(p.name)}</div>
+              <div class="text-xs text-gray-400">${p.endDate}</div>
+            </div>
+            ${getStatusBadge(p.status)}
+          </div>`).join('')}
+        </div>
+      </div>
+      <!-- Son notlarım -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <h3 class="font-semibold text-gray-800 mb-3">📝 Son Notlarım</h3>
+        ${userNotes.length === 0 ? '<p class="text-sm text-gray-400 text-center py-4">Henüz not girmediniz.</p>' :
+          userNotes.slice(0, 3).map(n => `
+          <div class="border-l-2 border-blue-300 pl-3 py-1.5 mb-2">
+            <div class="text-sm text-gray-700">${escapeHtml(n.text.slice(0, 100))}${n.text.length > 100 ? '...' : ''}</div>
+            <div class="text-xs text-gray-400 mt-0.5">${n.date} — ${getCategoryBadge(n.category)}</div>
+          </div>`).join('')
+        }
+      </div>
+    `;
+  };
+
+  window.init_my_notes = function() {
+    renderMyNotes('all');
+    document.querySelectorAll('.note-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.note-filter-btn').forEach(b => {
+          b.classList.remove('bg-blue-600', 'text-white');
+          b.classList.add('bg-gray-100', 'text-gray-600');
+        });
+        btn.classList.add('bg-blue-600', 'text-white');
+        btn.classList.remove('bg-gray-100', 'text-gray-600');
+        renderMyNotes(btn.getAttribute('data-filter'));
+      });
+    });
+  };
+
+  function renderMyNotes(filter) {
+    const userId = user ? user.id : null;
+    let notes = NOTES.filter(n => n.authorId === userId);
+    if (filter !== 'all') notes = notes.filter(n => n.category === filter);
+    const container = document.getElementById('my-notes-list');
+    if (notes.length === 0) {
+      container.innerHTML = '<div class="text-center text-gray-400 py-8">Bu kategoride not bulunamadı.</div>';
+      return;
+    }
+    container.innerHTML = notes.map(n => `
+      <div class="bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <div class="flex flex-wrap gap-1.5">
+            ${getCategoryBadge(n.category)}
+            ${n.severity ? getSeverityBadge(n.severity) : ''}
+          </div>
+          <span class="text-xs text-gray-400 whitespace-nowrap">${n.date}</span>
+        </div>
+        <p class="text-sm text-gray-700 mb-2">${escapeHtml(n.text)}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-blue-600 font-medium">${escapeHtml(n.project)}</span>
+          <div class="flex flex-wrap gap-1">
+            ${n.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-xs">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.init_my_files = function() {
+    const userId = user ? user.id : null;
+    const files = FILES.filter(f => f.authorId === userId);
+    const container = document.getElementById('my-files-list');
+    if (files.length === 0) {
+      container.innerHTML = '<div class="text-center text-gray-400 py-8">Henüz dosya yüklemediniz.</div>';
+      return;
+    }
+    container.innerHTML = files.map(f => `
+      <div class="bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100 flex items-center gap-3">
+        <span class="text-2xl">${getFileIcon(f.type)}</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">${escapeHtml(f.name)}</div>
+          <div class="text-xs text-gray-400 mt-0.5">${f.project} — ${f.size} — ${f.date}</div>
+        </div>
+        <button class="text-xs text-blue-600 hover:text-blue-700 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+          onclick="showToast('Demo: Dosya indirme simüle edildi', 'info')">
+          ⬇️ İndir
+        </button>
+      </div>
+    `).join('');
+  };
+
+  window.init_notifications = function() {
+    const container = document.getElementById('notifications-list');
+    const icons = { risk: '⚠️', warning: '🟡', info: 'ℹ️', deadline: '⏰', file: '📁' };
+    const colors = { risk: 'border-red-200 bg-red-50', warning: 'border-yellow-200 bg-yellow-50',
+      info: 'border-blue-200 bg-blue-50', deadline: 'border-orange-200 bg-orange-50', file: 'border-gray-200 bg-gray-50' };
+    container.innerHTML = NOTIFICATIONS.map(n => `
+      <div class="rounded-xl p-4 mb-3 border ${colors[n.type] || colors.info} ${n.read ? 'opacity-70' : ''}">
+        <div class="flex items-start gap-3">
+          <span class="text-xl mt-0.5">${icons[n.type] || 'ℹ️'}</span>
+          <div class="flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-semibold text-gray-800">${escapeHtml(n.title)}</span>
+              <span class="text-xs text-gray-400">${n.time}</span>
+            </div>
+            <p class="text-sm text-gray-600 mt-0.5">${escapeHtml(n.text)}</p>
+          </div>
+          ${!n.read ? '<span class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>' : ''}
+        </div>
+      </div>
+    `).join('');
+  };
+
+  // Not Gönder
+  function submitNote() {
+    const text = document.getElementById('note-text').value.trim();
+    if (!text) {
+      showToast('Lütfen bir not yazın!', 'warning');
+      return;
+    }
+    const btn = document.getElementById('note-submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="ai-analyzing">🧠 AI analiz ediyor...</span>';
+
+    setTimeout(() => {
+      const result = simulateAIAnalysis(text);
+      btn.disabled = false;
+      btn.innerHTML = '📤 Gönder';
+
+      // Show result
+      const aiRes = document.getElementById('ai-result');
+      aiRes.classList.remove('hidden');
+      document.getElementById('ai-confidence').textContent = `%${result.confidence} güven`;
+      document.getElementById('ai-category').innerHTML = getCategoryBadge(result.category);
+      document.getElementById('ai-project').textContent = result.project;
+      document.getElementById('ai-tags').innerHTML = result.tags.map(t =>
+        `<span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">${escapeHtml(t)}</span>`
+      ).join('');
+
+      showToast('Not başarıyla kaydedildi!', 'success');
+      // Clear form
+      document.getElementById('note-text').value = '';
+      document.getElementById('note-project').value = '';
+    }, 2000);
+  }
+</script>
+</body>
+</html>
