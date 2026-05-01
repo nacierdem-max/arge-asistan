@@ -108,9 +108,9 @@ const GanttChart = {
         const isRisky = this.isProjectRisky(project);
         const effectiveStatus = isRisky ? 'riskli' : project.status;
         const barClass = this.getBarStyle({ ...project, status: effectiveStatus });
-        const members = project.members.slice(0, 3).map(id => {
+        const memberObjects = project.members.slice(0, 3).map(id => {
           const p = PERSONNEL.find(x => x.id === id);
-          return p ? p.name : '';
+          return p ? { id: p.id, firstName: p.name.split(' ')[0] } : null;
         }).filter(Boolean);
         const extraCount = project.members.length > 3 ? `+${project.members.length - 3}` : '';
 
@@ -121,16 +121,14 @@ const GanttChart = {
         const leftPct = (startCol / totalCols * 100).toFixed(1);
         const widthPct = (colSpan / totalCols * 100).toFixed(1);
 
-        const progress = project.total > 0 ? Math.round((project.spent / project.total) * 100) : 0;
-
         html += `
         <div class="flex items-center mb-3 group cursor-pointer hover:bg-blue-50 rounded-lg transition-colors"
              data-project-id="${project.id}"
-             onclick="GanttChart.showProjectDetail(${project.id})">
+             onclick="showProjectDetail(${project.id})">
           <div class="w-56 flex-shrink-0 px-2">
             <div class="text-sm font-medium text-gray-800 truncate" title="${escapeHtml(project.name)}">${escapeHtml(project.name)}</div>
             <div class="flex flex-wrap gap-0.5 mt-0.5">
-              ${members.map(m => `<span class="text-xs text-gray-500">${escapeHtml(m.split(' ')[0])}</span>`).join('<span class="text-gray-300 text-xs">, </span>')}
+              ${memberObjects.map(m => `<a href="#" onclick="event.preventDefault(); event.stopPropagation(); showPersonDetail(${m.id})" class="text-xs text-gray-500 hover:text-blue-600 hover:underline">${escapeHtml(m.firstName)}</a>`).join('<span class="text-gray-300 text-xs">, </span>')}
               ${extraCount ? `<span class="text-xs text-blue-500 font-medium">${escapeHtml(extraCount)}</span>` : ''}
             </div>
           </div>
@@ -179,11 +177,9 @@ const GanttChart = {
     const project = PROJECTS.find(p => p.id === projectId);
     if (!project || !this.tooltip) return;
     const risks = NOTES.filter(n => n.category === 'risk' && n.projectId === projectId);
-    const progress = project.total > 0 ? Math.round((project.spent / project.total) * 100) : 0;
     this.tooltip.innerHTML = `
       <div class="font-semibold mb-1">${escapeHtml(project.name)}</div>
       <div class="text-gray-300">${project.startDate} → ${project.endDate}</div>
-      <div class="mt-1">Bütçe: %${progress} (${formatCurrency(project.spent)} / ${formatCurrency(project.total)})</div>
       <div>Ekip: ${project.members.length} kişi</div>
       ${risks.length > 0 ? `<div class="mt-1 text-red-300">⚠️ ${risks.length} aktif risk</div>` : ''}
     `;
@@ -204,57 +200,6 @@ const GanttChart = {
   },
 
   showProjectDetail(projectId) {
-    const project = PROJECTS.find(p => p.id === projectId);
-    if (!project) return;
-    const members = project.members.map(id => PERSONNEL.find(x => x.id === id)).filter(Boolean);
-    const risks = NOTES.filter(n => n.category === 'risk' && n.projectId === projectId);
-    const notes = NOTES.filter(n => n.projectId === projectId && n.category !== 'risk').slice(0, 3);
-    const progress = project.total > 0 ? Math.round((project.spent / project.total) * 100) : 0;
-
-    const content = `
-      <div class="space-y-4">
-        <div class="flex items-center gap-3 flex-wrap">
-          ${getStatusBadge(project.status)}
-          <span class="text-sm text-gray-500">${project.startDate} — ${project.endDate}</span>
-        </div>
-        <p class="text-sm text-gray-700">${escapeHtml(project.desc)}</p>
-        <div>
-          <div class="text-sm font-medium text-gray-700 mb-1">Bütçe Kullanımı</div>
-          <div class="flex items-center gap-2">
-            <div class="flex-1 bg-gray-200 rounded-full h-2">
-              <div class="bg-blue-500 h-2 rounded-full" style="width:${progress}%"></div>
-            </div>
-            <span class="text-xs text-gray-600 whitespace-nowrap">%${progress} — ${formatCurrency(project.spent)} / ${formatCurrency(project.total)}</span>
-          </div>
-        </div>
-        <div>
-          <div class="text-sm font-medium text-gray-700 mb-2">Ekip (${members.length} kişi)</div>
-          <div class="flex flex-wrap gap-2">
-            ${members.map(m => `
-              <div class="flex items-center gap-1.5 bg-gray-50 rounded-full px-2 py-1">
-                <div class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">${escapeHtml(m.avatar.slice(0,2))}</div>
-                <span class="text-xs text-gray-700">${escapeHtml(m.name)}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-        ${risks.length > 0 ? `
-        <div class="bg-red-50 rounded-lg p-3">
-          <div class="text-sm font-medium text-red-800 mb-2">⚠️ Aktif Riskler</div>
-          ${risks.map(r => `<div class="text-xs text-red-700 mb-1">• ${escapeHtml(r.text.replace('⚠️ ', ''))}</div>`).join('')}
-        </div>
-        ` : ''}
-        ${notes.length > 0 ? `
-        <div>
-          <div class="text-sm font-medium text-gray-700 mb-2">Son Notlar</div>
-          ${notes.map(n => `<div class="text-xs text-gray-600 border-l-2 border-blue-300 pl-2 mb-2">${escapeHtml(n.text.slice(0, 120))}${n.text.length > 120 ? '...' : ''}<span class="text-gray-400 ml-1">— ${escapeHtml(n.author)}</span></div>`).join('')}
-        </div>
-        ` : ''}
-        <div class="flex flex-wrap gap-1.5">
-          ${project.tags.map(t => `<span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">${escapeHtml(t)}</span>`).join('')}
-        </div>
-      </div>
-    `;
-    Modal.show(project.name, content);
+    showProjectDetail(projectId);
   }
 };

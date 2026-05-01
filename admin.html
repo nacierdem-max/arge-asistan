@@ -307,7 +307,7 @@
 
 <!-- Modal -->
 <div id="modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between px-5 py-4 border-b">
       <h3 id="modal-title" class="font-bold text-gray-800"></h3>
       <button id="modal-close" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
@@ -330,7 +330,7 @@
     document.getElementById('dashboard-projects').innerHTML = PROJECTS.map(p => {
       const depts = p.depts.map(d => DEPARTMENTS.find(x => x.id === d)?.short || '').join(', ');
       const isRisky = NOTES.some(n => n.category === 'risk' && n.projectId === p.id);
-      return `<tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="GanttChart.showProjectDetail(${p.id})">
+      return `<tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="showProjectDetail(${p.id})">
         <td class="px-3 py-2.5">
           <div class="font-medium text-gray-800">${escapeHtml(p.name)}</div>
           ${isRisky ? '<span class="text-xs text-red-500">⚠️ Risk var</span>' : ''}
@@ -357,7 +357,7 @@
       <div class="flex items-start gap-2 py-2 border-b border-gray-50 last:border-0">
         <span class="text-xs mt-0.5">${n.severity === 'yüksek' ? '🔴' : n.severity === 'orta' ? '🟡' : '🟢'}</span>
         <div>
-          <div class="text-xs font-medium text-gray-700">${escapeHtml(n.project)}</div>
+          <div class="text-xs font-medium">${n.projectId ? clickableProject(n.projectId, n.project) : `<span class="text-gray-700">${escapeHtml(n.project)}</span>`}</div>
           <div class="text-xs text-gray-500 mt-0.5">${escapeHtml(n.text.replace('⚠️ ', '').slice(0, 70))}...</div>
         </div>
       </div>
@@ -432,14 +432,14 @@
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2 mb-1">
-              <span class="text-sm font-medium text-gray-800">${escapeHtml(n.author)}</span>
+              ${n.authorId ? clickablePerson(n.authorId, n.author) : `<span class="text-sm font-medium text-gray-800">${escapeHtml(n.author)}</span>`}
               <span class="text-xs text-gray-400">${n.dept}</span>
               ${getCategoryBadge(n.category)}
               ${n.severity ? getSeverityBadge(n.severity) : ''}
             </div>
             <p class="text-sm text-gray-700 mb-2">${escapeHtml(n.text)}</p>
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <span class="text-xs font-medium text-blue-600">${escapeHtml(n.project)}</span>
+              <span class="text-xs font-medium">${n.projectId ? clickableProject(n.projectId, n.project) : `<span class="text-blue-600">${escapeHtml(n.project)}</span>`}</span>
               <div class="flex items-center gap-2">
                 ${n.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-xs">${escapeHtml(t)}</span>`).join('')}
                 <span class="text-xs text-gray-400">${n.date}</span>
@@ -478,13 +478,13 @@
           <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
             <div class="flex items-center gap-2">
               ${getSeverityBadge(r.severity)}
-              <span class="text-sm font-semibold text-gray-800">${escapeHtml(r.project)}</span>
+              ${r.projectId ? clickableProject(r.projectId, r.project) : `<span class="text-sm font-semibold text-gray-800">${escapeHtml(r.project)}</span>`}
             </div>
             <span class="text-xs text-gray-400">${r.date}</span>
           </div>
           <p class="text-sm text-gray-700 mb-2">${escapeHtml(r.text)}</p>
           <div class="flex items-center justify-between">
-            <span class="text-xs text-gray-500">👤 ${escapeHtml(r.author)} — ${escapeHtml(r.dept)}</span>
+            <span class="text-xs text-gray-500">👤 ${r.authorId ? clickablePerson(r.authorId, r.author) : escapeHtml(r.author)} — ${escapeHtml(r.dept)}</span>
             <div class="flex gap-1">
               ${r.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-white/60 rounded text-xs text-gray-600">${escapeHtml(t)}</span>`).join('')}
             </div>
@@ -528,16 +528,21 @@
             </tr>
           </thead>
           <tbody>
-            ${files.map(f => `
+            ${files.map(f => {
+              const proj = PROJECTS.find(p => p.name === f.project);
+              return `
               <tr class="border-b border-gray-50 hover:bg-gray-50">
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
                     <span class="text-lg">${getFileIcon(f.type)}</span>
-                    <span class="font-medium text-gray-800 text-xs">${escapeHtml(f.name)}</span>
+                    <div>
+                      <span class="font-medium text-gray-800 text-xs">${escapeHtml(f.name)}</span>
+                      ${proj ? `<div class="text-xs mt-0.5">${clickableProject(proj.id, f.project)}</div>` : ''}
+                    </div>
                   </div>
                 </td>
                 <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(f.dept)}</td>
-                <td class="px-4 py-3 hidden lg:table-cell text-xs text-gray-600">${escapeHtml(f.author)}</td>
+                <td class="px-4 py-3 hidden lg:table-cell text-xs text-gray-600">${f.authorId ? clickablePerson(f.authorId, f.author) : escapeHtml(f.author)}</td>
                 <td class="px-4 py-3 text-xs text-gray-500">${f.size}</td>
                 <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-400">${f.date}</td>
                 <td class="px-4 py-3">
@@ -547,7 +552,7 @@
                   </button>
                 </td>
               </tr>
-            `).join('')}
+            `}).join('')}
           </tbody>
         </table>
       </div>
@@ -563,7 +568,12 @@
       risk: 'bg-red-100 text-red-700'
     };
     const icons = { note: '📝', file: '📁', project: '🚀', risk: '⚠️' };
-    document.getElementById('audit-list').innerHTML = AUDIT_LOG.map((item, i) => `
+    document.getElementById('audit-list').innerHTML = AUDIT_LOG.map((item, i) => {
+      const person = PERSONNEL.find(p => p.name === item.user);
+      const userLink = person
+        ? clickablePerson(person.id, item.user)
+        : `<span class="text-sm font-medium text-gray-800">${escapeHtml(item.user)}</span>`;
+      return `
       <div class="audit-item relative flex gap-4 pb-4 ${i < AUDIT_LOG.length - 1 ? 'border-b border-gray-50' : ''}">
         <div class="w-6 h-6 rounded-full ${colors[item.category] || 'bg-gray-100 text-gray-600'} flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
           ${icons[item.category] || '●'}
@@ -571,7 +581,7 @@
         <div class="flex-1">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <span class="text-sm font-medium text-gray-800">${escapeHtml(item.user)}</span>
+              ${userLink}
               <span class="text-sm text-gray-500 ml-1">${escapeHtml(item.action)}</span>
             </div>
             <span class="text-xs text-gray-400">${item.time}</span>
@@ -579,7 +589,8 @@
           <div class="text-xs text-gray-500 mt-0.5">${escapeHtml(item.detail)}</div>
         </div>
       </div>
-    `).join('');
+    `;
+    }).join('');
   };
 
   // ---- PERSONEL YÖNETİMİ INIT ----
@@ -646,7 +657,7 @@
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
                     <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0" aria-label="${escapeHtml(p.name)} avatarı">${escapeHtml(p.avatar)}</div>
-                    <span class="font-medium text-gray-800">${escapeHtml(p.name)}</span>
+                    <span class="font-medium text-gray-800 hover:text-blue-600 hover:underline" onclick="event.stopPropagation(); showPersonDetail(${p.id})">${escapeHtml(p.name)}</span>
                   </div>
                 </td>
                 <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</td>
@@ -769,7 +780,7 @@
               ${[...inProgress, ...planned, ...done].map(t => `
                 <tr class="border-b border-gray-50 hover:bg-gray-50">
                   <td class="px-3 py-2.5 font-medium text-gray-800">${escapeHtml(t.title)}</td>
-                  <td class="px-3 py-2.5 hidden md:table-cell text-xs text-blue-600">${escapeHtml(t.project)}</td>
+                  <td class="px-3 py-2.5 hidden md:table-cell text-xs">${t.projectId ? clickableProject(t.projectId, t.project) : `<span class="text-blue-600">${escapeHtml(t.project)}</span>`}</td>
                   <td class="px-3 py-2.5">${taskStatusBadge(t.status)}</td>
                   <td class="px-3 py-2.5 hidden sm:table-cell text-xs text-gray-500">${t.startDate}</td>
                   <td class="px-3 py-2.5 hidden sm:table-cell text-xs text-gray-500">${t.endDate}</td>
@@ -822,7 +833,7 @@
                 <span class="text-xs text-gray-400 ml-auto">${n.date}</span>
               </div>
               <p class="text-sm text-gray-700">${escapeHtml(n.text.replace('⚠️ ', '').slice(0, 120))}${n.text.length > 120 ? '...' : ''}</p>
-              <div class="text-xs text-blue-600 mt-1">${escapeHtml(n.project)}</div>
+              <div class="text-xs mt-1">${n.projectId ? clickableProject(n.projectId, n.project) : `<span class="text-blue-600">${escapeHtml(n.project)}</span>`}</div>
             </div>
           `).join('')}
         </div>
@@ -840,7 +851,7 @@
                 <span class="text-xs text-gray-400 ml-auto">${r.date}</span>
               </div>
               <p class="text-sm text-gray-700">${escapeHtml(r.text.replace('⚠️ ', ''))}</p>
-              <div class="text-xs text-blue-600 mt-1">${escapeHtml(r.project)}</div>
+              <div class="text-xs mt-1">${r.projectId ? clickableProject(r.projectId, r.project) : `<span class="text-blue-600">${escapeHtml(r.project)}</span>`}</div>
             </div>
           `).join('')}
         </div>
