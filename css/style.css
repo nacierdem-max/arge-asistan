@@ -197,7 +197,7 @@ body {
   font-weight: 500;
 }
 
-/* Audit timeline */
+/* Audit timeline — left: icon width (24px) / 2 - line width (2px) / 2 = 11px */
 .audit-item::before {
   content: '';
   position: absolute;

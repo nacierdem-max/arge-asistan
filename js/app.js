@@ -48,6 +48,7 @@ const Nav = {
   current: null,
 
   init(defaultSection) {
+    this.initialized = new Set();
     this.current = defaultSection;
     this.show(defaultSection);
 
@@ -75,10 +76,10 @@ const Nav = {
     const target = document.getElementById('section-' + section);
     if (target) {
       target.classList.remove('hidden');
-      // Lazy init
-      if (typeof window['init_' + section] === 'function') {
+      // Lazy init — sadece ilk ziyarette çalışır
+      if (!this.initialized.has(section) && typeof window['init_' + section] === 'function') {
         window['init_' + section]();
-        window['init_' + section] = null; // Sadece bir kez çalış
+        this.initialized.add(section);
       }
     }
     // Aktif nav item
