@@ -636,7 +636,7 @@
 
   window.init_assistant = function() {
     AIChat.init('chat-messages','chat-input','chat-send-btn','chat-mic-btn');
-    if (typeof SpeechInput!=='undefined') SpeechInput.init('chat-input','chat-mic-btn',()=>AIChat.send());
+    SpeechInput?.init('chat-input','chat-mic-btn',()=>AIChat.send());
     document.getElementById('chat-quick-buttons').innerHTML =
       ['T9 durumu','Teleskop raporu','Riskler','Bu hafta ne yapıldı?','ADW bağımlılıklar','Personel iş yükü'].map(q =>
         `<button onclick="document.getElementById('chat-input').value='${q}'; AIChat.send();"

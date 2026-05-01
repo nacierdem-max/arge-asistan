@@ -408,16 +408,10 @@
   });
 
   // Speech init
-  SpeechInput.init('note-text', 'note-mic-btn', null);
+  SpeechInput?.init('note-text', 'note-mic-btn', null);
 
   // Navigation init
   Nav.init('my-tasks');
-
-  // Lider ise özel linkleri göster
-  if (user && user.role_level === 'lead') {
-    const leadNavLinks = document.getElementById('lead-nav-links');
-    if (leadNavLinks) leadNavLinks.classList.remove('hidden');
-  }
 
   // ---- Init functions ----
 
