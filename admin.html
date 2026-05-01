@@ -30,18 +30,18 @@
     </div>
   </div>
   <nav class="flex-1 px-3 py-4 space-y-1">
-    <a href="#" data-nav="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
-      <span class="text-base">📊</span><span>Genel Bakış</span>
+    <a href="#" data-nav="team" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">👥</span><span>Ekip</span>
+    </a>
+    <a href="#" data-nav="projects" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">📅</span><span>Projeler & Görevler</span>
     </a>
     <a href="#" data-nav="assistant" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
       <span class="text-base">💬</span><span>Asistan</span>
       <span class="ml-auto text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium">AI</span>
     </a>
-    <a href="#" data-nav="projects" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
-      <span class="text-base">📅</span><span>Projeler & Görevler</span>
-    </a>
-    <a href="#" data-nav="team" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
-      <span class="text-base">👥</span><span>Ekip</span>
+    <a href="#" data-nav="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">📊</span><span>Genel Bakış</span>
     </a>
   </nav>
   <div class="px-3 pb-2">
@@ -231,9 +231,9 @@
         <div class="flex flex-wrap gap-2">
           <button onclick="openAssignTaskModal()" class="text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all" style="background:#34C759;color:white;">✅ Görev Ata</button>
           <button onclick="openRoleModal()" class="text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all" style="background:#8B5CF6;color:white;">🔑 Yetki</button>
-          <button onclick="setPersonnelView('compact')" id="view-compact" class="view-btn active">≡ Kompakt</button>
+          <button onclick="setPersonnelView('compact')" id="view-compact" class="view-btn">≡ Kompakt</button>
           <button onclick="setPersonnelView('medium')" id="view-medium" class="view-btn">▤ Orta</button>
-          <button onclick="setPersonnelView('wide')" id="view-wide" class="view-btn">▦ Geniş</button>
+          <button onclick="setPersonnelView('wide')" id="view-wide" class="view-btn active">▦ Geniş</button>
         </div>
       </div>
       <div class="apple-card p-4 mb-5">
@@ -349,7 +349,7 @@
 <script>
   Auth.checkAuth();
   if (Auth.role !== 'admin') window.location.href = 'index.html';
-  Nav.init('dashboard');
+  Nav.init('team');
 
   // Override Nav.show once for: (1) section name mapping, (2) apple sidebar active style
   const _origNavShow = Nav.show.bind(Nav);
@@ -663,7 +663,7 @@
   };
   window.init_personnel = window.init_team;
 
-  let personnelViewMode = 'compact';
+  let personnelViewMode = 'wide';
   window.setPersonnelView = function(mode) {
     personnelViewMode = mode;
     ['compact','medium','wide'].forEach(m => { const btn=document.getElementById('view-'+m); if(btn) btn.classList.toggle('active',m===mode); });
