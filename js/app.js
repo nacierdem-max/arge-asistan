@@ -77,8 +77,9 @@ const Nav = {
     if (target) {
       target.classList.remove('hidden');
       // Lazy init — sadece ilk ziyarette çalışır
-      if (!this.initialized.has(section) && typeof window['init_' + section] === 'function') {
-        window['init_' + section]();
+      const initName = 'init_' + section.replace(/-/g, '_');
+      if (!this.initialized.has(section) && typeof window[initName] === 'function') {
+        window[initName]();
         this.initialized.add(section);
       }
     }
