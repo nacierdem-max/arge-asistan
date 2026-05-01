@@ -657,7 +657,7 @@
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
                     <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0" aria-label="${escapeHtml(p.name)} avatarı">${escapeHtml(p.avatar)}</div>
-                    <a href="#" data-modal-person-id="${parseInt(p.id, 10)}" onclick="event.stopPropagation()" class="font-medium text-gray-800 hover:text-blue-600 hover:underline">${escapeHtml(p.name)}</a>
+                    <a href="#" data-modal-person-id="${p.id}" onclick="event.stopPropagation()" class="font-medium text-gray-800 hover:text-blue-600 hover:underline">${escapeHtml(p.name)}</a>
                   </div>
                 </td>
                 <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</td>

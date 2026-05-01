@@ -128,7 +128,7 @@ const GanttChart = {
           <div class="w-56 flex-shrink-0 px-2">
             <div class="text-sm font-medium text-gray-800 truncate" title="${escapeHtml(project.name)}">${escapeHtml(project.name)}</div>
             <div class="flex flex-wrap gap-0.5 mt-0.5">
-              ${memberObjects.map(m => `<a href="#" data-modal-person-id="${parseInt(m.id, 10)}" onclick="event.stopPropagation()" class="text-xs text-gray-500 hover:text-blue-600 hover:underline">${escapeHtml(m.firstName)}</a>`).join('<span class="text-gray-300 text-xs">, </span>')}
+              ${memberObjects.map(m => `<a href="#" data-modal-person-id="${m.id}" onclick="event.stopPropagation()" class="text-xs text-gray-500 hover:text-blue-600 hover:underline">${escapeHtml(m.firstName)}</a>`).join('<span class="text-gray-300 text-xs">, </span>')}
               ${extraCount ? `<span class="text-xs text-blue-500 font-medium">${escapeHtml(extraCount)}</span>` : ''}
             </div>
           </div>
