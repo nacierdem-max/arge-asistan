@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/chat.js"></script>
   <script src="js/speech.js"></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -54,6 +55,13 @@
     <a href="#" data-nav="notifications" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
       <span class="text-lg">🔔</span> Bildirimler
       <span id="notif-badge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">3</span>
+    </a>
+    <a href="#" data-nav="messages" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">📨</span> Mesajlarım
+      <span id="msg-badge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden"></span>
+    </a>
+    <a href="#" data-nav="ai-chat" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-600">
+      <span class="text-lg">🤖</span> AI Sohbet
     </a>
     <!-- Takım Lideri Linkleri -->
     <div id="lead-nav-links" class="hidden pt-2 border-t border-blue-700 mt-2 space-y-0.5">
@@ -262,6 +270,100 @@
       <div id="notifications-list"></div>
     </div>
 
+    <!-- Mesajlarım -->
+    <div id="section-messages" class="section-panel hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-gray-800">📨 Mesajlarım</h2>
+        <button onclick="openNewMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
+          ✉️ Yeni Mesaj
+        </button>
+      </div>
+      <!-- Gelen / Gönderilen tabs -->
+      <div class="flex gap-2 mb-4">
+        <button onclick="showMsgTab('inbox')" id="tab-inbox" class="px-4 py-1.5 rounded-full text-sm font-medium bg-blue-600 text-white">📥 Gelen Kutusu</button>
+        <button onclick="showMsgTab('sent')" id="tab-sent" class="px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200">📤 Gönderilenler</button>
+      </div>
+      <div id="messages-content"></div>
+    </div>
+
+    <!-- AI Sohbet (Personel) -->
+    <div id="section-ai-chat" class="section-panel hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">🤖 AI Sohbet</h2>
+      <div class="flex gap-4" style="height:calc(100vh - 220px); min-height:450px;">
+        <!-- Sol: Geçmiş -->
+        <div class="w-48 flex-shrink-0 bg-white rounded-2xl shadow-sm border border-gray-100 flex-col hidden md:flex">
+          <div class="px-3 py-3 border-b border-gray-100">
+            <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Geçmişim</span>
+          </div>
+          <div id="personnel-chat-history-list" class="flex-1 overflow-y-auto py-1"></div>
+          <div class="p-2 border-t border-gray-100">
+            <button onclick="startPersonnelNewChat()"
+              class="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-medium transition-all">
+              + Yeni Konuşma
+            </button>
+          </div>
+        </div>
+        <!-- Sağ: Sohbet -->
+        <div class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col min-w-0">
+          <div id="personnel-chat-title" class="px-4 py-2.5 border-b border-gray-100 text-xs text-gray-500 font-medium">Yeni Konuşma</div>
+          <div id="personnel-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-1"></div>
+          <div class="border-t border-gray-100 p-3">
+            <div class="flex gap-2">
+              <input id="personnel-chat-input" type="text"
+                placeholder="Projeniz hakkında soru sorun..."
+                class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+              <button id="personnel-chat-send-btn"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow">
+                Gönder →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Yeni Mesaj Modal -->
+<div id="modal-new-msg" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h3 class="font-bold text-gray-800">✉️ Yeni Mesaj Gönder</h3>
+      <button onclick="document.getElementById('modal-new-msg').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
+    </div>
+    <div class="px-5 py-4 space-y-4">
+      <div>
+        <label class="modal-form-label">Alıcı *</label>
+        <select id="new-msg-to" class="modal-form-input">
+          <option value="">— Kişi seçin —</option>
+        </select>
+      </div>
+      <div>
+        <label class="modal-form-label">Konu *</label>
+        <input id="new-msg-subject" type="text" class="modal-form-input" placeholder="Mesaj konusu...">
+      </div>
+      <div>
+        <label class="modal-form-label">İlgili Proje</label>
+        <select id="new-msg-project" class="modal-form-input">
+          <option value="">— Proje seçin (opsiyonel) —</option>
+        </select>
+      </div>
+      <div>
+        <label class="modal-form-label">Mesaj *</label>
+        <textarea id="new-msg-text" rows="4" class="modal-form-input" placeholder="Mesajınızı yazın..."></textarea>
+      </div>
+      <div class="flex items-center gap-3">
+        <label for="new-msg-file" class="cursor-pointer flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-600 hover:bg-gray-100 transition-colors">
+          📎 Dosya Ekle
+          <input type="file" id="new-msg-file" class="hidden" multiple>
+        </label>
+        <span id="new-msg-file-name" class="text-xs text-gray-400"></span>
+      </div>
+      <button onclick="submitNewMessage()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow text-sm">
+        📤 Gönder
+      </button>
+    </div>
   </div>
 </div>
 
@@ -295,6 +397,13 @@
     const badge = document.getElementById('notif-badge');
     badge.textContent = unreadCount;
     badge.classList.remove('hidden');
+  }
+  // Mesaj badge
+  const currentUserId = user ? user.id : null;
+  const unreadMsgCount = MESSAGES.filter(m => m.to === currentUserId && !m.read).length;
+  if (unreadMsgCount > 0) {
+    const msgBadge = document.getElementById('msg-badge');
+    if (msgBadge) { msgBadge.textContent = unreadMsgCount; msgBadge.classList.remove('hidden'); }
   }
 
   // Proje select doldur
@@ -638,16 +747,25 @@
 
   window.init_notifications = function() {
     const container = document.getElementById('notifications-list');
-    const icons = { risk: '⚠️', warning: '🟡', info: 'ℹ️', deadline: '⏰', file: '📁' };
-    const colors = { risk: 'border-red-200 bg-red-50', warning: 'border-yellow-200 bg-yellow-50',
-      info: 'border-blue-200 bg-blue-50', deadline: 'border-orange-200 bg-orange-50', file: 'border-gray-200 bg-gray-50' };
-    container.innerHTML = NOTIFICATIONS.map(n => `
-      <div class="rounded-xl p-4 mb-3 border ${colors[n.type] || colors.info} ${n.read ? 'opacity-70' : ''}">
+    const icons = { risk: '🔴', warning: '🟡', info: 'ℹ️', deadline: '⏰', file: '📁', message: '💬', dependency: '🔗', completion: '✅' };
+    const colors = {
+      risk: 'border-red-200 bg-red-50', warning: 'border-yellow-200 bg-yellow-50',
+      info: 'border-blue-200 bg-blue-50', deadline: 'border-orange-200 bg-orange-50',
+      file: 'border-gray-200 bg-gray-50', message: 'border-indigo-200 bg-indigo-50',
+      dependency: 'border-purple-200 bg-purple-50', completion: 'border-emerald-200 bg-emerald-50'
+    };
+    container.innerHTML =
+      `<button onclick="NOTIFICATIONS.forEach(n=>{n.read=true}); document.querySelectorAll('#notif-badge,#msg-badge').forEach(b=>b.classList.add('hidden')); window.init_notifications();"
+        class="w-full text-xs text-blue-600 hover:text-blue-700 py-2 mb-3 border border-blue-100 rounded-xl hover:bg-blue-50 transition-colors">
+        ✓ Tümünü okundu işaretle
+      </button>` +
+      NOTIFICATIONS.map(n => `
+      <div class="rounded-xl p-4 mb-3 border ${colors[n.type] || colors.info} ${n.read ? 'opacity-70' : 'border-l-4'}">
         <div class="flex items-start gap-3">
           <span class="text-xl mt-0.5">${icons[n.type] || 'ℹ️'}</span>
           <div class="flex-1">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-sm font-semibold text-gray-800">${escapeHtml(n.title)}</span>
+              <span class="text-sm ${n.read ? 'font-medium' : 'font-bold'} text-gray-800">${escapeHtml(n.title)}</span>
               <span class="text-xs text-gray-400">${n.time}</span>
             </div>
             <p class="text-sm text-gray-600 mt-0.5">${escapeHtml(n.text)}</p>
@@ -657,6 +775,271 @@
       </div>
     `).join('');
   };
+
+  // ---- MESAJLARIM INIT ----
+  window.init_messages = function() {
+    // Msg badge
+    const userId = user ? user.id : null;
+    const unreadMsgs = MESSAGES.filter(m => m.to === userId && !m.read).length;
+    const msgBadge = document.getElementById('msg-badge');
+    if (msgBadge) {
+      if (unreadMsgs > 0) { msgBadge.textContent = unreadMsgs; msgBadge.classList.remove('hidden'); }
+      else { msgBadge.classList.add('hidden'); }
+    }
+    // Fill recipient select in modal
+    const toSel = document.getElementById('new-msg-to');
+    if (toSel && toSel.options.length === 1) {
+      const opts = PERSONNEL.filter(p => p.id !== userId).map(p =>
+        `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName)}</option>`
+      ).join('');
+      toSel.innerHTML += opts;
+    }
+    const projSelMsg = document.getElementById('new-msg-project');
+    if (projSelMsg && projSelMsg.options.length === 1) {
+      projSelMsg.innerHTML += PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    }
+    // File attachment listener (registered once during init)
+    const fileInput = document.getElementById('new-msg-file');
+    if (fileInput) {
+      fileInput.addEventListener('change', function() {
+        const names = Array.from(this.files).map(f => f.name).join(', ');
+        const fileNameEl = document.getElementById('new-msg-file-name');
+        if (fileNameEl) fileNameEl.textContent = names || '';
+      });
+    }
+    showMsgTab('inbox');
+  };
+
+  window.showMsgTab = function(tab) {
+    const userId = user ? user.id : null;
+    ['inbox', 'sent'].forEach(t => {
+      const btn = document.getElementById('tab-' + t);
+      if (btn) {
+        if (t === tab) { btn.classList.add('bg-blue-600', 'text-white'); btn.classList.remove('bg-gray-100', 'text-gray-600'); }
+        else { btn.classList.remove('bg-blue-600', 'text-white'); btn.classList.add('bg-gray-100', 'text-gray-600'); }
+      }
+    });
+    const msgs = tab === 'inbox'
+      ? MESSAGES.filter(m => m.to === userId)
+      : MESSAGES.filter(m => m.from === userId);
+    const container = document.getElementById('messages-content');
+    if (!container) return;
+    if (msgs.length === 0) {
+      container.innerHTML = `<div class="text-center text-gray-400 py-10">${tab === 'inbox' ? 'Gelen mesaj yok.' : 'Gönderilen mesaj yok.'}</div>`;
+      return;
+    }
+    container.innerHTML = msgs.map(m => {
+      const otherPersonId = tab === 'inbox' ? m.from : m.to;
+      const otherP = PERSONNEL.find(p => p.id === otherPersonId);
+      const proj = PROJECTS.find(p => p.id === m.relatedProjectId);
+      return `
+      <div class="bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors ${!m.read && tab === 'inbox' ? 'border-l-4 border-l-blue-400' : ''}">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">
+              ${escapeHtml(otherP ? otherP.avatar.slice(0,2) : '?')}
+            </div>
+            <div>
+              <span class="text-sm font-medium text-gray-800">${escapeHtml(otherP ? otherP.name : 'Bilinmiyor')}</span>
+              <span class="text-xs text-gray-400 ml-2">${tab === 'inbox' ? 'Gönderen' : 'Alıcı'}</span>
+            </div>
+          </div>
+          <span class="text-xs text-gray-400 whitespace-nowrap">${m.date} ${m.time}</span>
+        </div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">${escapeHtml(m.subject)}</div>
+        <p class="text-xs text-gray-600 mb-2">${escapeHtml(m.text.slice(0, 120))}${m.text.length > 120 ? '...' : ''}</p>
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-3">
+            ${m.attachment ? `<span class="text-xs text-gray-500">📎 ${escapeHtml(m.attachment)}</span>` : ''}
+            ${proj ? `<span class="text-xs text-blue-600">${escapeHtml(proj.name)}</span>` : ''}
+          </div>
+          ${!m.read && tab === 'inbox' ? '<span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Yeni</span>' : ''}
+        </div>
+      </div>`;
+    }).join('');
+  };
+
+  window.openNewMessageModal = function() {
+    document.getElementById('modal-new-msg').classList.remove('hidden');
+    // Trigger init if not done
+    const toSel = document.getElementById('new-msg-to');
+    if (toSel && toSel.options.length === 1) {
+      const userId = user ? user.id : null;
+      const opts = PERSONNEL.filter(p => p.id !== userId).map(p =>
+        `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName)}</option>`
+      ).join('');
+      toSel.innerHTML += opts;
+    }
+    const projSelMsg = document.getElementById('new-msg-project');
+    if (projSelMsg && projSelMsg.options.length === 1) {
+      projSelMsg.innerHTML += PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    }
+  };
+
+  window.submitNewMessage = function() {
+    const toVal = document.getElementById('new-msg-to').value;
+    const subject = document.getElementById('new-msg-subject').value.trim();
+    const text = document.getElementById('new-msg-text').value.trim();
+    if (!toVal) { showToast('Alıcı seçin!', 'warning'); return; }
+    if (!subject) { showToast('Konu zorunludur!', 'warning'); return; }
+    if (!text) { showToast('Mesaj yazın!', 'warning'); return; }
+    const toP = PERSONNEL.find(p => p.id === parseInt(toVal));
+    document.getElementById('modal-new-msg').classList.add('hidden');
+    document.getElementById('new-msg-to').value = '';
+    document.getElementById('new-msg-subject').value = '';
+    document.getElementById('new-msg-text').value = '';
+    showToast(`✅ Mesajınız ${escapeHtml(toP ? toP.name : 'alıcıya')} gönderildi!`, 'success');
+  };
+
+  // ---- AI SOHBET (Personel) ----
+  const PersonnelAIChat = Object.create(AIChat);
+  let personnelCurrentChatId = null;
+  const PERSONNEL_CHAT_HISTORY = typeof CHAT_HISTORY !== 'undefined' ? CHAT_HISTORY.slice(0, 3) : [];
+
+  function renderPersonnelChatHistoryList() {
+    const listEl = document.getElementById('personnel-chat-history-list');
+    if (!listEl) return;
+    const userId = user ? user.id : null;
+    // Show user-relevant histories (simulated: first 3 conversations)
+    const histories = PERSONNEL_CHAT_HISTORY.slice(0, 3);
+    listEl.innerHTML = histories.map(h => {
+      const isActive = h.id === personnelCurrentChatId;
+      const d = new Date(h.date);
+      const dateStr = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+      return `<button onclick="loadPersonnelChatHistory(${h.id})"
+        class="w-full text-left px-3 py-2.5 text-xs hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0 ${isActive ? 'bg-blue-50 text-blue-700' : 'text-gray-700'}">
+        <div class="font-medium truncate">${escapeHtml(h.title)}</div>
+        <div class="text-gray-400 mt-0.5">${dateStr}</div>
+      </button>`;
+    }).join('');
+  }
+
+  window.loadPersonnelChatHistory = function(historyId) {
+    const history = CHAT_HISTORY.find(h => h.id === historyId);
+    if (!history) return;
+    personnelCurrentChatId = historyId;
+    renderPersonnelChatHistoryList();
+    const titleEl = document.getElementById('personnel-chat-title');
+    if (titleEl) {
+      const d = new Date(history.date);
+      titleEl.textContent = `${history.title} — ${d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+    }
+    const container = document.getElementById('personnel-chat-messages');
+    if (container) {
+      container.innerHTML = '';
+      history.messages.forEach(m => {
+        const msg = { role: m.role, text: m.text, time: m.time };
+        const div = document.createElement('div');
+        div.className = m.role === 'user' ? 'flex justify-end mb-4' : 'flex justify-start mb-4';
+        const bubble = m.role === 'user'
+          ? `<div class="max-w-md bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">
+               <div class="text-sm">${AIChat.formatText(escapeHtml(m.text))}</div>
+               <div class="text-xs text-blue-200 mt-1 text-right">${m.time}</div>
+             </div>`
+          : `<div class="flex gap-3 max-w-2xl">
+               <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-1">🧠</div>
+               <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100">
+                 <div class="text-sm text-gray-800">${AIChat.formatText(escapeHtml(m.text))}</div>
+                 <div class="text-xs text-gray-400 mt-1">${m.time}</div>
+               </div>
+             </div>`;
+        div.innerHTML = bubble;
+        container.appendChild(div);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+  };
+
+  window.startPersonnelNewChat = function() {
+    personnelCurrentChatId = null;
+    renderPersonnelChatHistoryList();
+    const container = document.getElementById('personnel-chat-messages');
+    if (container) container.innerHTML = '';
+    const titleEl = document.getElementById('personnel-chat-title');
+    if (titleEl) titleEl.textContent = 'Yeni Konuşma';
+    // Add welcome
+    const userId = user ? user.id : null;
+    const userPerson = PERSONNEL.find(p => p.id === userId);
+    const deptName = userPerson ? userPerson.deptName : 'departmanınız';
+    const chatObj = Object.create(AIChat);
+    chatObj.messages = [];
+    chatObj.container = container;
+    chatObj.addMessage('ai', `Merhaba ${userPerson ? userPerson.name : ''}! ${deptName} ile ilgili sorularınızı yanıtlayabilirim.\n\n- 📋 Görev durumunuz\n- 🔗 Proje bağımlılıkları\n- ⚠️ Riskler\n- 👥 Ekip durumu`);
+  };
+
+  window.init_ai_chat = function() {
+    const chatInput = document.getElementById('personnel-chat-input');
+    const sendBtn = document.getElementById('personnel-chat-send-btn');
+    const chatMessages = document.getElementById('personnel-chat-messages');
+    if (!chatInput || !chatMessages) return;
+
+    // Create a separate AIChat instance for personnel
+    const myChat = {
+      messages: [],
+      container: chatMessages,
+      typing: false,
+      send() {
+        if (this.typing) return;
+        const text = chatInput.value.trim();
+        if (!text) return;
+        this.addMessage('user', text);
+        chatInput.value = '';
+        this.showTyping();
+        setTimeout(() => {
+          this.hideTyping();
+          const response = AIChat.generateResponse(text);
+          this.addMessage('ai', response.text);
+        }, 1000 + Math.random() * 600);
+      },
+      addMessage(role, text) {
+        const msg = { role, text, time: new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'}) };
+        this.messages.push(msg);
+        const div = document.createElement('div');
+        div.className = role === 'user' ? 'flex justify-end mb-4' : 'flex justify-start mb-4';
+        const bubble = role === 'user'
+          ? `<div class="max-w-md bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm">
+               <div class="text-sm">${AIChat.formatText(escapeHtml(text))}</div>
+               <div class="text-xs text-blue-200 mt-1 text-right">${msg.time}</div>
+             </div>`
+          : `<div class="flex gap-3 max-w-2xl">
+               <div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-1">🧠</div>
+               <div class="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm border border-gray-100">
+                 <div class="text-sm text-gray-800">${AIChat.formatText(escapeHtml(text))}</div>
+                 <div class="text-xs text-gray-400 mt-1">${msg.time}</div>
+               </div>
+             </div>`;
+        div.innerHTML = bubble;
+        this.container.appendChild(div);
+        this.container.scrollTop = this.container.scrollHeight;
+      },
+      showTyping() {
+        this.typing = true;
+        const d = document.createElement('div');
+        d.id = 'personnel-typing';
+        d.className = 'flex justify-start mb-4';
+        d.innerHTML = '<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-1">🧠</div><div class="bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-100"><span class="typing-dots text-gray-400 text-sm">●●●</span></div></div>';
+        this.container.appendChild(d);
+        this.container.scrollTop = this.container.scrollHeight;
+      },
+      hideTyping() {
+        this.typing = false;
+        const d = document.getElementById('personnel-typing');
+        if (d) d.remove();
+      }
+    };
+
+    sendBtn && sendBtn.addEventListener('click', () => myChat.send());
+    chatInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); myChat.send(); }
+    });
+
+    renderPersonnelChatHistoryList();
+    // Welcome
+    const userId = user ? user.id : null;
+    const userPerson = PERSONNEL.find(p => p.id === userId);
+    myChat.addMessage('ai', `Merhaba ${userPerson ? userPerson.name : ''}! Projeleriniz ve görevleriniz hakkında soru sorabilirsiniz.`);
+  };
+
 
   // Not Gönder
   function submitNote() {

@@ -849,11 +849,27 @@ const FILES = [
   { id: 12, name: "Teleskop_DB_Migration_Plan.md", dept: "Üst Yazılım", author: "Caner Özdemir", authorId: 38, size: "180KB", project: "Teleskop v5 Boyahane Yönetim", date: "30 Mart 2026", type: "md" },
   { id: 13, name: "LABx_Next_Fizibilite.pdf", dept: "Sistem & Proje", author: "Tarık Güneyli", authorId: 78, size: "2.8MB", project: "LABx Next Laboratuvar", date: "28 Mart 2026", type: "pdf" },
   { id: 14, name: "T9_Thermal_Analysis.pdf", dept: "Elektronik & Donanım", author: "Elif Kaya", authorId: 2, size: "5.1MB", project: "T9 PLC v3 Ana Kart", date: "25 Mart 2026", type: "pdf" },
-  { id: 15, name: "ADW_Conveyor_PID_Parameters.xlsx", dept: "Mekatronik & Robotik", author: "Erhan Soylu", authorId: 64, size: "320KB", project: "ADW Toz Boyarmadde Otomasyon", date: "22 Mart 2026", type: "xlsx" }
+  { id: 15, name: "ADW_Conveyor_PID_Parameters.xlsx", dept: "Mekatronik & Robotik", author: "Erhan Soylu", authorId: 64, size: "320KB", project: "ADW Toz Boyarmadde Otomasyon", date: "22 Mart 2026", type: "xlsx" },
+  // Revizyon geçmişleri
+  { id: 16, name: "T9_PLC_Schematic_Rev1.pdf", dept: "Elektronik & Donanım", author: "Ahmet Yılmaz", authorId: 1, size: "1.8MB", project: "T9 PLC v3 Ana Kart", date: "15 Şubat 2026", type: "pdf" },
+  { id: 17, name: "T9_PLC_Schematic_Rev2.pdf", dept: "Elektronik & Donanım", author: "Ahmet Yılmaz", authorId: 1, size: "2.0MB", project: "T9 PLC v3 Ana Kart", date: "5 Mart 2026", type: "pdf" },
+  { id: 18, name: "T9_PLC_Schematic_Rev3.pdf", dept: "Elektronik & Donanım", author: "Ahmet Yılmaz", authorId: 1, size: "2.2MB", project: "T9 PLC v3 Ana Kart", date: "28 Mart 2026", type: "pdf" },
+  { id: 19, name: "T9_FPGA_PinMap_v1.xlsx", dept: "Elektronik & Donanım", author: "Murat Öztürk", authorId: 5, size: "120KB", project: "T9 PLC v3 Ana Kart", date: "20 Şubat 2026", type: "xlsx" },
+  { id: 20, name: "T9_FPGA_PinMap_v4.xlsx", dept: "Elektronik & Donanım", author: "Ahmet Yılmaz", authorId: 1, size: "145KB", project: "T9 PLC v3 Ana Kart", date: "20 Nisan 2026", type: "xlsx" },
+  { id: 21, name: "PMT140_Calibration_Data_v2.xlsx", dept: "Sensör Geliştirme", author: "Mustafa Bayar", authorId: 54, size: "760KB", project: "PMT140 pH Sensörü v2", date: "25 Nisan 2026", type: "xlsx" },
+  { id: 22, name: "T9_EMC_PreTest_Report.pdf", dept: "Test & Kalite", author: "Osman Kılınç", authorId: 74, size: "3.8MB", project: "T9 PLC v3 Ana Kart", date: "27 Nisan 2026", type: "pdf" },
+  { id: 23, name: "ADW_Assembly_CAD_v3.step", dept: "Mekatronik & Robotik", author: "Betül Kırıcı", authorId: 61, size: "28MB", project: "ADW Toz Boyarmadde Otomasyon", date: "18 Nisan 2026", type: "step" },
+  { id: 24, name: "Teleskop_OPC-UA_Module_Readme.md", dept: "Üst Yazılım", author: "Erdem Bayrak", authorId: 40, size: "95KB", project: "Teleskop v5 Boyahane Yönetim", date: "22 Nisan 2026", type: "md" },
+  { id: 25, name: "SAT210_PCB_Layout_Rev2.png", dept: "Sensör Geliştirme", author: "Ümit Korkut", authorId: 58, size: "820KB", project: "SAT210 Spektrofotometrik Sensör", date: "10 Nisan 2026", type: "png" },
+  { id: 26, name: "IIoT_AWS_Architecture.png", dept: "Üst Yazılım", author: "Berk Çağlar", authorId: 45, size: "310KB", project: "IIoT Gateway & Bulut", date: "28 Nisan 2026", type: "png" },
+  { id: 27, name: "T7PAC_v6_Sprint_Plan.xlsx", dept: "Gömülü Yazılım", author: "Onur Tekin", authorId: 19, size: "240KB", project: "T7PAC Firmware v6", date: "20 Nisan 2026", type: "xlsx" },
+  { id: 28, name: "RD96_72h_Test_Report.pdf", dept: "Test & Kalite", author: "Lale Demirtaş", authorId: 71, size: "2.9MB", project: "RD96 Sıvı Dozajlama v2", date: "31 Mart 2026", type: "pdf" },
+  { id: 29, name: "PMT140_ATEX_Application.pdf", dept: "Sensör Geliştirme", author: "Fikret Akbulut", authorId: 48, size: "4.1MB", project: "PMT140 pH Sensörü v2", date: "24 Nisan 2026", type: "pdf" },
+  { id: 30, name: "ADW_User_Manual_v1.pdf", dept: "Sistem & Proje", author: "Yeliz Çakır", authorId: 81, size: "6.2MB", project: "ADW Toz Boyarmadde Otomasyon", date: "14 Nisan 2026", type: "pdf" }
 ];
 
 const AUDIT_LOG = [
-  { id: 1, user: "Ahmet Yılmaz", action: "Not ekledi", detail: "T9 PLC şematik review notu", time: "10 dk önce", category: "note" },
+  { id: 1, user: "Ahmet Yılmaz", action: "Not ekledi", detail: "T9 PLC rev4 şematik review tamamlandı notu", time: "10 dk önce", category: "note" },
   { id: 2, user: "Kaan Yıldırım", action: "Dosya yükledi", detail: "Teleskop_v5_API_Doc.pdf", time: "25 dk önce", category: "file" },
   { id: 3, user: "Fikret Akbulut", action: "Not güncelledi", detail: "PMT140 kalibrasyon notu", time: "1 saat önce", category: "note" },
   { id: 4, user: "Onur Tekin", action: "Proje durumu güncelledi", detail: "T7PAC v6 → Planlanan", time: "2 saat önce", category: "project" },
@@ -867,16 +883,61 @@ const AUDIT_LOG = [
   { id: 12, user: "Serkan Ateş", action: "Not ekledi", detail: "T9 Ethernet/IP protokol notu", time: "1 gün önce", category: "note" },
   { id: 13, user: "Merve Aksoy", action: "Not ekledi", detail: "Teleskop mobil app gelişme notu", time: "1 gün önce", category: "note" },
   { id: 14, user: "Kemal Turan", action: "Dosya yükledi", detail: "T9_EMC_Test_Report.pdf", time: "2 gün önce", category: "file" },
-  { id: 15, user: "Tarık Güneyli", action: "Not ekledi", detail: "LABx Next kickoff planı", time: "2 gün önce", category: "note" }
+  { id: 15, user: "Tarık Güneyli", action: "Not ekledi", detail: "LABx Next kickoff planı", time: "2 gün önce", category: "note" },
+  // Geçmiş kayıtlar (3 aylık)
+  { id: 16, user: "Ahmet Yılmaz", action: "Dosya yükledi", detail: "T9_PLC_Schematic_Rev4.pdf — 28 Nis", time: "28 Nis 2026", category: "file" },
+  { id: 17, user: "Elif Kaya", action: "Görev tamamlandı", detail: "EMC filtre katı optimizasyonu tamamlandı — 27 Nis", time: "27 Nis 2026", category: "project" },
+  { id: 18, user: "Burak Demir", action: "Risk bildirdi", detail: "FPGA voltage mismatch riski — Bank 34 level shifter gerekiyor — 27 Nis", time: "27 Nis 2026", category: "risk" },
+  { id: 19, user: "Osman Kılınç", action: "Dosya yükledi", detail: "T9_EMC_PreTest_Report.pdf — 27 Nis", time: "27 Nis 2026", category: "file" },
+  { id: 20, user: "Kaan Yıldırım", action: "Not ekledi", detail: "Teleskop v5 boyahane modülü 3 müşteri tesisinde canlıya alındı — 28 Nis", time: "28 Nis 2026", category: "note" },
+  { id: 21, user: "Serkan Ateş", action: "Görev tamamlandı", detail: "ICT200 kalibrasyon algoritması onaylandı — 29 Nis", time: "29 Nis 2026", category: "project" },
+  { id: 22, user: "Erdem Bayrak", action: "Dosya yükledi", detail: "Teleskop_OPC-UA_Module_Readme.md — 22 Nis", time: "22 Nis 2026", category: "file" },
+  { id: 23, user: "İpek Sarı", action: "Not ekledi", detail: "SAT210 müşteri demo sunumu yapıldı — 30 Nis", time: "30 Nis 2026", category: "note" },
+  { id: 24, user: "Mustafa Bayar", action: "Dosya yükledi", detail: "PMT140_Calibration_Data_v2.xlsx — 25 Nis", time: "25 Nis 2026", category: "file" },
+  { id: 25, user: "Fikret Akbulut", action: "Dosya yükledi", detail: "PMT140_ATEX_Application.pdf — 24 Nis", time: "24 Nis 2026", category: "file" },
+  { id: 26, user: "Yönetici", action: "Proje oluşturdu", detail: "'ADW Toz Boyarmadde' projesi oluşturuldu — 3 Mar", time: "3 Mar 2026", category: "project" },
+  { id: 27, user: "Yönetici", action: "Proje oluşturdu", detail: "'IIoT Gateway & Bulut' projesi oluşturuldu — 15 Mar", time: "15 Mar 2026", category: "project" },
+  { id: 28, user: "Ahmet Yılmaz", action: "Dosya yükledi", detail: "T9_PLC_Schematic_Rev1.pdf — 15 Şub", time: "15 Şub 2026", category: "file" },
+  { id: 29, user: "Ahmet Yılmaz", action: "Dosya yükledi", detail: "T9_PLC_Schematic_Rev2.pdf — 5 Mar", time: "5 Mar 2026", category: "file" },
+  { id: 30, user: "Ahmet Yılmaz", action: "Dosya yükledi", detail: "T9_PLC_Schematic_Rev3.pdf — 28 Mar", time: "28 Mar 2026", category: "file" },
+  { id: 31, user: "Kerem Yalçın", action: "Dosya yükledi", detail: "T7PAC_v6_Requirements.docx — 5 Nis", time: "5 Nis 2026", category: "file" },
+  { id: 32, user: "Kadir Varol", action: "Görev tamamlandı", detail: "ICT200 final kalibrasyon tamamlandı — 1 Nis", time: "1 Nis 2026", category: "project" },
+  { id: 33, user: "Caner Özdemir", action: "Dosya yükledi", detail: "Teleskop_DB_Migration_Plan.md — 30 Mar", time: "30 Mar 2026", category: "file" },
+  { id: 34, user: "Barış Kaplan", action: "Görev tamamlandı", detail: "T7 panel boot süresi 2.8sn'ye optimize edildi — 28 Mar", time: "28 Mar 2026", category: "project" },
+  { id: 35, user: "Ali Rıza Çam", action: "Dosya yükledi", detail: "ADW_Motor_Secim_Raporu.pdf — 12 Nis", time: "12 Nis 2026", category: "file" },
+  { id: 36, user: "Tarık Güneyli", action: "Dosya yükledi", detail: "LABx_Next_Fizibilite.pdf — 28 Mar", time: "28 Mar 2026", category: "file" },
+  { id: 37, user: "Berk Çağlar", action: "Not ekledi", detail: "IIoT Gateway AWS IoT Core entegrasyonu tamamlandı — 1 Mar", time: "1 Mar 2026", category: "note" },
+  { id: 38, user: "Murat Öztürk", action: "Dosya yükledi", detail: "T9_FPGA_PinMap_v1.xlsx — 20 Şub", time: "20 Şub 2026", category: "file" },
+  { id: 39, user: "Gizem Aslan", action: "Görev tamamlandı", detail: "Teleskop v5 alarm yönetimi modülü tamamlandı — 9 Nis", time: "9 Nis 2026", category: "project" },
+  { id: 40, user: "Volkan Erdoğan", action: "Not ekledi", detail: "T7PAC v6 EtherCAT master stack lisansı alındı — 20 Nis", time: "20 Nis 2026", category: "note" },
+  { id: 41, user: "Elif Kaya", action: "Risk bildirdi", detail: "T9 PLC 6 katman PCB maliyeti beklenenin %20 üzerinde — 12 Nis", time: "12 Nis 2026", category: "risk" },
+  { id: 42, user: "Mustafa Bayar", action: "Risk bildirdi", detail: "PMT140 cam elektrot tedariki gecikti — 15 Nis", time: "15 Nis 2026", category: "risk" },
+  { id: 43, user: "Erhan Soylu", action: "Görev tamamlandı", detail: "ADW konveyör PID optimizasyonu — Kp=1.2 optimal değer — 25 Mar", time: "25 Mar 2026", category: "project" },
+  { id: 44, user: "Hakan Korur", action: "Risk bildirdi", detail: "IIoT Gateway IEC 62443 sertifikası 2-3 ay uzayabilir — 17 Nis", time: "17 Nis 2026", category: "risk" },
+  { id: 45, user: "Cenk Yücel", action: "Görev tamamlandı", detail: "RD96 kavitasyon problemi çözüldü — 28 Şub", time: "28 Şub 2026", category: "project" },
+  { id: 46, user: "Kadir Varol", action: "Dosya yükledi", detail: "ICT200_Final_Calibration.xlsx — 2 Nis", time: "2 Nis 2026", category: "file" },
+  { id: 47, user: "Yeliz Çakır", action: "Dosya yükledi", detail: "ADW_User_Manual_v1.pdf — 14 Nis", time: "14 Nis 2026", category: "file" },
+  { id: 48, user: "Betül Kırıcı", action: "Dosya yükledi", detail: "ADW_Assembly_CAD_v3.step — 18 Nis", time: "18 Nis 2026", category: "file" },
+  { id: 49, user: "Halil Çetin", action: "Dosya yükledi", detail: "SAT210_Optik_Test_Sonuclari.pdf — 16 Nis", time: "16 Nis 2026", category: "file" },
+  { id: 50, user: "Berk Çağlar", action: "Dosya yükledi", detail: "IIoT_AWS_Architecture.png — 28 Nis", time: "28 Nis 2026", category: "file" }
 ];
 
 const NOTIFICATIONS = [
-  { id: 1, title: "Risk Bildirimi", text: "T9 PLC FPGA tedarik süresi 8 haftaya çıktı", type: "risk", time: "10 dk önce", read: false },
-  { id: 2, title: "Proje Güncellemesi", text: "Teleskop v5 — migration riski yüksek olarak işaretlendi", type: "warning", time: "1 saat önce", read: false },
-  { id: 3, title: "Yeni Not", text: "Ahmet Yılmaz T9 PLC projesine not ekledi", type: "info", time: "2 saat önce", read: false },
-  { id: 4, title: "Deadline Uyarısı", text: "ADW Toz Boyarmadde — 4 hafta kaldı", type: "deadline", time: "3 saat önce", read: true },
-  { id: 5, title: "Dosya Yüklendi", text: "Teleskop_v5_API_Doc.pdf — Kaan Yıldırım", type: "file", time: "4 saat önce", read: true },
-  { id: 6, title: "Risk Bildirimi", text: "SAT210 optik filtre tedarikçisi fiyat %30 artırdı", type: "risk", time: "6 saat önce", read: true }
+  { id: 1, title: "Risk Bildirimi", text: "T9 PLC FPGA tedarik süresi 8 haftaya çıktı. Proje takvimi etkilenebilir.", type: "risk", time: "10 dk önce", date: "2026-05-01", read: false },
+  { id: 2, title: "Bağımlılık Güncellendi", text: "Elif Kaya 'T9 PLC güç katı tasarımı' görevini tamamladı. EMC test planı etkileniyor.", type: "dependency", time: "30 dk önce", date: "2026-04-28", read: false },
+  { id: 3, title: "Deadline Yaklaşıyor", text: "T9 PLC 'PCB layout finalizasyonu' görevi 3 gün içinde bitiyor.", type: "deadline", time: "1 saat önce", date: "2026-04-29", read: false },
+  { id: 4, title: "Yeni Mesaj", text: "Ahmet Yılmaz size 'T9 PLC — FPGA pin ataması' hakkında mesaj gönderdi.", type: "message", time: "2 saat önce", date: "2026-04-20", read: false },
+  { id: 5, title: "Görev Tamamlandı", text: "Serkan Ateş 'ICT200 kalibrasyon algoritması' görevini tamamladı. Doğrulama bekleniyor.", type: "completion", time: "3 saat önce", date: "2026-04-29", read: false },
+  { id: 6, title: "Risk Bildirimi", text: "RD96 projesi: pompa test sonuçları beklentinin altında. Servo timing ayarı gerekiyor.", type: "risk", time: "4 saat önce", date: "2026-04-30", read: false },
+  { id: 7, title: "Proje Güncellemesi", text: "Teleskop v5 — migration riski yüksek olarak işaretlendi.", type: "warning", time: "5 saat önce", date: "2026-04-23", read: false },
+  { id: 8, title: "Yeni Not", text: "Ahmet Yılmaz T9 PLC projesine kritik not ekledi.", type: "info", time: "6 saat önce", date: "2026-04-27", read: true },
+  { id: 9, title: "Deadline Uyarısı", text: "ADW Toz Boyarmadde — Haziran teslimatı için 4 hafta kaldı.", type: "deadline", time: "1 gün önce", date: "2026-04-28", read: true },
+  { id: 10, title: "Dosya Yüklendi", text: "Teleskop_v5_API_Doc.pdf — Kaan Yıldırım yükledi.", type: "file", time: "1 gün önce", date: "2026-04-20", read: true },
+  { id: 11, title: "Risk Bildirimi", text: "SAT210 optik filtre tedarikçisi fiyat %30 artırdı. Bütçe revizyon gerekebilir.", type: "risk", time: "2 gün önce", date: "2026-04-25", read: true },
+  { id: 12, title: "Yeni Mesaj", text: "Burak Demir size FPGA voltage mismatch riski hakkında mesaj gönderdi.", type: "message", time: "2 gün önce", date: "2026-04-20", read: true },
+  { id: 13, title: "Görev Atandı", text: "Size yeni görev atandı: 'T9 PLC EMC test hazırlığı' — Kemal Turan tarafından.", type: "info", time: "3 gün önce", date: "2026-04-27", read: true },
+  { id: 14, title: "Bağımlılık Uyarısı", text: "ADW Toz Boyarmadde firmware modülü T7PAC projesine bağımlı. T7PAC %70 tamamlandı.", type: "dependency", time: "3 gün önce", date: "2026-04-28", read: true },
+  { id: 15, title: "Dosya Güncellendi", text: "T9_FPGA_PinMap_v4.xlsx — Ahmet Yılmaz tarafından güncellendi.", type: "file", time: "4 gün önce", date: "2026-04-20", read: true }
 ];
 
 const DEPENDENCIES = [
@@ -894,3 +955,279 @@ const DEPENDENCIES = [
 const GANTT_MONTHS = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
 const GANTT_START_OFFSET = 1; // Show from Şubat (index 1)
 const GANTT_VISIBLE_MONTHS = 8; // Show 8 months
+
+// AI Sohbet Geçmişi
+const CHAT_HISTORY = [
+  {
+    id: 1,
+    title: 'T9 PLC risk analizi',
+    date: '2026-04-15',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'T9 PLC projesindeki riskler neler?', time: '09:15' },
+      { role: 'ai', text: 'T9 PLC v3 projesinde 3 aktif risk bulunuyor:\n1. 🔴 FPGA tedarik süresi 8 haftaya uzadı (Xilinx Artix-7)\n2. 🟡 EMC test sonuçları sınırda — RE101 testi tekrarlanacak\n3. 🟡 PCB 12 katman — üretici kapasitesi dolu, alternatif aranıyor', time: '09:15' },
+      { role: 'user', text: 'FPGA alternatifi var mı?', time: '09:16' },
+      { role: 'ai', text: 'Lattice ECP5 alternatif olarak değerlendiriliyor. Ahmet Yılmaz geçen hafta pin-uyumluluk analizi yaptı. Sonuç: %85 uyumlu, 12 pin yeniden atanmalı. Tahmini etki: 2 hafta ek süre.', time: '09:16' }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Teleskop v5 ilerleme raporu',
+    date: '2026-04-22',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'Teleskop projesinin son durumu ne?', time: '14:30' },
+      { role: 'ai', text: 'Teleskop v5 Boyahane Yönetim Sistemi — Durum Raporu:\n\n📊 İlerleme: %68\n👥 Aktif ekip: 6 kişi (3 Üst Yazılım, 2 Sistem, 1 Test)\n\n✅ Tamamlanan:\n- SCADA altyapı kurulumu\n- OPC-UA haberleşme modülü\n- Reçete yönetimi v1\n\n🔄 Devam Eden:\n- Boyahane PLC entegrasyonu\n- Gerçek zamanlı izleme dashboardu\n- Alarm yönetimi\n\n📅 Planlanan:\n- Sahada commissioning (Haziran)\n- Kullanıcı eğitimleri', time: '14:30' }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Personel iş yükü analizi',
+    date: '2026-04-25',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'Elektronik departmanında en yoğun çalışan kim?', time: '10:45' },
+      { role: 'ai', text: 'Elektronik & Donanım departmanı iş yükü analizi:\n\n🔴 En Yoğun:\n1. Ahmet Yılmaz — 4 aktif görev, 2 projede (T9 PLC, T7 Panel)\n2. Elif Kaya — 3 aktif görev, T9 PLC + termal analiz\n\n🟡 Orta Yoğunluk:\n3. Burak Demir — 2 görev, T9 PLC\n4. Selin Arslan — 2 görev, T7 Panel\n\n🟢 Uygun:\n5. Fatih Şahin — 1 görev tamamlandı, yeni görev atanabilir\n\nÖneri: Fatih Şahin\'e T9 PLC sinyal bütünlüğü görevini atayabilirsiniz.', time: '10:45' }
+    ]
+  },
+  {
+    id: 4,
+    title: 'ADW proje bağımlılıkları',
+    date: '2026-04-28',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'ADW projesinin bağımlılıkları ne durumda?', time: '16:20' },
+      { role: 'ai', text: 'ADW Toz Boyarmadde Otomasyon — Bağımlılık Durumu:\n\n⚠️ Kritik Bağımlılık:\n- T7PAC Firmware v6 → ADW kontrol yazılımı T7PAC üzerinde çalışacak. Firmware henüz %70 — ADW başlangıcı etkilenebilir.\n\n✅ Çözülen:\n- Servo motor tedariki tamamlandı (Yaskawa Sigma-7)\n- Mekanik tasarım onaylandı\n\n📋 Bekleyen:\n- Tartım hücresi kalibrasyonu (Sensör dept. ile koordineli)\n- HMI panel montajı (T7 Panel projesine bağlı)', time: '16:20' }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Haftalık özet — 28 Nisan',
+    date: '2026-04-28',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'Bu haftanın özetini ver', time: '17:00' },
+      { role: 'ai', text: '📋 Haftalık Özet — 22-28 Nisan 2026\n\n✅ Tamamlanan Görevler: 8\n🔄 Devam Eden: 24\n📅 Yeni Planlanan: 5\n\n🎯 Öne Çıkanlar:\n- T9 PLC rev4 şematik review tamamlandı ✅\n- ICT200 kalibrasyon algoritması onaylandı ✅\n- Teleskop OPC-UA modülü teste hazır ✅\n\n⚠️ Dikkat Gerektiren:\n- FPGA tedarik hâlâ belirsiz (Ahmet takip ediyor)\n- RD96 pompa testi 2 gün gecikmeli\n- PPD baskı kalitesi sorunu devam ediyor\n\n📊 Departman Performansı:\n- Elektronik: %92 (en yüksek)\n- Gömülü Yazılım: %88\n- Sensör: %85\n- Mekatronik: %78 (RD96 gecikmesi)', time: '17:00' }
+    ]
+  },
+  {
+    id: 6,
+    title: 'Personel görev dağılımı',
+    date: '2026-04-10',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'Tüm projelerde görev dağılımını göster', time: '11:00' },
+      { role: 'ai', text: 'Proje Görev Dağılımı Özeti:\n\n🔵 T9 PLC v3 (en büyük proje):\n- 18 aktif personel\n- 52 görev (14 tamamlandı, 24 devam, 14 planlanan)\n- Kritik yol: PCB layout → EMC test → CE belgelendirme\n\n🔵 Teleskop v5:\n- 6 aktif personel\n- 18 görev (7 tamamlandı, 8 devam, 3 planlanan)\n\n🔵 ADW Otomasyon:\n- 6 aktif personel\n- 20 görev (8 tamamlandı, 9 devam, 3 planlanan)\n\n📊 Toplam: 85 personel, 220+ görev, 12 proje', time: '11:00' }
+    ]
+  },
+  {
+    id: 7,
+    title: 'Bütçe analizi — Nisan',
+    date: '2026-04-05',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'Projelerin bütçe durumu nasıl?', time: '09:30' },
+      { role: 'ai', text: 'Proje Bütçe Durumu — Nisan 2026:\n\n🟢 Bütçe Uyumlu:\n- ICT200 İletkenlik (tamamlandı): 220.000₺ / 220.000₺ ✅\n- RD96 Sıvı Dozajlama (tamamlandı): 310.000₺ / 310.000₺ ✅\n\n🟡 Dikkat:\n- T9 PLC: 520.000₺ / 850.000₺ (%61) — PCB maliyet aşımı riski var\n- PMT140: 210.000₺ / 290.000₺ (%72) — ATEX sertifikasyon maliyeti eklenecek\n\n🔴 Revizyon Gerekiyor:\n- SAT210: Thorlabs fiyat artışı nedeniyle 340.000₺ bütçe yetersiz kalabilir (+50.000₺ tahmin)\n\nÖneri: SAT210 için bütçe revizyon talebini bu ay sonuna kadar hazırlayın.', time: '09:30' },
+      { role: 'user', text: 'T9 PCB maliyet aşımının detayı?', time: '09:32' },
+      { role: 'ai', text: 'T9 PLC PCB Maliyet Detayı:\n\nMevcut Durum: JLCPCB fiyat artışı sonrası 6 katman PCB rev4 maliyeti beklenenin %20 üzerinde.\n\n📊 Hesap:\n- Orijinal tahmin: 45.000₺ (10 adet)\n- Güncel fiyat: 54.000₺\n- Fark: +9.000₺\n\nÇözüm Seçenekleri:\n1. 4 katmana indirim — PCB tasarım 2 hafta ek süre (Elif Kaya inceliyor)\n2. Farklı üretici (PCBWay) — %8 daha ucuz, kalite farkı test edilmeli\n3. Bütçe revizyonu — en hızlı ama mali onay gerekiyor', time: '09:33' }
+    ]
+  },
+  {
+    id: 8,
+    title: 'IIoT güvenlik durumu',
+    date: '2026-03-20',
+    user: 'Yönetici',
+    messages: [
+      { role: 'user', text: 'IIoT Gateway güvenlik durumu?', time: '14:00' },
+      { role: 'ai', text: 'IIoT Gateway & Bulut — Güvenlik Durumu:\n\n✅ Tamamlanan:\n- X.509 sertifika tabanlı kimlik doğrulama aktif\n- TLS 1.3 iletişim şifreleme\n- AWS IoT Core entegrasyonu\n\n🔄 Devam Eden:\n- IEC 62443 sertifikasyonu (tahmini 3 ay)\n- Penetrasyon testi hazırlığı\n- RBAC yetki yönetimi\n\n⚠️ Dikkat:\n- Sertifikasyon süreci beklenenden uzun — Hakan Korur danışmanlık firmasıyla görüşüyor\n- 3. parti kütüphane güvenlik güncellemeleri bekliyor (6 CVE)\n\n🔐 Tavsiye: CVE güncellemelerini öncelikle yapın.', time: '14:00' }
+    ]
+  }
+];
+
+// Personel Arası Mesajlaşma
+const MESSAGES = [
+  {
+    id: 1,
+    from: 1, // Ahmet Yılmaz
+    to: 19,  // Onur Tekin (Gömülü Yazılım)
+    subject: 'T9 PLC — FPGA pin ataması',
+    text: 'Onur, FPGA pin atamasını güncelledim. EtherCAT portları artık Bank 34 üzerinde. Firmware tarafında SPI konfigürasyonunu günceller misin? Ekte güncel pin listesi.',
+    date: '2026-04-20',
+    time: '11:30',
+    read: true,
+    attachment: 'T9_FPGA_PinMap_v4.xlsx',
+    relatedProject: 'T9 PLC v3 Ana Kart',
+    relatedProjectId: 1
+  },
+  {
+    id: 2,
+    from: 19, // Onur Tekin
+    to: 1,   // Ahmet Yılmaz
+    subject: 'RE: T9 PLC — FPGA pin ataması',
+    text: "Ahmet, SPI konfigürasyonunu güncelledim. Ama Bank 34'te voltage mismatch riski var — 3.3V ile 1.8V karışıyor. Level shifter gerekebilir. Yarın toplantıda konuşalım.",
+    date: '2026-04-20',
+    time: '14:15',
+    read: true,
+    relatedProject: 'T9 PLC v3 Ana Kart',
+    relatedProjectId: 1
+  },
+  {
+    id: 3,
+    from: 34, // Kaan Yıldırım (Üst Yazılım)
+    to: 36,  // Ozan Türk (SCADA)
+    subject: 'Teleskop — OPC-UA server hazır',
+    text: "OPC-UA server modülü hazır ve test ortamında çalışıyor. SCADA tarafında endpoint konfigürasyonunu yapabilirsin. Port: 4840, SecurityPolicy: Basic256Sha256. Dökümantasyonu wiki'ye ekledim.",
+    date: '2026-04-22',
+    time: '09:45',
+    read: true,
+    relatedProject: 'Teleskop v5 Boyahane Yönetim',
+    relatedProjectId: 4
+  },
+  {
+    id: 4,
+    from: 54, // Mustafa Bayar (Sensör)
+    to: 70,  // Kemal Turan (Test)
+    subject: 'PMT140 — kalibrasyon verisi',
+    text: 'pH 4.0, 7.0, 10.0 tampon çözeltileriyle kalibrasyon tamamlandı. Lineerlik: R²=0.9998. Test raporunu hazırlayabilirsin. Ham veri ekte.',
+    date: '2026-04-25',
+    time: '16:00',
+    read: false,
+    attachment: 'PMT140_Calibration_Data_v2.xlsx',
+    relatedProject: 'PMT140 pH Sensörü v2',
+    relatedProjectId: 8
+  },
+  {
+    id: 5,
+    from: 1,  // Ahmet Yılmaz
+    to: 74,  // Osman Kılınç (EMC Test)
+    subject: 'T9 PLC — EMC pre-test sonuçları',
+    text: 'EMC ön test sonuçları geldi. RE101 30-100MHz bandında 3dB sınır aşımı var. Ferrit bead eklenmesi gerekiyor. Test raporu ekte. Resmi test öncesi düzeltme yapacağız.',
+    date: '2026-04-27',
+    time: '10:30',
+    read: false,
+    attachment: 'T9_EMC_PreTest_Report.pdf',
+    relatedProject: 'T9 PLC v3 Ana Kart',
+    relatedProjectId: 1
+  },
+  {
+    id: 6,
+    from: 60, // Ali Rıza Çam (Mekatronik)
+    to: 24,  // Gamze Özkan (Firmware)
+    subject: 'ADW — servo kontrol parametreleri',
+    text: 'ADW servo kalibrasyon tamamlandı. ±0.05g hassasiyete ulaştık. Yaskawa Sigma-7 parametrelerini güncelledim: Pn100=2450, Pn101=280. Firmware tarafında güncelleme gerekiyor mu?',
+    date: '2026-04-15',
+    time: '14:20',
+    read: true,
+    relatedProject: 'ADW Toz Boyarmadde Otomasyon',
+    relatedProjectId: 6
+  },
+  {
+    id: 7,
+    from: 24, // Gamze Özkan
+    to: 60,  // Ali Rıza Çam
+    subject: 'RE: ADW — servo kontrol parametreleri',
+    text: 'Ali Rıza bey, parametreleri firmware v2.3.1\'e yükledim. Servo PID döngüsü yeni değerlerle test edildi — yanıt zamanı %15 iyileşti. Yarın tam yük testi yapabiliriz.',
+    date: '2026-04-15',
+    time: '17:05',
+    read: true,
+    relatedProject: 'ADW Toz Boyarmadde Otomasyon',
+    relatedProjectId: 6
+  },
+  {
+    id: 8,
+    from: 48, // Fikret Akbulut (Sensör)
+    to: 78,  // Tarık Güneyli (PM)
+    subject: 'PMT140 ATEX başvurusu — TÜV randevusu',
+    text: 'TÜV randevusu alındı: 15 Haziran 2026. Ex ia IIC T4 Ga sınıfı için gerekli belgeler tamamlandı. Başvuru dosyası hazır, onayınızı bekliyorum. İnceleme süresi 6-8 hafta.',
+    date: '2026-04-24',
+    time: '11:15',
+    read: true,
+    attachment: 'PMT140_ATEX_Application.pdf',
+    relatedProject: 'PMT140 pH Sensörü v2',
+    relatedProjectId: 8
+  },
+  {
+    id: 9,
+    from: 45, // Berk Çağlar (Cloud)
+    to: 42,  // Hakan Korur (Güvenlik)
+    subject: 'IIoT — AWS IAM rolleri',
+    text: 'IIoT Gateway için AWS IAM rolleri oluşturuldu. Principle of least privilege uygulandı. 6 CVE güvenlik güncellemesi de tamamlandı. Penetrasyon testi hazırlığını başlatabiliriz.',
+    date: '2026-04-26',
+    time: '09:30',
+    read: true,
+    relatedProject: 'IIoT Gateway & Bulut',
+    relatedProjectId: 11
+  },
+  {
+    id: 10,
+    from: 42, // Hakan Korur
+    to: 45,  // Berk Çağlar
+    subject: 'RE: IIoT — pentest planı',
+    text: 'Harika! Pentest firması ile 28 Mayıs randevusu alındı. Scope: External network, API endpoints, MQTT broker. Hazırlık listesini ekliyorum.',
+    date: '2026-04-26',
+    time: '13:45',
+    read: true,
+    relatedProject: 'IIoT Gateway & Bulut',
+    relatedProjectId: 11
+  },
+  {
+    id: 11,
+    from: 50, // Halil Çetin (Optik)
+    to: 49,  // Gülşen Erdal (Sensör)
+    subject: 'SAT210 — filtre alternatifi bulundu',
+    text: 'Thorlabs yerine Semrock FF01-450/40 filtresini test ettim. Geçirgenlik %95 (Thorlabs %93). Fiyat %22 daha düşük. Mevcut montaj çerçevesiyle uyumlu. Onay için Fikret Bey\'e gönderelim mi?',
+    date: '2026-04-28',
+    time: '15:30',
+    read: false,
+    relatedProject: 'SAT210 Spektrofotometrik Sensör',
+    relatedProjectId: 10
+  },
+  {
+    id: 12,
+    from: 21, // Barış Kaplan (Firmware)
+    to: 4,   // Selin Arslan (Elektronik)
+    subject: 'T7 Panel — kapasitif ekran sürücüsü güncelleme',
+    text: 'Linux kernel 5.15 için ekran sürücüsü tamamlandı. Çoklu dokunma (10 parmak) çalışıyor. Ama yeni AUO panel ile test etmem lazım — bende sadece Innolux var. Panel temin edilince haber ver.',
+    date: '2026-04-23',
+    time: '10:00',
+    read: true,
+    relatedProject: 'T7 Operatör Panel 10"',
+    relatedProjectId: 2
+  },
+  {
+    id: 13,
+    from: 64, // Erhan Soylu (Mekatronik)
+    to: 65,  // Ferhat Güngör (Mekatronik)
+    subject: 'ADW — Beckhoff EL7047 alternatifi',
+    text: 'Beckhoff EL7047 stokta yok. Alternatif: Kollmorgen AKD-P00306 servo sürücü. Spesler uyumlu, fiyat %5 daha yüksek ama 1 hafta içinde teslim. Yöneticiye bildirmeden önce görüşün?',
+    date: '2026-04-21',
+    time: '16:45',
+    read: true,
+    relatedProject: 'ADW Toz Boyarmadde Otomasyon',
+    relatedProjectId: 6
+  },
+  {
+    id: 14,
+    from: 38, // Caner Özdemir (DB)
+    to: 35,  // Merve Aksoy (Full Stack)
+    subject: 'Teleskop — PostgreSQL migration tamamlandı',
+    text: '5 milyon kayıt başarıyla PostgreSQL\'e migrate edildi. NULL constraint ihlalleri düzeltildi, rollback planı hazır. Mobil app için yeni API endpoint\'lerini ekledim. Swagger\'da güncel.',
+    date: '2026-04-18',
+    time: '11:30',
+    read: true,
+    relatedProject: 'Teleskop v5 Boyahane Yönetim',
+    relatedProjectId: 4
+  },
+  {
+    id: 15,
+    from: 78, // Tarık Güneyli (PM)
+    to: 1,   // Ahmet Yılmaz
+    subject: 'T9 PLC — bütçe revizyon talebi',
+    text: 'Ahmet bey, PCB ve FPGA tedarik sorunları nedeniyle T9 bütçe revizyonu gerekiyor. Mevcut: 850K₺, Revize tahmin: 920K₺. Yönetim toplantısı için gerekçe dokümanını hazırlar mısınız? 30 Nisan son gün.',
+    date: '2026-04-22',
+    time: '14:00',
+    read: true,
+    relatedProject: 'T9 PLC v3 Ana Kart',
+    relatedProjectId: 1
+  }
+];
