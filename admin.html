@@ -706,6 +706,14 @@
     });
   }
 
+  function trMonthToEn(str) {
+    return str
+      .replace(/Ocak/g, 'Jan').replace(/Şubat/g, 'Feb').replace(/Mart/g, 'Mar')
+      .replace(/Nisan/g, 'Apr').replace(/Mayıs/g, 'May').replace(/Haziran/g, 'Jun')
+      .replace(/Temmuz/g, 'Jul').replace(/Ağustos/g, 'Aug').replace(/Eylül/g, 'Sep')
+      .replace(/Ekim/g, 'Oct').replace(/Kasım/g, 'Nov').replace(/Aralık/g, 'Dec');
+  }
+
   function renderPersonnelSummary(deptFilter, timeRange) {
     const mainEl = document.getElementById('pm-main');
     let personnel = deptFilter ? PERSONNEL.filter(p => p.dept === deptFilter) : [...PERSONNEL];
@@ -717,16 +725,10 @@
         const proj = PROJECTS.find(x => x.id === pid);
         return proj && proj.status === 'devam';
       });
-      const notes = NOTES.filter(n => {
-        if (n.authorId !== p.id) return false;
-        if (timeRange === 'all') return true;
-        // last 3 months for notes
-        const noteDate = new Date(n.date.split(' ').reverse().join('-').replace(/Ocak/,'01').replace(/Şubat/,'02').replace(/Mart/,'03').replace(/Nisan/,'04').replace(/Mayıs/,'05').replace(/Haziran/,'06').replace(/Temmuz/,'07').replace(/Ağustos/,'08').replace(/Eylül/,'09').replace(/Ekim/,'10').replace(/Kasım/,'11').replace(/Aralık/,'12') || '2026-01-01');
-        return true; // Show all notes in summary for simplicity
-      });
+      const notes = NOTES.filter(n => n.authorId === p.id);
       const risks = NOTES.filter(n => n.authorId === p.id && n.category === 'risk');
       const files = FILES.filter(f => f.authorId === p.id);
-      const lastNote = NOTES.filter(n => n.authorId === p.id).sort((a, b) => b.id - a.id)[0];
+      const lastNote = notes.slice().sort((a, b) => b.id - a.id)[0];
       const dept = DEPARTMENTS.find(d => d.id === p.dept);
       const deptColor = dept ? dept.color : '#6b7280';
 
@@ -916,7 +918,7 @@
             <tbody>
               ${personProjects.map(proj => {
                 const pct2 = proj.budget > 0 ? Math.round(proj.spent / proj.budget * 100) : 0;
-                const endDate = new Date(proj.endDate.replace('Ocak','Jan').replace('Şubat','Feb').replace('Mart','Mar').replace('Nisan','Apr').replace('Mayıs','May').replace('Haziran','Jun').replace('Temmuz','Jul').replace('Ağustos','Aug').replace('Eylül','Sep').replace('Ekim','Oct').replace('Kasım','Nov').replace('Aralık','Dec') + ' ' + '2026');
+                const endDate = new Date(trMonthToEn(proj.endDate) + ' 2026');
                 const remainDays = Math.max(0, Math.round((endDate.getTime() - now.getTime()) / 86400000));
                 return `<tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="GanttChart.showProjectDetail(${proj.id})">
                   <td class="px-3 py-2.5 font-medium text-gray-800">${escapeHtml(proj.name)}</td>
@@ -1048,7 +1050,6 @@
     const totalSpent = COST_DATA.reduce((a, b) => a + b.spent, 0);
     const remaining = totalBudget - totalSpent;
     const overallPct = Math.round(totalSpent / totalBudget * 100);
-
 
     document.getElementById('cost-content').innerHTML = `
       <!-- Özet kartlar -->
