@@ -82,42 +82,14 @@
 
     <!-- ===== DASHBOARD ===== -->
     <div id="section-dashboard" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-5">📊 Ar-Ge Dashboard</h2>
-      <!-- KPI Kartlar -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-gray-500 uppercase">Aktif Proje</span>
-            <span class="text-2xl">🚀</span>
-          </div>
-          <div class="text-3xl font-bold text-blue-600">12</div>
-          <div class="text-xs text-gray-400 mt-1">Toplam proje sayısı</div>
-        </div>
-        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-gray-500 uppercase">Devam Eden</span>
-            <span class="text-2xl">⚙️</span>
-          </div>
-          <div class="text-3xl font-bold text-green-600">8</div>
-          <div class="text-xs text-gray-400 mt-1">Aktif geliştirme</div>
-        </div>
-        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-gray-500 uppercase">Risk</span>
-            <span class="text-2xl">⚠️</span>
-          </div>
-          <div class="text-3xl font-bold text-red-600">7</div>
-          <div class="text-xs text-gray-400 mt-1">Aktif risk bildirimi</div>
-        </div>
-        <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-gray-500 uppercase">Ar-Ge Kadrosu</span>
-            <span class="text-2xl">👥</span>
-          </div>
-          <div class="text-3xl font-bold text-purple-600">85</div>
-          <div class="text-xs text-gray-400 mt-1">7 departman</div>
-        </div>
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-xl font-bold text-gray-800">📊 Ar-Ge Dashboard</h2>
+        <button onclick="openNewProjectModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
+          ➕ Yeni Proje
+        </button>
       </div>
+      <!-- KPI Kartlar (JS ile doldurulur) -->
+      <div id="kpi-cards" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
 
       <!-- Projeler özet tablosu -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
@@ -130,6 +102,8 @@
                 <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
                 <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Durum</th>
                 <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Bitiş</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">İlerleme</th>
+                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden xl:table-cell">Ekip</th>
               </tr>
             </thead>
             <tbody id="dashboard-projects"></tbody>
@@ -279,7 +253,17 @@
 
     <!-- ===== PERSONEL YÖNETİMİ ===== -->
     <div id="section-personnel" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">👥 Personel Yönetimi</h2>
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 class="text-xl font-bold text-gray-800">👥 Personel Yönetimi</h2>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="openAssignTaskModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
+            ✅ Görev Ata
+          </button>
+          <button onclick="openRoleModal()" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
+            🔑 Yetki Yönetimi
+          </button>
+        </div>
+      </div>
       <!-- Filtreler -->
       <div class="filter-bar p-4 mb-4">
         <div class="grid grid-cols-2 gap-3">
@@ -316,6 +300,111 @@
   </div>
 </div>
 
+<!-- Yeni Proje Modal -->
+<div id="modal-new-project" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h3 class="font-bold text-gray-800">➕ Yeni Proje Oluştur</h3>
+      <button onclick="document.getElementById('modal-new-project').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
+    </div>
+    <div class="px-5 py-4 space-y-4">
+      <div>
+        <label class="modal-form-label">Proje Adı *</label>
+        <input id="np-name" type="text" class="modal-form-input" placeholder="Proje adını girin...">
+      </div>
+      <div>
+        <label class="modal-form-label">Açıklama</label>
+        <textarea id="np-desc" rows="2" class="modal-form-input" placeholder="Kısa açıklama..."></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="modal-form-label">Başlangıç Tarihi</label>
+          <input id="np-start" type="date" class="modal-form-input">
+        </div>
+        <div>
+          <label class="modal-form-label">Bitiş Tarihi</label>
+          <input id="np-end" type="date" class="modal-form-input">
+        </div>
+      </div>
+      <div>
+        <label class="modal-form-label">Departman(lar)</label>
+        <div id="np-depts" class="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-lg bg-gray-50"></div>
+      </div>
+      <div>
+        <label class="modal-form-label">Ekip Üyeleri</label>
+        <select id="np-members" multiple class="modal-form-input h-28 text-xs"></select>
+        <p class="text-xs text-gray-400 mt-1">Ctrl/Cmd ile çoklu seçim yapabilirsiniz</p>
+      </div>
+      <button onclick="submitNewProject()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow text-sm">
+        ✅ Proje Oluştur
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Görev Ata Modal -->
+<div id="modal-assign-task" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h3 class="font-bold text-gray-800">✅ Görev Ata</h3>
+      <button onclick="document.getElementById('modal-assign-task').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
+    </div>
+    <div class="px-5 py-4 space-y-4">
+      <div>
+        <label class="modal-form-label">Personel *</label>
+        <select id="at-person" class="modal-form-input">
+          <option value="">— Personel seçin —</option>
+        </select>
+      </div>
+      <div>
+        <label class="modal-form-label">Proje *</label>
+        <select id="at-project" class="modal-form-input">
+          <option value="">— Proje seçin —</option>
+        </select>
+      </div>
+      <div>
+        <label class="modal-form-label">Görev Başlığı *</label>
+        <input id="at-title" type="text" class="modal-form-input" placeholder="Görev başlığını girin...">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="modal-form-label">Başlangıç Tarihi</label>
+          <input id="at-start" type="date" class="modal-form-input">
+        </div>
+        <div>
+          <label class="modal-form-label">Bitiş Tarihi</label>
+          <input id="at-end" type="date" class="modal-form-input">
+        </div>
+      </div>
+      <div>
+        <label class="modal-form-label">Durum</label>
+        <select id="at-status" class="modal-form-input">
+          <option value="planned">📅 Planlanan</option>
+          <option value="in_progress">🔄 Devam Ediyor</option>
+          <option value="done">✅ Tamamlandı</option>
+        </select>
+      </div>
+      <button onclick="submitAssignTask()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow text-sm">
+        ✅ Görevi Ata
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Yetki Yönetimi Modal -->
+<div id="modal-role-mgmt" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-5 py-4 border-b">
+      <h3 class="font-bold text-gray-800">🔑 Yetki Yönetimi — Takım Liderleri</h3>
+      <button onclick="document.getElementById('modal-role-mgmt').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
+    </div>
+    <div class="px-5 py-4">
+      <p class="text-sm text-gray-500 mb-4">Personeli "Takım Lideri" yapın veya yetkisini kaldırın. Takım liderleri proje önerebilir ve kendi departmanlarına görev atayabilir.</p>
+      <div id="role-mgmt-list" class="space-y-2"></div>
+    </div>
+  </div>
+</div>
+
 <script>
   // Auth check
   Auth.checkAuth();
@@ -326,10 +415,61 @@
 
   // ---- DASHBOARD INIT ----
   window.init_dashboard = function() {
-    // Proje durumları tablosu
+    // --- KPI Kartları ---
+    const totalProjects = PROJECTS.length;
+    const inProgress = PROJECTS.filter(p => p.status === 'devam').length;
+    const completed = PROJECTS.filter(p => p.status === 'tamamlandi').length;
+    const riskCount = NOTES.filter(n => n.category === 'risk').length;
+    const highRisks = NOTES.filter(n => n.category === 'risk' && n.severity === 'yüksek').length;
+    const totalPersonnel = PERSONNEL.length;
+    const leadCount = PERSONNEL.filter(p => p.role_level === 'lead').length;
+
+    document.getElementById('kpi-cards').innerHTML = `
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Aktif Proje</span>
+          <span class="text-2xl">🚀</span>
+        </div>
+        <div class="text-3xl font-bold text-blue-600">${totalProjects}</div>
+        <div class="text-xs text-gray-400 mt-1">Toplam proje sayısı</div>
+        <div class="text-xs mt-2 kpi-trend-up">↑ ${inProgress} devam ediyor</div>
+      </div>
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Devam Eden</span>
+          <span class="text-2xl">⚙️</span>
+        </div>
+        <div class="text-3xl font-bold text-blue-600">${inProgress}</div>
+        <div class="text-xs text-gray-400 mt-1">Aktif geliştirme</div>
+        <div class="text-xs mt-2 ${completed > 0 ? 'kpi-trend-up' : 'text-gray-400'}">✅ ${completed} tamamlandı</div>
+      </div>
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Risk</span>
+          <span class="text-2xl">⚠️</span>
+        </div>
+        <div class="text-3xl font-bold text-red-600">${riskCount}</div>
+        <div class="text-xs text-gray-400 mt-1">Aktif risk bildirimi</div>
+        <div class="text-xs mt-2 ${highRisks > 0 ? 'kpi-trend-down' : 'text-gray-400'}">🔴 ${highRisks} yüksek öncelik</div>
+      </div>
+      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ar-Ge Kadrosu</span>
+          <span class="text-2xl">👥</span>
+        </div>
+        <div class="text-3xl font-bold text-purple-600">${totalPersonnel}</div>
+        <div class="text-xs text-gray-400 mt-1">${DEPARTMENTS.length} departman</div>
+        <div class="text-xs mt-2 text-purple-500">⭐ ${leadCount} takım lideri</div>
+      </div>
+    `;
+
+    // Proje durumları tablosu — progress ring + avatar group
     document.getElementById('dashboard-projects').innerHTML = PROJECTS.map(p => {
       const depts = p.depts.map(d => DEPARTMENTS.find(x => x.id === d)?.short || '').join(', ');
       const isRisky = NOTES.some(n => n.category === 'risk' && n.projectId === p.id);
+      const pct = p.status === 'tamamlandi' ? 100 : p.status === 'planlanan' ? 0 :
+        Math.round(((p.spent || 0) / (p.budget || 1)) * 100);
+      const ringColor = p.status === 'tamamlandi' ? '#10b981' : p.status === 'planlanan' ? '#94a3b8' : isRisky ? '#ef4444' : '#3b82f6';
       return `<tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="showProjectDetail(${p.id})">
         <td class="px-3 py-2.5">
           <div class="font-medium text-gray-800">${escapeHtml(p.name)}</div>
@@ -338,6 +478,8 @@
         <td class="px-3 py-2.5 hidden md:table-cell text-gray-500 text-xs">${escapeHtml(depts)}</td>
         <td class="px-3 py-2.5">${getStatusBadge(isRisky ? 'riskli' : p.status)}</td>
         <td class="px-3 py-2.5 hidden lg:table-cell text-xs text-gray-500">${p.endDate}</td>
+        <td class="px-3 py-2.5 hidden lg:table-cell">${getProgressRing(pct, ringColor)}</td>
+        <td class="px-3 py-2.5 hidden xl:table-cell">${getAvatarGroup(p.members, 3)}</td>
       </tr>`;
     }).join('');
 
@@ -644,6 +786,7 @@
               <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Devam</th>
               <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Planlanan</th>
               <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Tamamlanan</th>
+              <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Rol</th>
             </tr>
           </thead>
           <tbody>
@@ -656,7 +799,7 @@
               return `<tr class="border-b border-gray-50 hover:bg-blue-50 cursor-pointer transition-colors" onclick="document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();">
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0" aria-label="${escapeHtml(p.name)} avatarı">${escapeHtml(p.avatar)}</div>
+                    <div class="w-7 h-7 rounded-full ${p.role_level === 'lead' ? 'bg-purple-100' : 'bg-blue-100'} flex items-center justify-center text-xs font-bold ${p.role_level === 'lead' ? 'text-purple-700' : 'text-blue-700'} flex-shrink-0" aria-label="${escapeHtml(p.name)} avatarı">${escapeHtml(p.avatar)}</div>
                     <a href="#" data-modal-person-id="${p.id}" onclick="event.stopPropagation()" class="font-medium text-gray-800 hover:text-blue-600 hover:underline">${escapeHtml(p.name)}</a>
                   </div>
                 </td>
@@ -666,11 +809,12 @@
                   ${inProgress > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">${inProgress}</span>` : '<span class="text-gray-300">—</span>'}
                 </td>
                 <td class="px-3 py-3 text-center hidden sm:table-cell">
-                  ${planned > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">${planned}</span>` : '<span class="text-gray-300">—</span>'}
+                  ${planned > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">${planned}</span>` : '<span class="text-gray-300">—</span>'}
                 </td>
                 <td class="px-3 py-3 text-center hidden sm:table-cell">
-                  ${done > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">${done}</span>` : '<span class="text-gray-300">—</span>'}
+                  ${done > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">${done}</span>` : '<span class="text-gray-300">—</span>'}
                 </td>
+                <td class="px-3 py-3 text-center hidden md:table-cell">${getRoleBadge(p.role_level)}</td>
               </tr>`;
             }).join('')}
           </tbody>
@@ -730,9 +874,12 @@
     container.innerHTML = `
       <!-- Kişi Kartı -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4 flex flex-wrap items-center gap-4">
-        <div class="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">${escapeHtml(person.avatar)}</div>
+        <div class="w-14 h-14 rounded-full ${person.role_level === 'lead' ? 'bg-purple-600' : 'bg-blue-600'} flex items-center justify-center text-white text-xl font-bold flex-shrink-0">${escapeHtml(person.avatar)}</div>
         <div class="flex-1 min-w-0">
-          <div class="text-lg font-bold text-gray-800">${escapeHtml(person.name)}</div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="text-lg font-bold text-gray-800">${escapeHtml(person.name)}</div>
+            ${getRoleBadge(person.role_level)}
+          </div>
           <div class="text-sm text-gray-500">${escapeHtml(person.role)}</div>
           <div class="text-xs text-blue-600 mt-0.5">${escapeHtml(person.deptName)}</div>
         </div>
@@ -742,11 +889,11 @@
             <div class="text-xs text-gray-400">Devam</div>
           </div>
           <div class="text-center">
-            <div class="text-xl font-bold text-gray-500">${planned.length}</div>
+            <div class="text-xl font-bold text-slate-500">${planned.length}</div>
             <div class="text-xs text-gray-400">Planlanan</div>
           </div>
           <div class="text-center">
-            <div class="text-xl font-bold text-green-600">${done.length}</div>
+            <div class="text-xl font-bold text-emerald-600">${done.length}</div>
             <div class="text-xs text-gray-400">Tamamlanan</div>
           </div>
           <div class="text-center">
@@ -754,10 +901,16 @@
             <div class="text-xs text-gray-400">Risk</div>
           </div>
         </div>
-        <button onclick="document.getElementById('personnel-person-filter').value=''; renderPersonnel();"
-          class="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-blue-200 flex-shrink-0">
-          ← Listeye Dön
-        </button>
+        <div class="flex flex-col gap-2 flex-shrink-0">
+          <button onclick="document.getElementById('personnel-person-filter').value=''; renderPersonnel();"
+            class="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-blue-200">
+            ← Listeye Dön
+          </button>
+          <button onclick="openAssignTaskModalForPerson(${person.id})"
+            class="text-xs text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-colors border border-emerald-200">
+            ✅ Görev Ata
+          </button>
+        </div>
       </div>
 
       <!-- Görev Listesi -->
@@ -961,6 +1114,168 @@
       </div>
     `;
   };
+
+  // ---- YENİ PROJE MODAL ----
+  function openNewProjectModal() {
+    // Departman checkboxları
+    document.getElementById('np-depts').innerHTML = DEPARTMENTS.map(d =>
+      `<label class="flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-lg hover:bg-gray-100">
+        <input type="checkbox" value="${d.id}" class="np-dept-cb rounded text-blue-600"> 
+        <span class="text-xs text-gray-700">${escapeHtml(d.name)}</span>
+      </label>`
+    ).join('');
+    // Personel multi-select
+    document.getElementById('np-members').innerHTML = PERSONNEL.map(p =>
+      `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName.split(' ')[0])}</option>`
+    ).join('');
+    // Default tarihler
+    document.getElementById('np-start').value = '2026-05-01';
+    document.getElementById('np-end').value = '2026-12-31';
+    document.getElementById('np-name').value = '';
+    document.getElementById('np-desc').value = '';
+    document.getElementById('modal-new-project').classList.remove('hidden');
+  }
+
+  function submitNewProject() {
+    const name = document.getElementById('np-name').value.trim();
+    if (!name) { showToast('Proje adı zorunludur!', 'warning'); return; }
+    const deptIds = Array.from(document.querySelectorAll('.np-dept-cb:checked')).map(cb => parseInt(cb.value));
+    const memberIds = Array.from(document.getElementById('np-members').selectedOptions).map(o => parseInt(o.value));
+    const startDate = document.getElementById('np-start').value;
+    const endDate = document.getElementById('np-end').value;
+    const desc = document.getElementById('np-desc').value.trim();
+    const newId = Math.max(...PROJECTS.map(p => p.id)) + 1;
+    const newProject = {
+      id: newId,
+      name,
+      desc: desc || 'Açıklama eklenmedi.',
+      depts: deptIds.length ? deptIds : [1],
+      status: 'planlanan',
+      startDate: startDate ? new Date(startDate).toLocaleDateString('tr-TR', {day:'numeric',month:'long',year:'numeric'}) : '2026',
+      endDate: endDate ? new Date(endDate).toLocaleDateString('tr-TR', {day:'numeric',month:'long',year:'numeric'}) : '2026',
+      budget: 0, spent: 0,
+      members: memberIds,
+      tags: ['Yeni']
+    };
+    PROJECTS.push(newProject);
+    document.getElementById('modal-new-project').classList.add('hidden');
+    showToast(`✅ "${name}" projesi oluşturuldu!`, 'success');
+    // Dashboard güncelle
+    if (Nav.current === 'dashboard') {
+      Nav.initialized.delete('dashboard');
+      window.init_dashboard();
+    }
+  }
+
+  // ---- GÖREV ATA MODAL ----
+  function openAssignTaskModal() {
+    populateAssignTaskModal(null);
+    document.getElementById('modal-assign-task').classList.remove('hidden');
+  }
+
+  function openAssignTaskModalForPerson(personId) {
+    populateAssignTaskModal(personId);
+    document.getElementById('modal-assign-task').classList.remove('hidden');
+  }
+
+  function populateAssignTaskModal(preselectedPersonId) {
+    const personSel = document.getElementById('at-person');
+    personSel.innerHTML = '<option value="">— Personel seçin —</option>' +
+      PERSONNEL.map(p => `<option value="${p.id}" ${p.id === preselectedPersonId ? 'selected' : ''}>${escapeHtml(p.name)} — ${escapeHtml(p.deptName.split(' ')[0])}</option>`).join('');
+    document.getElementById('at-project').innerHTML = '<option value="">— Proje seçin —</option>' +
+      PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    document.getElementById('at-title').value = '';
+    document.getElementById('at-start').value = '2026-05-01';
+    document.getElementById('at-end').value = '2026-12-31';
+    document.getElementById('at-status').value = 'planned';
+  }
+
+  function submitAssignTask() {
+    const personId = parseInt(document.getElementById('at-person').value);
+    const projectId = parseInt(document.getElementById('at-project').value);
+    const title = document.getElementById('at-title').value.trim();
+    if (!personId) { showToast('Personel seçin!', 'warning'); return; }
+    if (!projectId) { showToast('Proje seçin!', 'warning'); return; }
+    if (!title) { showToast('Görev başlığı zorunludur!', 'warning'); return; }
+    const person = PERSONNEL.find(p => p.id === personId);
+    const project = PROJECTS.find(p => p.id === projectId);
+    if (!person || !project) return;
+    const newTask = {
+      title,
+      projectId,
+      project: project.name,
+      status: document.getElementById('at-status').value,
+      startDate: document.getElementById('at-start').value,
+      endDate: document.getElementById('at-end').value
+    };
+    if (!person.tasks) person.tasks = [];
+    person.tasks.push(newTask);
+    // Also add person to project members if not already
+    if (!project.members.includes(personId)) project.members.push(personId);
+    document.getElementById('modal-assign-task').classList.add('hidden');
+    showToast(`✅ "${title}" görevi ${escapeHtml(person.name)}'a atandı!`, 'success');
+    // Personel detayını yenile
+    const personFilter = document.getElementById('personnel-person-filter');
+    if (personFilter && personFilter.value === String(personId)) renderPersonnel();
+  }
+
+  // ---- YETKİ YÖNETİMİ MODAL ----
+  function openRoleModal() {
+    const list = document.getElementById('role-mgmt-list');
+    list.innerHTML = PERSONNEL.map(p => `
+      <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full ${p.role_level === 'lead' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'} flex items-center justify-center text-xs font-bold">${escapeHtml(p.avatar.slice(0,2))}</div>
+          <div>
+            <div class="text-sm font-medium text-gray-800">${escapeHtml(p.name)}</div>
+            <div class="text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</div>
+          </div>
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <span class="text-xs ${p.role_level === 'lead' ? 'text-purple-700 font-semibold' : 'text-gray-400'}">Takım Lideri</span>
+          <div class="relative">
+            <input type="checkbox" class="sr-only role-toggle" data-person-id="${p.id}" ${p.role_level === 'lead' ? 'checked' : ''}>
+            <div class="toggle-bg w-9 h-5 rounded-full cursor-pointer ${p.role_level === 'lead' ? 'bg-purple-600' : 'bg-gray-300'} transition-colors duration-200"></div>
+            <div class="toggle-dot absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${p.role_level === 'lead' ? 'translate-x-4' : ''}"></div>
+          </div>
+        </label>
+      </div>
+    `).join('');
+
+    // Toggle event listeners
+    list.querySelectorAll('.role-toggle').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const personId = parseInt(this.getAttribute('data-person-id'));
+        const person = PERSONNEL.find(p => p.id === personId);
+        if (!person) return;
+        person.role_level = this.checked ? 'lead' : 'member';
+        const bg = this.nextElementSibling;
+        const dot = bg.nextElementSibling;
+        bg.className = `toggle-bg w-9 h-5 rounded-full cursor-pointer ${person.role_level === 'lead' ? 'bg-purple-600' : 'bg-gray-300'} transition-colors duration-200`;
+        dot.className = `toggle-dot absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${person.role_level === 'lead' ? 'translate-x-4' : ''}`;
+        const label = this.parentElement.querySelector('span');
+        label.className = `text-xs ${person.role_level === 'lead' ? 'text-purple-700 font-semibold' : 'text-gray-400'}`;
+        showToast(`${escapeHtml(person.name)} ${person.role_level === 'lead' ? 'Takım Lideri yapıldı ⭐' : 'normal üye olarak güncellendi'}`, 'success');
+        // Refresh personnel list if visible
+        if (Nav.current === 'personnel') {
+          const personFilter = document.getElementById('personnel-person-filter');
+          if (personFilter && personFilter.value === String(personId)) {
+            renderPersonDetail(person, document.getElementById('personnel-content'));
+          } else {
+            renderPersonnel();
+          }
+        }
+      });
+    });
+
+    document.getElementById('modal-role-mgmt').classList.remove('hidden');
+  }
+
+  // Re-init current section: Nav.init runs before window.init_* are defined,
+  // so we need to trigger the init for the default section after all functions are defined.
+  if (Nav.current && !Nav.initialized.has(Nav.current)) {
+    Nav.show(Nav.current);
+  }
 </script>
 </body>
 </html>

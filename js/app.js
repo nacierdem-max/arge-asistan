@@ -113,12 +113,41 @@ function escapeHtml(str) {
 
 function getStatusBadge(status) {
   const map = {
-    'devam': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Devam Ediyor</span>',
-    'tamamlandi': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Tamamlandı</span>',
-    'planlanan': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Planlanan</span>',
-    'riskli': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Riskli</span>'
+    'devam': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">🔵 Devam Ediyor</span>',
+    'tamamlandi': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">🟢 Tamamlandı</span>',
+    'planlanan': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">⚪ Planlanan</span>',
+    'riskli': '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">🔴 Riskli</span>'
   };
   return map[status] || status;
+}
+
+function getRoleBadge(roleLevel) {
+  if (roleLevel === 'lead') return '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">⭐ Takım Lideri</span>';
+  return '';
+}
+
+function getProgressRing(pct, color) {
+  const c = color || '#3b82f6';
+  const gray = '#e5e7eb';
+  return `<div class="progress-ring" style="background: conic-gradient(${c} 0% ${pct}%, ${gray} ${pct}% 100%);" title="${pct}% tamamlandı">
+    <span>${pct}%</span>
+  </div>`;
+}
+
+function getAvatarGroup(memberIds, maxShow) {
+  const max = maxShow || 3;
+  const members = memberIds.map(id => PERSONNEL.find(p => p.id === id)).filter(Boolean);
+  const shown = members.slice(0, max);
+  const extra = members.length - max;
+  const colors = ['bg-blue-500','bg-purple-500','bg-emerald-500','bg-amber-500','bg-red-500','bg-cyan-500','bg-indigo-500','bg-pink-500'];
+  const avatarItems = shown.map((m, i) => {
+    const cls = `w-7 h-7 rounded-full ${colors[i % colors.length]} text-white text-xs flex items-center justify-center border-2 border-white font-bold flex-shrink-0`;
+    return `<div class="${cls}" title="${escapeHtml(m.name)}">${escapeHtml(m.avatar.slice(0, 2))}</div>`;
+  }).join('');
+  const extraBadge = extra > 0
+    ? `<div class="w-7 h-7 rounded-full bg-gray-400 text-white text-xs flex items-center justify-center border-2 border-white font-bold flex-shrink-0">+${extra}</div>`
+    : '';
+  return `<div class="flex -space-x-2">${avatarItems}${extraBadge}</div>`;
 }
 
 function getSeverityBadge(severity) {
