@@ -13,340 +13,249 @@
   <script src="js/chat.js"></script>
   <script src="js/speech.js"></script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body style="background:#f5f5f7;" class="min-h-screen">
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
 
 <!-- Sidebar -->
-<div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-blue-900 text-white z-30 flex flex-col shadow-xl lg:translate-x-0 -translate-x-full overflow-y-auto">
-  <!-- Logo -->
-  <div class="px-4 py-5 border-b border-blue-800 flex-shrink-0">
-    <div class="flex items-center gap-2">
-      <span class="text-2xl">🧠</span>
+<div id="sidebar" class="fixed inset-y-0 left-0 w-64 z-30 flex flex-col shadow-2xl lg:translate-x-0 -translate-x-full overflow-y-auto sidebar-apple">
+  <div class="px-5 py-6 border-b border-white/10 flex-shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-blue-500/20 flex items-center justify-center"><span class="text-xl">🧠</span></div>
       <div>
-        <div class="font-bold text-sm">ELİAR Ar-Ge</div>
-        <div class="text-blue-300 text-xs">Yönetici Paneli</div>
+        <div class="font-bold text-sm text-white">ELİAR Ar-Ge</div>
+        <div class="text-white/50 text-xs">Yönetici Paneli</div>
       </div>
     </div>
   </div>
-  <!-- Nav links -->
-  <nav class="flex-1 px-2 py-3 space-y-0.5">
-    <a href="#" data-nav="dashboard" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>📊</span> Dashboard
+  <nav class="flex-1 px-3 py-4 space-y-1">
+    <a href="#" data-nav="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">📊</span><span>Genel Bakış</span>
     </a>
-    <a href="#" data-nav="gantt" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>📅</span> Zaman Tablosu
+    <a href="#" data-nav="assistant" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">💬</span><span>Asistan</span>
+      <span class="ml-auto text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium">AI</span>
     </a>
-    <a href="#" data-nav="chat" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>💬</span> AI Sohbet
+    <a href="#" data-nav="projects" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">📅</span><span>Projeler & Görevler</span>
     </a>
-    <a href="#" data-nav="messages" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>📨</span> Mesajlar
-    </a>
-    <a href="#" data-nav="all-notes" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>📝</span> Tüm Notlar
-    </a>
-    <a href="#" data-nav="risks" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>⚠️</span> Riskler
-    </a>
-    <a href="#" data-nav="files" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>📁</span> Dosyalar
-    </a>
-    <a href="#" data-nav="audit" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>📋</span> Audit Log
-    </a>
-    <a href="#" data-nav="personnel" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>👥</span> Personel Yönetimi
-    </a>
-    <a href="#" data-nav="dependencies" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm nav-item text-blue-100 hover:bg-blue-700">
-      <span>🔗</span> Bağımlılıklar
+    <a href="#" data-nav="team" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">👥</span><span>Ekip</span>
     </a>
   </nav>
-  <!-- Logout -->
-  <div class="px-4 py-3 border-t border-blue-800 flex-shrink-0">
-    <button onclick="Auth.logout()" class="flex items-center gap-2 text-blue-300 hover:text-white text-sm w-full">
+  <div class="px-3 pb-2">
+    <button onclick="openNotifPanel()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white/60 hover:text-white text-sm transition-all">
+      <span>🔔</span>
+      <span id="sidebar-notif-text">Bildirimler</span>
+      <span id="sidebar-notif-badge" class="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
+    </button>
+  </div>
+  <div class="px-3 pb-4 border-t border-white/10 pt-3 flex-shrink-0">
+    <button onclick="Auth.logout()" class="flex items-center gap-3 text-white/50 hover:text-white text-sm w-full px-4 py-2 rounded-xl hover:bg-white/5 transition-all">
       <span>🚪</span> Çıkış Yap
     </button>
   </div>
 </div>
 
 <!-- Mobile header -->
-<header class="lg:hidden fixed top-0 left-0 right-0 z-20 bg-blue-900 text-white px-4 py-3 flex items-center justify-between shadow-md">
+<header class="lg:hidden fixed top-0 left-0 right-0 z-20 text-white px-4 py-3 flex items-center justify-between shadow-lg sidebar-apple">
   <button id="sidebar-toggle" class="text-white p-1">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
     </svg>
   </button>
   <span class="font-semibold text-sm">🧠 ELİAR Yönetici</span>
-  <button onclick="Auth.logout()" class="text-blue-300 text-xs">Çıkış</button>
+  <button onclick="openNotifPanel()" class="text-white/70 text-sm relative">
+    🔔<span id="mobile-notif-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center hidden">!</span>
+  </button>
 </header>
 
 <!-- Main content -->
 <div class="lg:ml-64 min-h-screen">
-  <div class="pt-16 lg:pt-0 p-4 md:p-6">
+  <div class="pt-16 lg:pt-0 p-4 md:p-6 lg:p-8">
 
-    <!-- ===== DASHBOARD ===== -->
+    <!-- ===== GENEL BAKIŞ (DASHBOARD) ===== -->
     <div id="section-dashboard" class="section-panel hidden">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-gray-800">📊 Ar-Ge Dashboard</h2>
-        <button onclick="openNewProjectModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
-          ➕ Yeni Proje
-        </button>
-      </div>
-      <!-- Bildirim Barı -->
-      <div id="notification-bar" onclick="openNotifPanel()" class="notif-pulse bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 mb-5 flex items-center justify-between cursor-pointer hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold" style="color:#1a1a2e;">Genel Bakış</h2>
+          <p class="text-sm text-gray-500 mt-0.5">Ar-Ge departmanı özeti</p>
+        </div>
         <div class="flex items-center gap-3">
-          <span class="text-xl">🔔</span>
-          <div>
-            <span id="notif-count" class="font-semibold text-amber-800">3 yeni bildirim</span>
-            <span class="text-sm text-amber-600 ml-2">— Tıklayın</span>
-          </div>
+          <button onclick="Nav.show('assistant')" class="apple-btn px-4 py-2 text-sm flex items-center gap-2">💬 Asistan'a Sor</button>
+          <button onclick="openNewProjectModal()" class="bg-white border border-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm hover:border-gray-300 transition-all">➕ Yeni Proje</button>
         </div>
-        <span class="text-amber-400 text-lg font-bold">→</span>
       </div>
-      <!-- KPI Kartlar (JS ile doldurulur) -->
       <div id="kpi-cards" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
-
-      <!-- Projeler özet tablosu -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
-        <h3 class="font-semibold text-gray-800 mb-4">📋 Proje Durumları</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm data-table">
-            <thead>
-              <tr>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Proje</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Durum</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Bitiş</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">İlerleme</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden xl:table-cell">Ekip</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-projects"></tbody>
-          </table>
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-semibold text-gray-800">📋 Projeler</h3>
+          <button onclick="Nav.show('projects')" class="text-sm text-blue-600 hover:underline">Tümünü gör →</button>
         </div>
+        <div id="dashboard-project-cards" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
       </div>
-
-      <!-- Departman özeti -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <h3 onclick="Nav.show('personnel')" class="font-semibold text-gray-800 mb-4 section-header-link">👥 Departman Özeti <span class="text-xs text-blue-500 font-normal">→</span></h3>
+        <div class="apple-card p-5">
+          <h3 onclick="Nav.show('team')" class="font-semibold text-gray-800 mb-4 section-header-link">👥 Departman Özeti <span class="text-xs text-blue-500 font-normal">→</span></h3>
           <div id="dashboard-departments"></div>
         </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          <h3 onclick="Nav.show('risks')" class="font-semibold text-gray-800 mb-4 section-header-link">⚠️ Son Riskler <span class="text-xs text-blue-500 font-normal">→</span></h3>
-          <div id="dashboard-risks"></div>
+        <div class="apple-card p-5">
+          <h3 class="font-semibold text-gray-800 mb-4">⚠️ Dikkat Gerektiren</h3>
+          <div id="dashboard-attention"></div>
         </div>
       </div>
     </div>
 
-    <!-- ===== GANTT ===== -->
-    <div id="section-gantt" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">📅 Zaman Tablosu (Gantt)</h2>
-      <!-- Filtreler -->
-      <div class="filter-bar p-4 mb-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1">Departman</label>
-            <select id="gantt-dept" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1">Proje</label>
-            <select id="gantt-project" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1">Durum</label>
-            <select id="gantt-status" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-              <option value="">Hepsi</option>
-              <option value="devam">Devam Ediyor</option>
-              <option value="tamamlandi">Tamamlandı</option>
-              <option value="planlanan">Planlanan</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-gray-500 mb-1">Kişi Ara</label>
-            <input id="gantt-person" type="text" placeholder="İsim ile ara..."
-              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
-          </div>
-        </div>
-      </div>
-      <!-- Gantt container -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <div id="gantt-container"></div>
-      </div>
-    </div>
-
-    <!-- ===== AI SOHBET ===== -->
-    <div id="section-chat" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">💬 AI Sohbet</h2>
-      <div class="flex gap-4" style="height:calc(100vh - 200px); min-height:500px;">
-        <!-- Sol: Geçmiş Konuşmalar -->
-        <div class="w-56 flex-shrink-0 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col hidden md:flex">
-          <div class="px-3 py-3 border-b border-gray-100 flex items-center justify-between">
-            <span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Geçmiş</span>
-            <button onclick="startNewChat()" title="Yeni Konuşma"
-              class="text-blue-600 hover:text-blue-700 text-lg leading-none font-bold hover:bg-blue-50 w-6 h-6 flex items-center justify-center rounded-lg transition-colors">+</button>
+    <!-- ===== ASİSTAN (AI) ===== -->
+    <div id="section-assistant" class="section-panel hidden">
+      <div style="height:calc(100vh - 120px); min-height:500px;" class="flex gap-4">
+        <div class="w-60 flex-shrink-0 apple-card flex-col hidden md:flex overflow-hidden flex">
+          <div class="px-4 py-4 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Konuşmalar</span>
+              <button onclick="startNewChat()" class="w-7 h-7 rounded-lg bg-blue-500 text-white flex items-center justify-center text-sm font-bold hover:bg-blue-600 transition-colors">+</button>
+            </div>
+            <button onclick="startNewChat()" class="w-full text-xs py-2 rounded-xl font-medium" style="background:#007AFF;color:white;">+ Yeni Konuşma</button>
           </div>
           <div id="chat-history-list" class="flex-1 overflow-y-auto py-1"></div>
-          <div class="p-2 border-t border-gray-100">
-            <button onclick="startNewChat()"
-              class="w-full text-xs bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-medium transition-all">
-              + Yeni Konuşma
-            </button>
-          </div>
         </div>
-        <!-- Sağ: Konuşma Alanı -->
-        <div class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col min-w-0">
-          <div id="chat-history-title" class="px-4 py-2.5 border-b border-gray-100 text-xs text-gray-500 font-medium"></div>
-          <!-- Chat mesajları -->
-          <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-1"></div>
-          <!-- Input -->
-          <div class="border-t border-gray-100 p-3">
-            <div class="flex gap-2">
-              <input id="chat-input" type="text"
-                placeholder="Soru sorun... (T9, Teleskop, risk, personel, bağımlılıklar...)"
-                class="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
-              <button id="chat-mic-btn"
-                title="Sesli sor (Türkçe)"
-                class="p-2.5 text-gray-400 hover:text-blue-600 rounded-xl hover:bg-blue-50 transition-colors text-lg">
-                🎤
-              </button>
-              <button id="chat-send-btn"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm transition-all shadow">
-                Gönder →
-              </button>
+        <div class="flex-1 apple-card flex flex-col min-w-0 overflow-hidden">
+          <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
+            <div>
+              <div id="chat-history-title" class="text-sm font-semibold text-gray-700">Yeni Konuşma</div>
+              <div class="text-xs text-gray-400">AI her şeyi yapabilir — görev ata, mesaj gönder, proje oluştur...</div>
             </div>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <span class="text-xs text-gray-400">Hızlı:</span>
-              <div id="chat-quick-buttons" class="flex flex-wrap gap-2"></div>
+            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">● Çevrimiçi</span>
+          </div>
+          <div id="chat-messages" class="flex-1 overflow-y-auto p-5 space-y-1"></div>
+          <div class="border-t border-gray-100 p-4">
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span class="text-xs text-gray-400 self-center">Hızlı:</span>
+              <div id="chat-quick-buttons" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <div class="flex gap-2">
+              <input id="chat-input" type="text" placeholder="Yazın... (görev ata, mesaj gönder, proje sor, risk bildir...)"
+                class="flex-1 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 bg-gray-50">
+              <button id="chat-mic-btn" title="Sesli sor" class="p-3 text-gray-400 hover:text-blue-600 rounded-xl hover:bg-blue-50 transition-colors text-lg">🎤</button>
+              <button id="chat-send-btn" class="px-5 py-3 rounded-2xl font-semibold text-sm shadow" style="background:#007AFF;color:white;">Gönder</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ===== TÜM NOTLAR ===== -->
-    <div id="section-all-notes" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">📝 Tüm Notlar</h2>
-      <!-- Filtreler -->
-      <div class="filter-bar p-4 mb-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <select id="filter-notes-dept" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-            <option value="">Tüm Departmanlar</option>
-          </select>
-          <select id="filter-notes-project" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+    <!-- ===== PROJELER & GÖREVLER ===== -->
+    <div id="section-projects" class="section-panel hidden">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold" style="color:#1a1a2e;">Projeler & Görevler</h2>
+          <p class="text-sm text-gray-500 mt-0.5">Tüm projeler ve görev durumları</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="setProjView('cards')" id="proj-view-cards" class="view-btn active">📋 Kartlar</button>
+          <button onclick="setProjView('gantt')" id="proj-view-gantt" class="view-btn">📅 Gantt</button>
+          <button onclick="setProjView('kanban')" id="proj-view-kanban" class="view-btn">✅ Kanban</button>
+        </div>
+      </div>
+      <!-- Kartlar -->
+      <div id="proj-section-cards">
+        <div id="proj-cards-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </div>
+      <!-- Gantt -->
+      <div id="proj-section-gantt" class="hidden">
+        <div class="apple-card p-5 mb-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Departman</label>
+              <select id="gantt-dept" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Proje</label>
+              <select id="gantt-project" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Durum</label>
+              <select id="gantt-status" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+                <option value="">Hepsi</option>
+                <option value="devam">Devam Ediyor</option>
+                <option value="tamamlandi">Tamamlandı</option>
+                <option value="planlanan">Planlanan</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Kişi Ara</label>
+              <input id="gantt-person" type="text" placeholder="İsim ile ara..." class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+            </div>
+          </div>
+        </div>
+        <div class="apple-card p-5"><div id="gantt-container"></div></div>
+      </div>
+      <!-- Kanban -->
+      <div id="proj-section-kanban" class="hidden">
+        <div class="apple-card p-4 mb-4 flex flex-wrap gap-3">
+          <select id="kanban-filter-project" class="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
             <option value="">Tüm Projeler</option>
           </select>
-          <select id="filter-notes-cat" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-            <option value="">Tüm Kategoriler</option>
-            <option value="proje">Proje</option>
-            <option value="plan">Plan</option>
-            <option value="bilgi">Bilgi Bankası</option>
-            <option value="risk">Risk</option>
+          <select id="kanban-filter-dept" class="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+            <option value="">Tüm Departmanlar</option>
           </select>
-          <input id="filter-notes-search" type="text" placeholder="Not içeriği ara..."
-            class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400">
+          <select id="kanban-filter-person" class="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
+            <option value="">Tüm Kişiler</option>
+          </select>
+        </div>
+        <div class="flex gap-4 kanban-board overflow-x-auto pb-4">
+          <div class="kanban-col flex-shrink-0 min-w-72">
+            <div class="kanban-col-header bg-gray-100 text-gray-600">📅 Yapılacak <span id="kanban-count-planned" class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">0</span></div>
+            <div id="kanban-col-planned" class="mt-2 space-y-2 min-h-20"></div>
+          </div>
+          <div class="kanban-col flex-shrink-0 min-w-72">
+            <div class="kanban-col-header" style="background:#EFF6FF;color:#1D4ED8;">🔄 Yapılıyor <span id="kanban-count-doing" class="ml-auto text-xs bg-blue-200 text-blue-700 px-2 py-0.5 rounded-full">0</span></div>
+            <div id="kanban-col-doing" class="mt-2 space-y-2 min-h-20"></div>
+          </div>
+          <div class="kanban-col flex-shrink-0 min-w-72">
+            <div class="kanban-col-header" style="background:#F0FDF4;color:#166534;">✅ Bitti <span id="kanban-count-done" class="ml-auto text-xs bg-green-200 text-green-700 px-2 py-0.5 rounded-full">0</span></div>
+            <div id="kanban-col-done" class="mt-2 space-y-2 min-h-20"></div>
+          </div>
         </div>
       </div>
-      <div id="all-notes-list"></div>
     </div>
 
-    <!-- ===== RİSKLER ===== -->
-    <div id="section-risks" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-2">⚠️ Risk Yönetimi</h2>
-      <p class="text-sm text-gray-500 mb-5">Aktif riskler ve blocker'lar</p>
-      <div id="risks-content"></div>
-    </div>
-
-    <!-- ===== DOSYALAR ===== -->
-    <div id="section-files" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">📁 Tüm Dosyalar</h2>
-      <div class="filter-bar p-4 mb-4 flex flex-wrap gap-3">
-        <select id="filter-files-dept" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-          <option value="">Tüm Departmanlar</option>
-        </select>
-        <select id="filter-files-type" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-          <option value="">Tüm Tipler</option>
-          <option value="pdf">PDF</option>
-          <option value="xlsx">Excel</option>
-          <option value="docx">Word</option>
-          <option value="step">CAD/STEP</option>
-          <option value="png">Görsel</option>
-          <option value="md">Markdown</option>
-        </select>
-      </div>
-      <div id="all-files-list"></div>
-    </div>
-
-    <!-- ===== AUDIT LOG ===== -->
-    <div id="section-audit" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-5">📋 Audit Log</h2>
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <div id="audit-list" class="space-y-2"></div>
-      </div>
-    </div>
-
-    <!-- ===== PERSONEL YÖNETİMİ ===== -->
-    <div id="section-personnel" class="section-panel hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <h2 class="text-xl font-bold text-gray-800">👥 Personel Yönetimi</h2>
+    <!-- ===== EKİP ===== -->
+    <div id="section-team" class="section-panel hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold" style="color:#1a1a2e;">Ekip</h2>
+          <p class="text-sm text-gray-500 mt-0.5">85 Ar-Ge mühendisi, 7 departman</p>
+        </div>
         <div class="flex flex-wrap gap-2">
-          <button onclick="openAssignTaskModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
-            ✅ Görev Ata
-          </button>
-          <button onclick="openRoleModal()" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all">
-            🔑 Yetki Yönetimi
-          </button>
+          <button onclick="openAssignTaskModal()" class="text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all" style="background:#34C759;color:white;">✅ Görev Ata</button>
+          <button onclick="openRoleModal()" class="text-sm font-semibold px-4 py-2 rounded-xl flex items-center gap-2 shadow transition-all" style="background:#8B5CF6;color:white;">🔑 Yetki</button>
+          <button onclick="setPersonnelView('compact')" id="view-compact" class="view-btn active">≡ Kompakt</button>
+          <button onclick="setPersonnelView('medium')" id="view-medium" class="view-btn">▤ Orta</button>
+          <button onclick="setPersonnelView('wide')" id="view-wide" class="view-btn">▦ Geniş</button>
         </div>
       </div>
-      <!-- Görünüm Modu Butonları -->
-      <div class="flex items-center gap-2 mb-4">
-        <button onclick="setPersonnelView('compact')" id="view-compact" class="view-btn active">≡ Kompakt</button>
-        <button onclick="setPersonnelView('medium')" id="view-medium" class="view-btn">▤ Orta</button>
-        <button onclick="setPersonnelView('wide')" id="view-wide" class="view-btn">▦ Geniş</button>
-      </div>
-      <!-- Filtreler -->
-      <div class="filter-bar p-4 mb-4">
+      <div class="apple-card p-4 mb-5">
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-medium text-gray-500 mb-1">Departman</label>
-            <select id="personnel-dept-filter" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
+            <select id="personnel-dept-filter" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
           </div>
           <div>
             <label class="block text-xs font-medium text-gray-500 mb-1">Kişi</label>
-            <select id="personnel-person-filter" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
+            <select id="personnel-person-filter" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white"></select>
           </div>
         </div>
       </div>
       <div id="personnel-content"></div>
     </div>
 
-    <!-- ===== BAĞIMLILIKLAR ===== -->
-    <div id="section-dependencies" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-5">🔗 Proje Bağımlılıkları</h2>
-      <div id="dependencies-content"></div>
-    </div>
-
-    <!-- ===== MESAJLAR ===== -->
-    <div id="section-messages" class="section-panel hidden">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">📨 Mesaj Trafiği</h2>
-      <!-- Filtreler -->
-      <div class="filter-bar p-4 mb-4 flex flex-wrap gap-3">
-        <select id="filter-msg-dept" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-          <option value="">Tüm Departmanlar</option>
-        </select>
-        <select id="filter-msg-project" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 bg-white">
-          <option value="">Tüm Projeler</option>
-        </select>
-        <input id="filter-msg-search" type="text" placeholder="Kişi veya konu ara..."
-          class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-400 flex-1 min-w-36">
-      </div>
-      <div id="messages-list"></div>
-    </div>
-
   </div>
 </div>
 
-<!-- Modal -->
-<div id="modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+<!-- General Modal -->
+<div id="modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" style="backdrop-filter:blur(4px);">
   <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
     <div class="flex items-center justify-between px-5 py-4 border-b">
       <h3 id="modal-title" class="font-bold text-gray-800"></h3>
@@ -364,23 +273,11 @@
       <button onclick="document.getElementById('modal-new-project').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
     </div>
     <div class="px-5 py-4 space-y-4">
-      <div>
-        <label class="modal-form-label">Proje Adı *</label>
-        <input id="np-name" type="text" class="modal-form-input" placeholder="Proje adını girin...">
-      </div>
-      <div>
-        <label class="modal-form-label">Açıklama</label>
-        <textarea id="np-desc" rows="2" class="modal-form-input" placeholder="Kısa açıklama..."></textarea>
-      </div>
+      <div><label class="modal-form-label">Proje Adı *</label><input id="np-name" type="text" class="modal-form-input" placeholder="Proje adını girin..."></div>
+      <div><label class="modal-form-label">Açıklama</label><textarea id="np-desc" rows="2" class="modal-form-input" placeholder="Kısa açıklama..."></textarea></div>
       <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="modal-form-label">Başlangıç Tarihi</label>
-          <input id="np-start" type="date" class="modal-form-input">
-        </div>
-        <div>
-          <label class="modal-form-label">Bitiş Tarihi</label>
-          <input id="np-end" type="date" class="modal-form-input">
-        </div>
+        <div><label class="modal-form-label">Başlangıç Tarihi</label><input id="np-start" type="date" class="modal-form-input"></div>
+        <div><label class="modal-form-label">Bitiş Tarihi</label><input id="np-end" type="date" class="modal-form-input"></div>
       </div>
       <div>
         <label class="modal-form-label">Departman(lar)</label>
@@ -391,9 +288,7 @@
         <select id="np-members" multiple class="modal-form-input h-28 text-xs"></select>
         <p class="text-xs text-gray-400 mt-1">Ctrl/Cmd ile çoklu seçim yapabilirsiniz</p>
       </div>
-      <button onclick="submitNewProject()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow text-sm">
-        ✅ Proje Oluştur
-      </button>
+      <button onclick="submitNewProject()" class="w-full font-semibold py-2.5 rounded-xl shadow text-sm" style="background:#007AFF;color:white;">✅ Proje Oluştur</button>
     </div>
   </div>
 </div>
@@ -406,31 +301,12 @@
       <button onclick="document.getElementById('modal-assign-task').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
     </div>
     <div class="px-5 py-4 space-y-4">
-      <div>
-        <label class="modal-form-label">Personel *</label>
-        <select id="at-person" class="modal-form-input">
-          <option value="">— Personel seçin —</option>
-        </select>
-      </div>
-      <div>
-        <label class="modal-form-label">Proje *</label>
-        <select id="at-project" class="modal-form-input">
-          <option value="">— Proje seçin —</option>
-        </select>
-      </div>
-      <div>
-        <label class="modal-form-label">Görev Başlığı *</label>
-        <input id="at-title" type="text" class="modal-form-input" placeholder="Görev başlığını girin...">
-      </div>
+      <div><label class="modal-form-label">Personel *</label><select id="at-person" class="modal-form-input"><option value="">— Personel seçin —</option></select></div>
+      <div><label class="modal-form-label">Proje *</label><select id="at-project" class="modal-form-input"><option value="">— Proje seçin —</option></select></div>
+      <div><label class="modal-form-label">Görev Başlığı *</label><input id="at-title" type="text" class="modal-form-input" placeholder="Görev başlığını girin..."></div>
       <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="modal-form-label">Başlangıç Tarihi</label>
-          <input id="at-start" type="date" class="modal-form-input">
-        </div>
-        <div>
-          <label class="modal-form-label">Bitiş Tarihi</label>
-          <input id="at-end" type="date" class="modal-form-input">
-        </div>
+        <div><label class="modal-form-label">Başlangıç</label><input id="at-start" type="date" class="modal-form-input"></div>
+        <div><label class="modal-form-label">Bitiş</label><input id="at-end" type="date" class="modal-form-input"></div>
       </div>
       <div>
         <label class="modal-form-label">Durum</label>
@@ -440,9 +316,7 @@
           <option value="done">✅ Tamamlandı</option>
         </select>
       </div>
-      <button onclick="submitAssignTask()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl transition-all shadow text-sm">
-        ✅ Görevi Ata
-      </button>
+      <button onclick="submitAssignTask()" class="w-full font-semibold py-2.5 rounded-xl shadow text-sm" style="background:#34C759;color:white;">✅ Görevi Ata</button>
     </div>
   </div>
 </div>
@@ -455,7 +329,7 @@
       <button onclick="document.getElementById('modal-role-mgmt').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold leading-none">×</button>
     </div>
     <div class="px-5 py-4">
-      <p class="text-sm text-gray-500 mb-4">Personeli "Takım Lideri" yapın veya yetkisini kaldırın. Takım liderleri proje önerebilir ve kendi departmanlarına görev atayabilir.</p>
+      <p class="text-sm text-gray-500 mb-4">Personeli "Takım Lideri" yapın veya yetkisini kaldırın.</p>
       <div id="role-mgmt-list" class="space-y-2"></div>
     </div>
   </div>
@@ -473,88 +347,70 @@
 </div>
 
 <script>
-  // Auth check
   Auth.checkAuth();
   if (Auth.role !== 'admin') window.location.href = 'index.html';
-
-  // Init navigasyon — dashboard başlangıç
   Nav.init('dashboard');
 
-  // ---- BİLDİRİM PANELİ ----
-  window.openNotifPanel = function() {
-    const icons = { risk: '🔴', warning: '🟡', info: '🚀', deadline: '⏰', file: '📁', message: '💬', dependency: '🔗', completion: '✅' };
-    const colors = {
-      risk: 'border-red-200 bg-red-50',
-      warning: 'border-yellow-200 bg-yellow-50',
-      info: 'border-blue-200 bg-blue-50',
-      deadline: 'border-orange-200 bg-orange-50',
-      file: 'border-gray-200 bg-gray-50',
-      message: 'border-indigo-200 bg-indigo-50',
-      dependency: 'border-purple-200 bg-purple-50',
-      completion: 'border-emerald-200 bg-emerald-50'
+  // Override Nav.show once for: (1) section name mapping, (2) apple sidebar active style
+  const _origNavShow = Nav.show.bind(Nav);
+  Nav.show = function(section) {
+    const sectionMap = {
+      'chat': 'assistant', 'gantt': 'projects', 'personnel': 'team',
+      'messages': 'assistant', 'all-notes': 'assistant', 'risks': 'assistant',
+      'files': 'assistant', 'audit': 'assistant', 'dependencies': 'assistant',
+      'kanban': 'projects'
     };
-    function getNavTarget(n) {
-      if (n.type === 'risk' || n.type === 'warning') return "Nav.show('risks')";
-      if (n.type === 'deadline') return "Nav.show('gantt')";
-      if (n.type === 'file') return "Nav.show('files')";
-      if (n.type === 'message') return "Nav.show('messages')";
-      return "Nav.show('all-notes')";
-    }
+    const mapped = sectionMap[section] || section;
+    _origNavShow(mapped);
+    document.querySelectorAll('[data-nav]').forEach(link => {
+      link.classList.remove('bg-white/20', 'text-white', 'font-semibold');
+      link.classList.add('text-white/70');
+      if (link.getAttribute('data-nav') === mapped) {
+        link.classList.add('bg-white/20', 'text-white', 'font-semibold');
+        link.classList.remove('text-white/70');
+      }
+    });
+  };
+
+  // Sidebar notification badge
+  function updateSidebarNotifBadge() {
+    const unread = NOTIFICATIONS.filter(n => !n.read).length;
+    const badge = document.getElementById('sidebar-notif-badge');
+    const mobileBadge = document.getElementById('mobile-notif-badge');
+    const text = document.getElementById('sidebar-notif-text');
+    if (badge) { badge.textContent = unread; badge.classList.toggle('hidden', unread === 0); }
+    if (mobileBadge) { mobileBadge.classList.toggle('hidden', unread === 0); }
+    if (text) text.textContent = unread > 0 ? `${unread} Bildirim` : 'Bildirimler';
+  }
+
+  window.openNotifPanel = function() {
+    const icons = { risk:'🔴', warning:'🟡', info:'🚀', deadline:'⏰', file:'📁', message:'💬', dependency:'🔗', completion:'✅' };
+    const colors = { risk:'border-red-200 bg-red-50', warning:'border-yellow-200 bg-yellow-50', info:'border-blue-200 bg-blue-50', deadline:'border-orange-200 bg-orange-50', file:'border-gray-200 bg-gray-50', message:'border-indigo-200 bg-indigo-50', dependency:'border-purple-200 bg-purple-50', completion:'border-emerald-200 bg-emerald-50' };
     document.getElementById('notif-panel-content').innerHTML =
-      `<button onclick="NOTIFICATIONS.forEach(n=>{n.read=true}); openNotifPanel(); updateNotifBar();"
+      `<button onclick="NOTIFICATIONS.forEach(n=>{n.read=true}); openNotifPanel(); updateSidebarNotifBadge();"
         class="w-full text-xs text-blue-600 hover:text-blue-700 py-1.5 mb-2 border border-blue-100 rounded-lg hover:bg-blue-50 transition-colors">
-        ✓ Tümünü okundu işaretle
-      </button>` +
+        ✓ Tümünü okundu işaretle</button>` +
       NOTIFICATIONS.map(n => `
-      <div onclick="${getNavTarget(n)}; document.getElementById('modal-notif').classList.add('hidden');"
-           class="rounded-xl p-3 border ${colors[n.type] || colors.info} cursor-pointer hover:shadow-md transition-all ${n.read ? 'opacity-70' : 'border-l-4'}">
+      <div onclick="document.getElementById('modal-notif').classList.add('hidden');"
+           class="rounded-xl p-3 border ${colors[n.type]||colors.info} cursor-pointer hover:shadow-md transition-all ${n.read?'opacity-70':'border-l-4'}">
         <div class="flex items-start gap-3">
-          <span class="text-lg mt-0.5 flex-shrink-0">${icons[n.type] || 'ℹ️'}</span>
+          <span class="text-lg mt-0.5 flex-shrink-0">${icons[n.type]||'ℹ️'}</span>
           <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-sm ${n.read ? 'font-medium' : 'font-bold'} text-gray-800">${escapeHtml(n.title)}</span>
+              <span class="text-sm ${n.read?'font-medium':'font-bold'} text-gray-800">${escapeHtml(n.title)}</span>
               <span class="text-xs text-gray-400 flex-shrink-0">${n.time}</span>
             </div>
             <p class="text-xs text-gray-600 mt-0.5">${escapeHtml(n.text)}</p>
           </div>
-          ${!n.read ? '<span class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>' : ''}
+          ${!n.read?'<span class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>':''}
         </div>
-      </div>
-    `).join('');
+      </div>`).join('');
     document.getElementById('modal-notif').classList.remove('hidden');
-  };
-
-  function updateNotifBar() {
-    const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
-    const notifCountEl = document.getElementById('notif-count');
-    if (notifCountEl) notifCountEl.textContent = unreadCount > 0 ? `${unreadCount} yeni bildirim` : 'Tüm bildirimler okundu';
-    const bar = document.getElementById('notification-bar');
-    if (bar) bar.classList.toggle('notif-pulse', unreadCount > 0);
-  }
-
-
-  // ---- PERSONEL GÖRÜNÜM MODU ----
-  let personnelViewMode = 'compact';
-  window.setPersonnelView = function(mode) {
-    personnelViewMode = mode;
-    ['compact', 'medium', 'wide'].forEach(m => {
-      const btn = document.getElementById('view-' + m);
-      if (btn) {
-        btn.classList.toggle('active', m === mode);
-      }
-    });
-    renderPersonnel();
   };
 
   // ---- DASHBOARD INIT ----
   window.init_dashboard = function() {
-    // --- Bildirim barı güncelle ---
-    const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
-    const notifCountEl = document.getElementById('notif-count');
-    if (notifCountEl) {
-      notifCountEl.textContent = unreadCount > 0 ? `${unreadCount} yeni bildirim` : 'Tüm bildirimler okundu';
-    }
-    // --- KPI Kartları ---
+    updateSidebarNotifBadge();
     const totalProjects = PROJECTS.length;
     const inProgress = PROJECTS.filter(p => p.status === 'devam').length;
     const completed = PROJECTS.filter(p => p.status === 'tamamlandi').length;
@@ -564,93 +420,179 @@
     const leadCount = PERSONNEL.filter(p => p.role_level === 'lead').length;
 
     document.getElementById('kpi-cards').innerHTML = `
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-blue-200" onclick="Nav.show('gantt')" title="Gantt'a git">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Aktif Proje</span>
-          <span class="text-2xl">🚀</span>
-        </div>
-        <div class="text-3xl font-bold text-blue-600">${totalProjects}</div>
-        <div class="text-xs text-gray-400 mt-1">Toplam proje sayısı</div>
-        <div class="text-xs mt-2 kpi-trend-up">↑ ${inProgress} devam ediyor</div>
+      <div class="stat-card apple-card p-5 cursor-pointer hover:border-blue-200" onclick="Nav.show('projects')">
+        <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Toplam Proje</span><div class="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-xl">🚀</div></div>
+        <div class="text-3xl font-bold" style="color:#007AFF;">${totalProjects}</div>
+        <div class="text-xs text-gray-400 mt-1">${inProgress} devam ediyor</div>
+        <div class="text-xs mt-2 font-medium" style="color:#34C759;">↑ ${completed} tamamlandı</div>
       </div>
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-blue-200" onclick="Nav.show('gantt')" title="Gantt'a git">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Devam Eden</span>
-          <span class="text-2xl">⚙️</span>
-        </div>
-        <div class="text-3xl font-bold text-blue-600">${inProgress}</div>
+      <div class="stat-card apple-card p-5 cursor-pointer hover:border-blue-200" onclick="Nav.show('projects')">
+        <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Devam Eden</span><div class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-xl">⚙️</div></div>
+        <div class="text-3xl font-bold" style="color:#007AFF;">${inProgress}</div>
         <div class="text-xs text-gray-400 mt-1">Aktif geliştirme</div>
-        <div class="text-xs mt-2 ${completed > 0 ? 'kpi-trend-up' : 'text-gray-400'}">✅ ${completed} tamamlandı</div>
+        <div class="text-xs mt-2 font-medium text-gray-400">↑ ${completed} tamamlandı</div>
       </div>
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-red-200" onclick="Nav.show('risks')" title="Riskler'e git">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Risk</span>
-          <span class="text-2xl">⚠️</span>
-        </div>
-        <div class="text-3xl font-bold text-red-600">${riskCount}</div>
-        <div class="text-xs text-gray-400 mt-1">Aktif risk bildirimi</div>
-        <div class="text-xs mt-2 ${highRisks > 0 ? 'kpi-trend-down' : 'text-gray-400'}">🔴 ${highRisks} yüksek öncelik</div>
+      <div class="stat-card apple-card p-5 cursor-pointer hover:border-red-200" onclick="Nav.show('assistant')">
+        <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Aktif Risk</span><div class="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center text-xl">⚠️</div></div>
+        <div class="text-3xl font-bold" style="color:#FF3B30;">${riskCount}</div>
+        <div class="text-xs text-gray-400 mt-1">Risk bildirimi</div>
+        <div class="text-xs mt-2 font-medium" style="color:${highRisks>0?'#FF3B30':'#94a3b8'};">🔴 ${highRisks} yüksek</div>
       </div>
-      <div class="stat-card bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-purple-200" onclick="Nav.show('personnel')" title="Personel Yönetimi'ne git">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ar-Ge Kadrosu</span>
-          <span class="text-2xl">👥</span>
-        </div>
-        <div class="text-3xl font-bold text-purple-600">${totalPersonnel}</div>
+      <div class="stat-card apple-card p-5 cursor-pointer hover:border-purple-200" onclick="Nav.show('team')">
+        <div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Ar-Ge Kadrosu</span><div class="w-10 h-10 rounded-2xl bg-purple-50 flex items-center justify-center text-xl">👥</div></div>
+        <div class="text-3xl font-bold" style="color:#8B5CF6;">${totalPersonnel}</div>
         <div class="text-xs text-gray-400 mt-1">${DEPARTMENTS.length} departman</div>
-        <div class="text-xs mt-2 text-purple-500">⭐ ${leadCount} takım lideri</div>
-      </div>
-    `;
+        <div class="text-xs mt-2 font-medium text-purple-400">⭐ ${leadCount} takım lideri</div>
+      </div>`;
 
-    // Proje durumları tablosu — progress ring + avatar group
-    document.getElementById('dashboard-projects').innerHTML = PROJECTS.map(p => {
-      const depts = p.depts.map(d => DEPARTMENTS.find(x => x.id === d)?.short || '').join(', ');
-      const isRisky = NOTES.some(n => n.category === 'risk' && n.projectId === p.id);
-      const pct = p.status === 'tamamlandi' ? 100 : p.status === 'planlanan' ? 0 :
-        Math.round(((p.spent || 0) / (p.budget || 1)) * 100);
-      const ringColor = p.status === 'tamamlandi' ? '#10b981' : p.status === 'planlanan' ? '#94a3b8' : isRisky ? '#ef4444' : '#3b82f6';
-      return `<tr class="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onclick="showProjectDetail(${p.id})">
-        <td class="px-3 py-2.5">
-          <div class="font-medium text-gray-800">${escapeHtml(p.name)}</div>
-          ${isRisky ? '<span class="text-xs text-red-500">⚠️ Risk var</span>' : ''}
-        </td>
-        <td class="px-3 py-2.5 hidden md:table-cell text-gray-500 text-xs">${escapeHtml(depts)}</td>
-        <td class="px-3 py-2.5">${getStatusBadge(isRisky ? 'riskli' : p.status)}</td>
-        <td class="px-3 py-2.5 hidden lg:table-cell text-xs text-gray-500">${p.endDate}</td>
-        <td class="px-3 py-2.5 hidden lg:table-cell">${getProgressRing(pct, ringColor)}</td>
-        <td class="px-3 py-2.5 hidden xl:table-cell">${getAvatarGroup(p.members, 3)}</td>
-      </tr>`;
-    }).join('');
+    renderDashboardProjectCards();
 
-    // Departman özeti
     document.getElementById('dashboard-departments').innerHTML = DEPARTMENTS.map(d => `
       <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-        <div class="flex items-center gap-2">
-          <div class="w-2 h-2 rounded-full" style="background:${d.color}"></div>
-          <span class="text-sm text-gray-700">${escapeHtml(d.name)}</span>
-        </div>
+        <div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full" style="background:${d.color}"></div><span class="text-sm text-gray-700">${escapeHtml(d.name.split('(')[0].trim())}</span></div>
         <span class="text-sm font-semibold text-gray-600">${d.count} kişi</span>
-      </div>
-    `).join('');
+      </div>`).join('');
 
-    // Son riskler
-    document.getElementById('dashboard-risks').innerHTML = NOTES.filter(n => n.category === 'risk').slice(0, 5).map(n => `
-      <div class="flex items-start gap-2 py-2 border-b border-gray-50 last:border-0">
-        <span class="text-xs mt-0.5">${n.severity === 'yüksek' ? '🔴' : n.severity === 'orta' ? '🟡' : '🟢'}</span>
-        <div>
-          <div class="text-xs font-medium">${n.projectId ? clickableProject(n.projectId, n.project) : `<span class="text-gray-700">${escapeHtml(n.project)}</span>`}</div>
-          <div class="text-xs text-gray-500 mt-0.5">${escapeHtml(n.text.replace('⚠️ ', '').slice(0, 70))}...</div>
-        </div>
-      </div>
-    `).join('');
+    const risks = NOTES.filter(n => n.category === 'risk').slice(0,3);
+    const deadlines = PROJECTS.filter(p => p.status === 'devam').slice(0,2);
+    const unreadMsgs = MESSAGES.filter(m => !m.read).slice(0,2);
+    const attentionItems = [
+      ...risks.map(r => ({ icon: r.severity==='yüksek'?'🔴':'🟡', text: r.text.replace('⚠️ ','').slice(0,65), sub: r.project })),
+      ...deadlines.map(p => ({ icon:'⏰', text:`${p.name} bitiş: ${p.endDate}`, sub:'Deadline' })),
+      ...unreadMsgs.map(m => { const fp = PERSONNEL.find(x=>x.id===m.from); return { icon:'💬', text:m.subject, sub:(fp?fp.name:'?')+' → size' }; })
+    ];
+    document.getElementById('dashboard-attention').innerHTML = attentionItems.slice(0,6).map(item => `
+      <div class="flex items-start gap-3 py-2.5 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-gray-50 rounded-lg px-1 -mx-1 transition-colors" onclick="Nav.show('assistant')">
+        <span class="text-base mt-0.5 flex-shrink-0">${item.icon}</span>
+        <div class="flex-1 min-w-0"><div class="text-sm text-gray-700 truncate">${escapeHtml(item.text)}</div><div class="text-xs text-gray-400 mt-0.5">${escapeHtml(item.sub)}</div></div>
+        <span class="text-xs text-blue-400 flex-shrink-0">→</span>
+      </div>`).join('') || '<div class="text-sm text-gray-400 text-center py-4">Dikkat gerektiren öğe yok 🎉</div>';
   };
+
+  function renderDashboardProjectCards() {
+    const el = document.getElementById('dashboard-project-cards');
+    if (!el) return;
+    el.innerHTML = PROJECTS.slice(0,6).map(p => {
+      const isRisky = NOTES.some(n => n.category==='risk' && n.projectId===p.id);
+      const pct = p.status==='tamamlandi'?100:p.status==='planlanan'?0:Math.round(((p.spent||0)/(p.budget||1))*100);
+      const ringColor = p.status==='tamamlandi'?'#34C759':p.status==='planlanan'?'#94a3b8':isRisky?'#FF3B30':'#007AFF';
+      const stCls = {devam:'bg-blue-100 text-blue-700',tamamlandi:'bg-green-100 text-green-700',planlanan:'bg-gray-100 text-gray-600',riskli:'bg-red-100 text-red-700'};
+      const stLabel = {devam:'Devam',tamamlandi:'Tamamlandı',planlanan:'Planlanan'};
+      const st = isRisky?'riskli':p.status;
+      return `<div class="apple-card p-5 cursor-pointer hover:shadow-md transition-all group" onclick="showProjectDetail(${p.id})">
+        <div class="flex items-start justify-between gap-3 mb-4">
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-gray-800 group-hover:text-blue-600 text-sm leading-tight mb-1">${escapeHtml(p.name)}</div>
+            <span class="text-xs px-2 py-0.5 rounded-full font-medium ${stCls[st]}">${isRisky?'⚠️ Riskli':stLabel[p.status]||p.status}</span>
+          </div>
+          ${getProgressRing(pct, ringColor)}
+        </div>
+        <div class="flex items-center justify-between">${getAvatarGroup(p.members,3)}<span class="text-xs text-gray-400">${p.endDate}</span></div>
+      </div>`;
+    }).join('');
+  }
 
   // ---- GANTT INIT ----
   window.init_gantt = function() {
-    GanttChart.init();
+    if (typeof GanttChart !== 'undefined') GanttChart.init();
   };
 
-  // ---- AI CHAT INIT ----
+  // ---- PROJECTS INIT ----
+  window.init_projects = function() {
+    renderProjCards();
+    const kbProj = document.getElementById('kanban-filter-project');
+    if (kbProj && kbProj.options.length===1) kbProj.innerHTML += PROJECTS.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    const kbDept = document.getElementById('kanban-filter-dept');
+    if (kbDept && kbDept.options.length===1) kbDept.innerHTML += DEPARTMENTS.map(d=>`<option value="${d.id}">${escapeHtml(d.name)}</option>`).join('');
+    const kbPerson = document.getElementById('kanban-filter-person');
+    if (kbPerson && kbPerson.options.length===1) kbPerson.innerHTML += PERSONNEL.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+    ['kanban-filter-project','kanban-filter-dept','kanban-filter-person'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('change', renderKanban);
+    });
+  };
+
+  let projViewMode = 'cards';
+  window.setProjView = function(mode) {
+    projViewMode = mode;
+    ['cards','gantt','kanban'].forEach(m => {
+      const btn = document.getElementById('proj-view-'+m);
+      if (btn) btn.classList.toggle('active', m===mode);
+      const sec = document.getElementById('proj-section-'+m);
+      if (sec) sec.classList.toggle('hidden', m!==mode);
+    });
+    if (mode==='gantt' && typeof GanttChart!=='undefined') GanttChart.init();
+    else if (mode==='kanban') renderKanban();
+    else if (mode==='cards') renderProjCards();
+  };
+
+  function renderProjCards() {
+    const el = document.getElementById('proj-cards-grid');
+    if (!el) return;
+    el.innerHTML = PROJECTS.map(p => {
+      const isRisky = NOTES.some(n => n.category==='risk' && n.projectId===p.id);
+      const pct = p.status==='tamamlandi'?100:p.status==='planlanan'?0:Math.round(((p.spent||0)/(p.budget||1))*100);
+      const ringColor = p.status==='tamamlandi'?'#34C759':p.status==='planlanan'?'#94a3b8':isRisky?'#FF3B30':'#007AFF';
+      const stCls = {devam:'bg-blue-100 text-blue-700',tamamlandi:'bg-green-100 text-green-700',planlanan:'bg-gray-100 text-gray-600',riskli:'bg-red-100 text-red-700'};
+      const stLabel = {devam:'🔵 Devam',tamamlandi:'✅ Tamamlandı',planlanan:'⚪ Planlanan'};
+      const st = isRisky?'riskli':p.status;
+      const depts = p.depts.map(d => DEPARTMENTS.find(x=>x.id===d)?.short||'').filter(Boolean).join(', ');
+      return `<div class="apple-card p-5 cursor-pointer hover:shadow-lg transition-all group" onclick="showProjectDetail(${p.id})">
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-gray-800 group-hover:text-blue-600 mb-1">${escapeHtml(p.name)}</div>
+            <div class="text-xs text-gray-500 mb-2 leading-relaxed line-clamp-2">${escapeHtml(p.desc||'')}</div>
+            <span class="text-xs px-2 py-0.5 rounded-full font-medium ${stCls[st]}">${isRisky?'⚠️ Riskli':stLabel[p.status]||p.status}</span>
+          </div>
+          ${getProgressRing(pct, ringColor)}
+        </div>
+        <div class="border-t border-gray-50 pt-3 flex items-center justify-between">
+          ${getAvatarGroup(p.members,4)}
+          <div class="text-right"><div class="text-xs text-gray-400">${p.endDate}</div><div class="text-xs text-gray-400 mt-0.5">${escapeHtml(depts)}</div></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderKanban() {
+    const projFilter = document.getElementById('kanban-filter-project')?.value;
+    const deptFilter = document.getElementById('kanban-filter-dept')?.value;
+    const personFilter = document.getElementById('kanban-filter-person')?.value;
+    let allTasks = [];
+    PERSONNEL.forEach(p => { (p.tasks||[]).forEach(t => allTasks.push({...t, personId:p.id, personName:p.name, personAvatar:p.avatar})); });
+    if (projFilter) allTasks = allTasks.filter(t => t.projectId===parseInt(projFilter));
+    if (deptFilter) { const dp = PERSONNEL.filter(p=>p.dept===parseInt(deptFilter)).map(p=>p.id); allTasks = allTasks.filter(t=>dp.includes(t.personId)); }
+    if (personFilter) allTasks = allTasks.filter(t=>t.personId===parseInt(personFilter));
+    const planned = allTasks.filter(t=>t.status==='planned');
+    const doing = allTasks.filter(t=>t.status==='in_progress');
+    const done = allTasks.filter(t=>t.status==='done').slice(0,30);
+    function taskCard(t, cls) {
+      const proj = PROJECTS.find(p=>p.id===t.projectId);
+      return `<div class="kanban-card ${cls}" onclick="document.getElementById('kanban-filter-person').value='${t.personId}'; renderKanban();">
+        <div class="font-medium text-sm text-gray-800 mb-1.5 leading-tight">${escapeHtml(t.title)}</div>
+        ${proj?`<div class="text-xs text-blue-600 mb-1">${escapeHtml(proj.name)}</div>`:''}
+        <div class="flex items-center justify-between mt-2">
+          <div class="flex items-center gap-1">
+            <div class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-xs flex items-center justify-center font-bold">${escapeHtml(t.personAvatar.slice(0,2))}</div>
+            <span class="text-xs text-gray-500">${escapeHtml(t.personName.split(' ')[0])}</span>
+          </div>
+          <span class="text-xs text-gray-400">${t.endDate?t.endDate.split('-').slice(1).join('/'):''}
+          </span>
+        </div>
+      </div>`;
+    }
+    const cp = document.getElementById('kanban-col-planned');
+    const cd = document.getElementById('kanban-col-doing');
+    const cn = document.getElementById('kanban-col-done');
+    if (cp) cp.innerHTML = planned.length>0?planned.slice(0,20).map(t=>taskCard(t,'todo')).join(''):'<div class="text-xs text-gray-400 text-center py-4">Görev yok</div>';
+    if (cd) cd.innerHTML = doing.length>0?doing.slice(0,20).map(t=>taskCard(t,'doing')).join(''):'<div class="text-xs text-gray-400 text-center py-4">Görev yok</div>';
+    if (cn) cn.innerHTML = done.length>0?done.map(t=>taskCard(t,'done')).join(''):'<div class="text-xs text-gray-400 text-center py-4">Görev yok</div>';
+    const c1=document.getElementById('kanban-count-planned'); if(c1) c1.textContent=planned.length;
+    const c2=document.getElementById('kanban-count-doing'); if(c2) c2.textContent=doing.length;
+    const c3=document.getElementById('kanban-count-done'); if(c3) c3.textContent=done.length;
+  }
+
+  // ---- ASSISTANT (AI CHAT) INIT ----
   let currentChatId = null;
 
   function renderChatHistoryList() {
@@ -658,36 +600,26 @@
     if (!listEl) return;
     listEl.innerHTML = CHAT_HISTORY.map(h => {
       const isActive = h.id === currentChatId;
-      const d = new Date(h.date);
-      const dateStr = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+      const dateStr = new Date(h.date).toLocaleDateString('tr-TR', {day:'numeric',month:'short'});
       return `<button onclick="loadChatHistory(${h.id})"
-        class="w-full text-left px-3 py-2.5 text-xs hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0 ${isActive ? 'bg-blue-50 text-blue-700' : 'text-gray-700'}">
-        <div class="font-medium truncate">${escapeHtml(h.title)}</div>
+        class="w-full text-left px-4 py-3 text-xs hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 ${isActive?'bg-blue-50 text-blue-700 font-medium':'text-gray-600'}">
+        <div class="font-medium truncate text-sm">${escapeHtml(h.title)}</div>
         <div class="text-gray-400 mt-0.5">${dateStr}</div>
       </button>`;
     }).join('');
   }
 
   window.loadChatHistory = function(historyId) {
-    const history = CHAT_HISTORY.find(h => h.id === historyId);
+    const history = CHAT_HISTORY.find(h=>h.id===historyId);
     if (!history) return;
     currentChatId = historyId;
     renderChatHistoryList();
-    // Show history title
     const titleEl = document.getElementById('chat-history-title');
-    if (titleEl) {
-      const d = new Date(history.date);
-      titleEl.textContent = `${history.title} — ${d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-    }
-    // Render messages
+    if (titleEl) titleEl.textContent = `${history.title} — ${new Date(history.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}`;
     AIChat.messages = [];
     const container = document.getElementById('chat-messages');
     if (container) container.innerHTML = '';
-    history.messages.forEach(m => {
-      const msg = { role: m.role, text: m.text, time: m.time };
-      AIChat.messages.push(msg);
-      AIChat.renderMessage(msg);
-    });
+    history.messages.forEach(m => { const msg={role:m.role,text:m.text,time:m.time}; AIChat.messages.push(msg); AIChat.renderMessage(msg); });
     AIChat.scrollToBottom();
   };
 
@@ -699,499 +631,132 @@
     if (container) container.innerHTML = '';
     const titleEl = document.getElementById('chat-history-title');
     if (titleEl) titleEl.textContent = 'Yeni Konuşma';
-    AIChat.addMessage('ai', `Merhaba! Ben **Eliar Akıllı Ar-Ge Asistanı**. Size yardımcı olmak için hazırım.\n\n- 📊 Proje durumları\n- ⚠️ Riskler ve bağımlılıklar\n- 👥 Personel ve iş yükü\n- 📈 Bütçe ve takvim analizi`);
+    AIChat.addMessage('ai', `Merhaba! Ben **Eliar Akıllı Ar-Ge Asistanı**. 🧠\n\n**Şunları yapabilirim:**\n- 📊 **Proje raporu** — "T9 durumu nedir?"\n- ✅ **Görev at** *(demo)* — "Ahmet'e PCB layout görevi ver, 30 Mayıs'a kadar"\n- 💬 **Mesaj gönder** *(demo)* — "Burak'a mesaj: PCB layout hazır mı?"\n- ⚠️ **Risk bildir** *(demo)* — "Risk: FPGA tedarik 8 hafta gecikti"\n- 🚀 **Proje oluştur** *(demo)* — "Yeni proje: LABx v2, Temmuz'da başlasın"\n- 📋 **Haftalık özet** — "Bu hafta ne yapıldı?"\n- 👥 **Personel analizi** — "Elektronik'te en yoğun kim?"\n- 🔗 **Bağımlılıklar** — "ADW'nin bağımlılıkları ne?"\n\n*Not: (demo) işaretli komutlar simülasyon modunda çalışır.*\n\nNe yapmamı istersiniz?`);
   };
 
-  window.init_chat = function() {
-    AIChat.init('chat-messages', 'chat-input', 'chat-send-btn', 'chat-mic-btn');
-    SpeechInput.init('chat-input', 'chat-mic-btn', () => AIChat.send());
+  window.init_assistant = function() {
+    AIChat.init('chat-messages','chat-input','chat-send-btn','chat-mic-btn');
+    if (typeof SpeechInput!=='undefined') SpeechInput.init('chat-input','chat-mic-btn',()=>AIChat.send());
     document.getElementById('chat-quick-buttons').innerHTML =
-      ['T9 durumu', 'Teleskop raporu', 'Riskler', 'ADW projesi', 'Personel listesi', 'Bağımlılıklar'].map(q =>
+      ['T9 durumu','Teleskop raporu','Riskler','Bu hafta ne yapıldı?','ADW bağımlılıklar','Personel iş yükü'].map(q =>
         `<button onclick="document.getElementById('chat-input').value='${q}'; AIChat.send();"
-          class="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2 py-0.5 rounded-full transition-colors">${q}</button>`
+          class="text-xs text-blue-600 hover:bg-blue-50 px-3 py-1 rounded-full border border-blue-100 transition-colors">${q}</button>`
       ).join('');
-    // Set initial title
-    const titleEl = document.getElementById('chat-history-title');
-    if (titleEl) titleEl.textContent = 'Yeni Konuşma';
-    // Render history list
     renderChatHistoryList();
+    startNewChat();
   };
+  window.init_chat = window.init_assistant;
 
-  // ---- MESAJLAR INIT ----
-  window.init_messages = function() {
-    // Fill filter dropdowns
-    const deptSel = document.getElementById('filter-msg-dept');
-    if (deptSel && deptSel.options.length === 1) {
-      deptSel.innerHTML += DEPARTMENTS.map(d =>
-        `<option value="${d.id}">${escapeHtml(d.name)}</option>`
-      ).join('');
-    }
-    const projSel = document.getElementById('filter-msg-project');
-    if (projSel && projSel.options.length === 1) {
-      projSel.innerHTML += PROJECTS.map(p =>
-        `<option value="${p.id}">${escapeHtml(p.name)}</option>`
-      ).join('');
-    }
-    renderMessages();
-    ['filter-msg-dept', 'filter-msg-project'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('change', renderMessages);
-    });
-    const searchEl = document.getElementById('filter-msg-search');
-    if (searchEl) searchEl.addEventListener('input', renderMessages);
-  };
-
-  function renderMessages() {
-    const deptId = document.getElementById('filter-msg-dept')?.value;
-    const projId = document.getElementById('filter-msg-project')?.value;
-    const search = (document.getElementById('filter-msg-search')?.value || '').toLowerCase();
-
-    let msgs = [...MESSAGES];
-    if (deptId) {
-      const deptPersonnel = PERSONNEL.filter(p => p.dept === parseInt(deptId)).map(p => p.id);
-      msgs = msgs.filter(m => deptPersonnel.includes(m.from) || deptPersonnel.includes(m.to));
-    }
-    if (projId) {
-      msgs = msgs.filter(m => m.relatedProjectId === parseInt(projId));
-    }
-    if (search) {
-      msgs = msgs.filter(m => {
-        const fromP = PERSONNEL.find(p => p.id === m.from);
-        const toP = PERSONNEL.find(p => p.id === m.to);
-        return m.subject.toLowerCase().includes(search) ||
-          m.text.toLowerCase().includes(search) ||
-          (fromP && fromP.name.toLowerCase().includes(search)) ||
-          (toP && toP.name.toLowerCase().includes(search));
-      });
-    }
-
-    const container = document.getElementById('messages-list');
-    if (!container) return;
-    if (msgs.length === 0) {
-      container.innerHTML = '<div class="text-center text-gray-400 py-10">Mesaj bulunamadı.</div>';
-      return;
-    }
-    container.innerHTML = `<div class="text-xs text-gray-400 mb-3">${msgs.length} mesaj gösteriliyor</div>` +
-      msgs.map(m => {
-        const fromP = PERSONNEL.find(p => p.id === m.from);
-        const toP = PERSONNEL.find(p => p.id === m.to);
-        const fromName = fromP ? fromP.name : 'Bilinmiyor';
-        const toName = toP ? toP.name : 'Bilinmiyor';
-        const proj = PROJECTS.find(p => p.id === m.relatedProjectId);
-        const fileIcon = m.attachment ? `<span class="text-xs text-gray-500">📎 ${escapeHtml(m.attachment)}</span>` : '';
-        return `
-        <div class="bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors ${!m.read ? 'border-l-4 border-l-blue-400' : ''}">
-          <div class="flex items-start justify-between gap-3 mb-2">
-            <div class="flex items-center gap-2 min-w-0">
-              <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">
-                ${escapeHtml(fromP ? fromP.avatar.slice(0,2) : '?')}
-              </div>
-              <div class="min-w-0">
-                <span class="text-sm font-semibold text-gray-800">${escapeHtml(fromName)}</span>
-                <span class="text-xs text-gray-400 mx-1">→</span>
-                <span class="text-sm text-gray-600">${escapeHtml(toName)}</span>
-              </div>
-            </div>
-            <span class="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">${m.date} ${m.time}</span>
-          </div>
-          <div class="text-sm font-medium text-gray-800 mb-1">${escapeHtml(m.subject)}</div>
-          <p class="text-xs text-gray-600 mb-2 line-clamp-2">${escapeHtml(m.text.slice(0, 150))}${m.text.length > 150 ? '...' : ''}</p>
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-3">
-              ${fileIcon}
-              ${proj ? `<span class="text-xs text-blue-600">${escapeHtml(proj.name)}</span>` : ''}
-            </div>
-            ${!m.read ? '<span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Okunmamış</span>' : ''}
-          </div>
-        </div>`;
-      }).join('');
-  }
-
-
-  // ---- TÜM NOTLAR INIT ----
-  window.init_all_notes = function() {
-    // Filtre dropdown'larını doldur
-    const deptSel = document.getElementById('filter-notes-dept');
-    if (deptSel.options.length === 1) {
-      deptSel.innerHTML += DEPARTMENTS.map(d =>
-        `<option value="${escapeHtml(d.short)}">${escapeHtml(d.name)}</option>`
-      ).join('');
-    }
-    const projSel = document.getElementById('filter-notes-project');
-    if (projSel.options.length === 1) {
-      projSel.innerHTML += PROJECTS.map(p =>
-        `<option value="${p.id}">${escapeHtml(p.name)}</option>`
-      ).join('');
-    }
-    renderAllNotes();
-    ['filter-notes-dept','filter-notes-project','filter-notes-cat'].forEach(id => {
-      document.getElementById(id).addEventListener('change', renderAllNotes);
-    });
-    document.getElementById('filter-notes-search').addEventListener('input', renderAllNotes);
-  };
-
-  function renderAllNotes() {
-    const dept = document.getElementById('filter-notes-dept').value;
-    const proj = document.getElementById('filter-notes-project').value;
-    const cat = document.getElementById('filter-notes-cat').value;
-    const search = document.getElementById('filter-notes-search').value.toLowerCase();
-
-    let notes = [...NOTES];
-    if (dept) notes = notes.filter(n => n.dept && n.dept.toLowerCase().includes(dept.toLowerCase()));
-    if (proj) notes = notes.filter(n => n.projectId === parseInt(proj));
-    if (cat) notes = notes.filter(n => n.category === cat);
-    if (search) notes = notes.filter(n =>
-      n.text.toLowerCase().includes(search) ||
-      n.author.toLowerCase().includes(search) ||
-      n.project.toLowerCase().includes(search)
-    );
-
-    const container = document.getElementById('all-notes-list');
-    if (notes.length === 0) {
-      container.innerHTML = '<div class="text-center text-gray-400 py-10">Filtre kriterlerine uygun not bulunamadı.</div>';
-      return;
-    }
-    container.innerHTML = `<div class="text-xs text-gray-400 mb-3">${notes.length} not gösteriliyor</div>` +
-      notes.map(n => `
-      <div class="bg-white rounded-xl p-4 mb-3 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors">
-        <div class="flex items-start gap-3">
-          <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">
-            ${escapeHtml(n.author.split(' ').map(w => w[0]).slice(0,2).join(''))}
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex flex-wrap items-center gap-2 mb-1">
-              ${n.authorId ? clickablePerson(n.authorId, n.author) : `<span class="text-sm font-medium text-gray-800">${escapeHtml(n.author)}</span>`}
-              <span class="text-xs text-gray-400">${n.dept}</span>
-              ${getCategoryBadge(n.category)}
-              ${n.severity ? getSeverityBadge(n.severity) : ''}
-            </div>
-            <p class="text-sm text-gray-700 mb-2">${escapeHtml(n.text)}</p>
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <span class="text-xs font-medium">${n.projectId ? clickableProject(n.projectId, n.project) : `<span class="text-blue-600">${escapeHtml(n.project)}</span>`}</span>
-              <div class="flex items-center gap-2">
-                ${n.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-xs">${escapeHtml(t)}</span>`).join('')}
-                <span class="text-xs text-gray-400">${n.date}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // ---- RİSKLER INIT ----
-  window.init_risks = function() {
-    const risks = NOTES.filter(n => n.category === 'risk');
-    const high = risks.filter(r => r.severity === 'yüksek');
-    const med = risks.filter(r => r.severity === 'orta');
-    const low = risks.filter(r => r.severity === 'düşük');
-
-    document.getElementById('risks-content').innerHTML = `
-      <div class="grid grid-cols-3 gap-4 mb-5">
-        <div class="bg-red-50 rounded-2xl p-4 text-center border border-red-100">
-          <div class="text-2xl font-bold text-red-600">${high.length}</div>
-          <div class="text-xs text-red-500 mt-1">🔴 Yüksek Öncelik</div>
-        </div>
-        <div class="bg-yellow-50 rounded-2xl p-4 text-center border border-yellow-100">
-          <div class="text-2xl font-bold text-yellow-600">${med.length}</div>
-          <div class="text-xs text-yellow-600 mt-1">🟡 Orta Öncelik</div>
-        </div>
-        <div class="bg-green-50 rounded-2xl p-4 text-center border border-green-100">
-          <div class="text-2xl font-bold text-green-600">${low.length}</div>
-          <div class="text-xs text-green-600 mt-1">🟢 Düşük Öncelik</div>
-        </div>
-      </div>
-      ${[...high, ...med, ...low].map(r => `
-        <div class="risk-card ${r.severity === 'yüksek' ? 'high bg-red-50 border-red-200' : r.severity === 'orta' ? 'medium bg-yellow-50 border-yellow-200' : 'low bg-green-50 border-green-200'} rounded-xl p-4 mb-3 border">
-          <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
-            <div class="flex items-center gap-2">
-              ${getSeverityBadge(r.severity)}
-              ${r.projectId ? clickableProject(r.projectId, r.project) : `<span class="text-sm font-semibold text-gray-800">${escapeHtml(r.project)}</span>`}
-            </div>
-            <span class="text-xs text-gray-400">${r.date}</span>
-          </div>
-          <p class="text-sm text-gray-700 mb-2">${escapeHtml(r.text)}</p>
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-gray-500">👤 ${r.authorId ? clickablePerson(r.authorId, r.author) : escapeHtml(r.author)} — ${escapeHtml(r.dept)}</span>
-            <div class="flex gap-1">
-              ${r.tags.slice(0,3).map(t => `<span class="px-1.5 py-0.5 bg-white/60 rounded text-xs text-gray-600">${escapeHtml(t)}</span>`).join('')}
-            </div>
-          </div>
-        </div>
-      `).join('')}
-    `;
-  };
-
-  // ---- DOSYALAR INIT ----
-  window.init_files = function() {
-    const deptSel = document.getElementById('filter-files-dept');
-    if (deptSel.options.length === 1) {
-      deptSel.innerHTML += DEPARTMENTS.map(d =>
-        `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)}</option>`
-      ).join('');
-    }
-    renderAllFiles();
-    document.getElementById('filter-files-dept').addEventListener('change', renderAllFiles);
-    document.getElementById('filter-files-type').addEventListener('change', renderAllFiles);
-  };
-
-  function renderAllFiles() {
-    const dept = document.getElementById('filter-files-dept').value;
-    const type = document.getElementById('filter-files-type').value;
-    let files = [...FILES];
-    if (dept) files = files.filter(f => f.dept === dept);
-    if (type) files = files.filter(f => f.type === type);
-
-    document.getElementById('all-files-list').innerHTML = `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table class="w-full text-sm data-table">
-          <thead>
-            <tr>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Dosya</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">Kişi</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Boyut</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Tarih</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase"></th>
-            </tr>
-          </thead>
-          <tbody>
-            ${files.map(f => {
-              const proj = PROJECTS.find(p => p.name === f.project);
-              return `
-              <tr class="border-b border-gray-50 hover:bg-gray-50">
-                <td class="px-4 py-3">
-                  <div class="flex items-center gap-2">
-                    <span class="text-lg">${getFileIcon(f.type)}</span>
-                    <div>
-                      <span class="font-medium text-gray-800 text-xs">${escapeHtml(f.name)}</span>
-                      ${proj ? `<div class="text-xs mt-0.5">${clickableProject(proj.id, f.project)}</div>` : ''}
-                    </div>
-                  </div>
-                </td>
-                <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(f.dept)}</td>
-                <td class="px-4 py-3 hidden lg:table-cell text-xs text-gray-600">${f.authorId ? clickablePerson(f.authorId, f.author) : escapeHtml(f.author)}</td>
-                <td class="px-4 py-3 text-xs text-gray-500">${f.size}</td>
-                <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-400">${f.date}</td>
-                <td class="px-4 py-3">
-                  <button onclick="showToast('Demo: İndirme simüle edildi', 'info')"
-                    class="text-xs text-blue-600 hover:text-blue-700 font-medium hover:bg-blue-50 px-2 py-1 rounded-lg transition-colors">
-                    ⬇️
-                  </button>
-                </td>
-              </tr>
-            `}).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-  }
-
-  // ---- AUDIT LOG INIT ----
-  window.init_audit = function() {
-    const colors = {
-      note: 'bg-blue-100 text-blue-700',
-      file: 'bg-green-100 text-green-700',
-      project: 'bg-purple-100 text-purple-700',
-      risk: 'bg-red-100 text-red-700'
-    };
-    const icons = { note: '📝', file: '📁', project: '🚀', risk: '⚠️' };
-    document.getElementById('audit-list').innerHTML = AUDIT_LOG.map((item, i) => {
-      const person = PERSONNEL.find(p => p.name === item.user);
-      const userLink = person
-        ? clickablePerson(person.id, item.user)
-        : `<span class="text-sm font-medium text-gray-800">${escapeHtml(item.user)}</span>`;
-      return `
-      <div class="audit-item relative flex gap-4 pb-4 ${i < AUDIT_LOG.length - 1 ? 'border-b border-gray-50' : ''}">
-        <div class="w-6 h-6 rounded-full ${colors[item.category] || 'bg-gray-100 text-gray-600'} flex items-center justify-center text-xs flex-shrink-0 mt-0.5">
-          ${icons[item.category] || '●'}
-        </div>
-        <div class="flex-1">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              ${userLink}
-              <span class="text-sm text-gray-500 ml-1">${escapeHtml(item.action)}</span>
-            </div>
-            <span class="text-xs text-gray-400">${item.time}</span>
-          </div>
-          <div class="text-xs text-gray-500 mt-0.5">${escapeHtml(item.detail)}</div>
-        </div>
-      </div>
-    `;
-    }).join('');
-  };
-
-  // ---- PERSONEL YÖNETİMİ INIT ----
-  window.init_personnel = function() {
+  // ---- EKİP (TEAM) INIT ----
+  window.init_team = function() {
     const deptFilter = document.getElementById('personnel-dept-filter');
     const personFilter = document.getElementById('personnel-person-filter');
-
-    // Departman dropdown doldur
-    deptFilter.innerHTML = '<option value="">Hepsi</option>' +
-      DEPARTMENTS.map(d => `<option value="${d.id}">${escapeHtml(d.name)}</option>`).join('');
-
-    // Kişi dropdown doldur
+    deptFilter.innerHTML = '<option value="">Hepsi</option>' + DEPARTMENTS.map(d=>`<option value="${d.id}">${escapeHtml(d.name)}</option>`).join('');
     function fillPersonDropdown(deptId) {
-      const list = deptId ? PERSONNEL.filter(p => p.dept === parseInt(deptId)) : PERSONNEL;
-      personFilter.innerHTML = '<option value="">Hepsi</option>' +
-        list.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+      const list = deptId ? PERSONNEL.filter(p=>p.dept===parseInt(deptId)) : PERSONNEL;
+      personFilter.innerHTML = '<option value="">Hepsi</option>' + list.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
     }
     fillPersonDropdown('');
-
-    deptFilter.addEventListener('change', function() {
-      fillPersonDropdown(this.value);
-      personFilter.value = '';
-      renderPersonnel();
-    });
+    deptFilter.addEventListener('change', function() { fillPersonDropdown(this.value); personFilter.value=''; renderPersonnel(); });
     personFilter.addEventListener('change', renderPersonnel);
+    renderPersonnel();
+  };
+  window.init_personnel = window.init_team;
 
+  let personnelViewMode = 'compact';
+  window.setPersonnelView = function(mode) {
+    personnelViewMode = mode;
+    ['compact','medium','wide'].forEach(m => { const btn=document.getElementById('view-'+m); if(btn) btn.classList.toggle('active',m===mode); });
     renderPersonnel();
   };
 
-  // Shared personnel view date constants (DEMO_TODAY from app.js)
   const PERSONNEL_GANTT_START = new Date('2026-02-01');
   const PERSONNEL_GANTT_END = new Date('2026-11-30');
-  const PERSONNEL_GANTT_TOTAL_DAYS = Math.ceil((PERSONNEL_GANTT_END - PERSONNEL_GANTT_START) / (1000 * 60 * 60 * 24));
-  const PERSONNEL_GANTT_MONTHS = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+  const PERSONNEL_GANTT_TOTAL_DAYS = Math.ceil((PERSONNEL_GANTT_END - PERSONNEL_GANTT_START) / (1000*60*60*24));
+  const PERSONNEL_GANTT_MONTHS = ['Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas'];
 
   function renderPersonnel() {
-    const deptId = document.getElementById('personnel-dept-filter').value;
-    const personId = document.getElementById('personnel-person-filter').value;
+    const deptId = document.getElementById('personnel-dept-filter')?.value;
+    const personId = document.getElementById('personnel-person-filter')?.value;
     const container = document.getElementById('personnel-content');
-
-    if (personId) {
-      const person = PERSONNEL.find(p => p.id === parseInt(personId));
-      if (person) { renderPersonDetail(person, container); return; }
-    }
-
-    // Özet — tüm personel veya departman filtreli
-    const list = deptId ? PERSONNEL.filter(p => p.dept === parseInt(deptId)) : PERSONNEL;
-
-    if (personnelViewMode === 'medium') {
-      renderPersonnelMedium(list, container);
-    } else if (personnelViewMode === 'wide') {
-      renderPersonnelWide(list, container);
-    } else {
-      renderPersonnelCompact(list, container);
-    }
+    if (!container) return;
+    if (personId) { const person = PERSONNEL.find(p=>p.id===parseInt(personId)); if(person){ renderPersonDetail(person,container); return; } }
+    const list = deptId ? PERSONNEL.filter(p=>p.dept===parseInt(deptId)) : PERSONNEL;
+    if (personnelViewMode==='medium') renderPersonnelMedium(list,container);
+    else if (personnelViewMode==='wide') renderPersonnelWide(list,container);
+    else renderPersonnelCompact(list,container);
   }
 
   function renderPersonnelCompact(list, container) {
     container.innerHTML = `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+      <div class="apple-card overflow-x-auto">
         <table class="w-full text-sm data-table">
-          <thead>
-            <tr>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">İsim</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
-              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">İlerleme</th>
-              <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Devam</th>
-              <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Planlanan</th>
-              <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Tamamlanan</th>
-              <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Rol</th>
-            </tr>
-          </thead>
+          <thead><tr>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">İsim</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Departman</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase hidden lg:table-cell">İlerleme</th>
+            <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase">Devam</th>
+            <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Plan</th>
+            <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Bitti</th>
+            <th class="text-center px-3 py-3 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Rol</th>
+          </tr></thead>
           <tbody>
             ${list.map(p => {
-              const tasks = p.tasks || [];
-              const inPr = tasks.filter(t => t.status === 'in_progress').length;
-              const planned = tasks.filter(t => t.status === 'planned').length;
-              const done = tasks.filter(t => t.status === 'done').length;
+              const tasks = p.tasks||[];
+              const inPr = tasks.filter(t=>t.status==='in_progress').length;
+              const planned = tasks.filter(t=>t.status==='planned').length;
+              const done = tasks.filter(t=>t.status==='done').length;
               const total = tasks.length;
-              const donePct = total > 0 ? Math.round(done / total * 100) : 0;
+              const donePct = total>0?Math.round(done/total*100):0;
               return `<tr class="border-b border-gray-50 hover:bg-blue-50 cursor-pointer transition-colors" onclick="document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();">
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-full ${p.role_level === 'lead' ? 'bg-purple-100' : 'bg-blue-100'} flex items-center justify-center text-xs font-bold ${p.role_level === 'lead' ? 'text-purple-700' : 'text-blue-700'} flex-shrink-0">${escapeHtml(p.avatar)}</div>
+                    <div class="w-8 h-8 rounded-full ${p.role_level==='lead'?'bg-purple-100 text-purple-700':'bg-blue-100 text-blue-700'} flex items-center justify-center text-xs font-bold flex-shrink-0">${escapeHtml(p.avatar.slice(0,2))}</div>
                     <a href="#" data-modal-person-id="${p.id}" onclick="event.stopPropagation()" class="font-medium text-gray-800 hover:text-blue-600 hover:underline">${escapeHtml(p.name)}</a>
                   </div>
                 </td>
                 <td class="px-4 py-3 hidden md:table-cell text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</td>
                 <td class="px-4 py-3 hidden lg:table-cell">
                   <div class="flex items-center gap-2">
-                    <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden" style="min-width:60px">
-                      <div class="h-full bg-blue-500 rounded-full" style="width:${donePct}%"></div>
-                    </div>
+                    <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden" style="min-width:60px"><div class="h-full rounded-full" style="width:${donePct}%;background:#34C759;"></div></div>
                     <span class="text-xs text-gray-400">${donePct}%</span>
                   </div>
                 </td>
-                <td class="px-3 py-3 text-center">
-                  ${inPr > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">${inPr}</span>` : '<span class="text-gray-300">—</span>'}
-                </td>
-                <td class="px-3 py-3 text-center hidden sm:table-cell">
-                  ${planned > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">${planned}</span>` : '<span class="text-gray-300">—</span>'}
-                </td>
-                <td class="px-3 py-3 text-center hidden sm:table-cell">
-                  ${done > 0 ? `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">${done}</span>` : '<span class="text-gray-300">—</span>'}
-                </td>
+                <td class="px-3 py-3 text-center">${inPr>0?`<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">${inPr}</span>`:'<span class="text-gray-300">—</span>'}</td>
+                <td class="px-3 py-3 text-center hidden sm:table-cell">${planned>0?`<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">${planned}</span>`:'<span class="text-gray-300">—</span>'}</td>
+                <td class="px-3 py-3 text-center hidden sm:table-cell">${done>0?`<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">${done}</span>`:'<span class="text-gray-300">—</span>'}</td>
                 <td class="px-3 py-3 text-center hidden md:table-cell">${getRoleBadge(p.role_level)}</td>
               </tr>`;
             }).join('')}
           </tbody>
         </table>
       </div>
-      <div class="text-xs text-gray-400 mt-2 text-right">${list.length} kişi listeleniyor. Satıra tıklayarak detay görüntüleyin.</div>
-    `;
+      <div class="text-xs text-gray-400 mt-2 text-right">${list.length} kişi. Satıra tıklayarak detay görüntüleyin.</div>`;
   }
 
   function renderPersonnelMedium(list, container) {
     const ganttStart = PERSONNEL_GANTT_START;
     const totalDays = PERSONNEL_GANTT_TOTAL_DAYS;
     const months = PERSONNEL_GANTT_MONTHS;
-
-    function pctLeft(dateStr) {
-      const d = new Date(dateStr);
-      return Math.max(0, Math.min(100, Math.round((d - ganttStart) / (1000 * 60 * 60 * 24) / totalDays * 100)));
-    }
-    function pctWidth(startStr, endStr) {
-      const s = new Date(startStr);
-      const e = new Date(endStr);
-      const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-      return Math.max(2, Math.round(days / totalDays * 100));
-    }
-
+    function pctLeft(dateStr) { const d=new Date(dateStr); return Math.max(0,Math.min(100,Math.round((d-ganttStart)/(1000*60*60*24)/totalDays*100))); }
+    function pctWidth(s,e) { return Math.max(2,Math.round(Math.ceil((new Date(e)-new Date(s))/(1000*60*60*24))/totalDays*100)); }
     container.innerHTML = list.map(p => {
-      const tasks = p.tasks || [];
-      return `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-3 cursor-pointer hover:border-blue-200 transition-all"
-           onclick="document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();">
+      const tasks = p.tasks||[];
+      return `<div class="apple-card p-4 mb-3 cursor-pointer hover:shadow-md transition-all" onclick="document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();">
         <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-full ${p.role_level === 'lead' ? 'bg-purple-600' : 'bg-blue-600'} flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${escapeHtml(p.avatar)}</div>
+          <div class="w-10 h-10 rounded-full ${p.role_level==='lead'?'bg-purple-600':'bg-blue-600'} flex items-center justify-center text-white text-sm font-bold flex-shrink-0">${escapeHtml(p.avatar.slice(0,2))}</div>
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="font-semibold text-gray-800 text-sm">${escapeHtml(p.name)}</span>
-              ${getRoleBadge(p.role_level)}
-            </div>
+            <div class="flex items-center gap-2">${escapeHtml(p.name)} ${getRoleBadge(p.role_level)}</div>
             <div class="text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])} — ${tasks.length} görev</div>
           </div>
-          <div class="flex gap-3 text-center flex-shrink-0">
+          <div class="flex gap-4 text-center flex-shrink-0">
             <div><div class="text-sm font-bold text-blue-600">${tasks.filter(t=>t.status==='in_progress').length}</div><div class="text-xs text-gray-400">Devam</div></div>
-            <div><div class="text-sm font-bold text-emerald-600">${tasks.filter(t=>t.status==='done').length}</div><div class="text-xs text-gray-400">Bitti</div></div>
+            <div><div class="text-sm font-bold" style="color:#34C759;">${tasks.filter(t=>t.status==='done').length}</div><div class="text-xs text-gray-400">Bitti</div></div>
           </div>
         </div>
-        ${tasks.length > 0 ? `
-        <div class="border-t border-gray-50 pt-2">
-          <div class="flex mb-1">
-            ${months.map(m => `<div class="flex-1 text-xs text-gray-300 text-center">${m}</div>`).join('')}
-          </div>
-          <div class="space-y-1.5">
-            ${tasks.map(t => {
-              const left = pctLeft(t.startDate);
-              const w = pctWidth(t.startDate, t.endDate);
-              const color = t.status === 'done' ? 'bg-emerald-400' : t.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300';
-              return `<div class="relative h-2 bg-gray-100 rounded-full overflow-hidden" title="${escapeHtml(t.title)}">
-                <div class="${color} absolute h-full rounded-full" style="left:${left}%; width:${w}%; min-width:4px;"></div>
-              </div>`;
-            }).join('')}
-          </div>
-          <div class="flex gap-3 mt-1.5">
-            <span class="flex items-center gap-1 text-xs text-gray-400"><span class="w-2.5 h-1.5 rounded bg-emerald-400 inline-block"></span>Bitti</span>
-            <span class="flex items-center gap-1 text-xs text-gray-400"><span class="w-2.5 h-1.5 rounded bg-blue-500 inline-block"></span>Devam</span>
-            <span class="flex items-center gap-1 text-xs text-gray-400"><span class="w-2.5 h-1.5 rounded bg-gray-300 inline-block"></span>Plan</span>
-          </div>
-        </div>` : '<div class="text-xs text-gray-400 border-t border-gray-50 pt-2">Görev atanmamış</div>'}
+        ${tasks.length>0?`<div class="border-t border-gray-50 pt-2"><div class="flex mb-1">${months.map(m=>`<div class="flex-1 text-xs text-gray-300 text-center">${m}</div>`).join('')}</div><div class="space-y-1.5">${tasks.map(t=>{const left=pctLeft(t.startDate);const w=pctWidth(t.startDate,t.endDate);const color=t.status==='done'?'#34C759':t.status==='in_progress'?'#007AFF':'#cbd5e1';return `<div class="relative h-2 bg-gray-100 rounded-full overflow-hidden" title="${escapeHtml(t.title)}"><div class="absolute h-full rounded-full" style="left:${left}%;width:${w}%;min-width:4px;background:${color};"></div></div>`;}).join('')}</div></div>`:''}
       </div>`;
-    }).join('') + `<div class="text-xs text-gray-400 mt-1 text-right">${list.length} kişi listeleniyor.</div>`;
+    }).join('')+`<div class="text-xs text-gray-400 mt-1 text-right">${list.length} kişi listeleniyor.</div>`;
   }
 
   function renderPersonnelWide(list, container) {
@@ -1199,44 +764,30 @@
     const ganttStart = PERSONNEL_GANTT_START;
     const totalDays = PERSONNEL_GANTT_TOTAL_DAYS;
     const months = PERSONNEL_GANTT_MONTHS;
-
-    function pctLeft(dateStr) {
-      const d = new Date(dateStr);
-      return Math.max(0, Math.min(100, Math.round((d - ganttStart) / (1000 * 60 * 60 * 24) / totalDays * 100)));
-    }
-    function pctWidth(startStr, endStr) {
-      const s = new Date(startStr);
-      const e = new Date(endStr);
-      return Math.max(2, Math.round(Math.ceil((e - s) / (1000 * 60 * 60 * 24)) / totalDays * 100));
-    }
+    function pctLeft(dateStr) { const d=new Date(dateStr); return Math.max(0,Math.min(100,Math.round((d-ganttStart)/(1000*60*60*24)/totalDays*100))); }
+    function pctWidth(s,e) { return Math.max(2,Math.round(Math.ceil((new Date(e)-new Date(s))/(1000*60*60*24))/totalDays*100)); }
     function remainBadge(endDate, status) {
-      if (status === 'done') return '<span class="text-xs text-emerald-600 font-medium">✅ Tamamlandı</span>';
-      const days = Math.ceil((new Date(endDate) - today) / (1000 * 60 * 60 * 24));
-      if (days < 0) return `<span class="text-xs text-red-500 font-semibold">⚠️ ${Math.abs(days)}g geçti</span>`;
-      if (days <= 7) return `<span class="text-xs text-orange-500 font-semibold">⏰ ${days}g kaldı</span>`;
+      if (status==='done') return '<span class="text-xs text-emerald-600 font-medium">✅ Tamamlandı</span>';
+      const days = Math.ceil((new Date(endDate)-today)/(1000*60*60*24));
+      if (days<0) return `<span class="text-xs text-red-500 font-semibold">⚠️ ${Math.abs(days)}g geçti</span>`;
+      if (days<=7) return `<span class="text-xs text-orange-500 font-semibold">⏰ ${days}g kaldı</span>`;
       return `<span class="text-xs text-gray-500">${days}g kaldı</span>`;
     }
     function taskBadge(s) {
-      if (s === 'in_progress') return '<span class="px-1.5 py-0.5 rounded text-xs bg-blue-100 text-blue-700">🔄</span>';
-      if (s === 'planned') return '<span class="px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600">📅</span>';
+      if (s==='in_progress') return '<span class="px-1.5 py-0.5 rounded text-xs bg-blue-100 text-blue-700">🔄</span>';
+      if (s==='planned') return '<span class="px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600">📅</span>';
       return '<span class="px-1.5 py-0.5 rounded text-xs bg-emerald-100 text-emerald-700">✅</span>';
     }
-
     container.innerHTML = list.map(p => {
-      const tasks = p.tasks || [];
-      const ip = tasks.filter(t => t.status === 'in_progress');
-      const pl = tasks.filter(t => t.status === 'planned');
-      const dn = tasks.filter(t => t.status === 'done');
-      return `
-      <div class="wide-person-card">
-        <!-- Kişi başlık -->
+      const tasks = p.tasks||[];
+      const ip=tasks.filter(t=>t.status==='in_progress');
+      const pl=tasks.filter(t=>t.status==='planned');
+      const dn=tasks.filter(t=>t.status==='done');
+      return `<div class="wide-person-card">
         <div class="flex flex-wrap items-center gap-3 mb-4">
-          <div class="w-12 h-12 rounded-full ${p.role_level === 'lead' ? 'bg-purple-600' : 'bg-blue-600'} flex items-center justify-center text-white text-lg font-bold flex-shrink-0">${escapeHtml(p.avatar)}</div>
+          <div class="w-12 h-12 rounded-full ${p.role_level==='lead'?'bg-purple-600':'bg-blue-600'} flex items-center justify-center text-white text-lg font-bold flex-shrink-0">${escapeHtml(p.avatar.slice(0,2))}</div>
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="font-bold text-gray-800">${escapeHtml(p.name)}</span>
-              ${getRoleBadge(p.role_level)}
-            </div>
+            <div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-gray-800">${escapeHtml(p.name)}</span>${getRoleBadge(p.role_level)}</div>
             <div class="text-sm text-gray-500">${escapeHtml(p.role)}</div>
             <div class="text-xs text-blue-600 mt-0.5">${escapeHtml(p.deptName)}</div>
           </div>
@@ -1246,414 +797,154 @@
             <div class="text-center"><div class="text-lg font-bold text-emerald-600">${dn.length}</div><div class="text-xs text-gray-400">Bitti</div></div>
           </div>
           <button onclick="event.stopPropagation(); document.getElementById('personnel-person-filter').value='${p.id}'; renderPersonnel();"
-            class="text-xs text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors flex-shrink-0">
-            Detay →
-          </button>
+            class="text-xs text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors flex-shrink-0">Detay →</button>
         </div>
-        ${tasks.length > 0 ? `
-        <!-- Görev tablosu -->
-        <div class="overflow-x-auto mb-3">
-          <table class="w-full text-xs data-table">
-            <thead><tr>
-              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Görev</th>
-              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold hidden sm:table-cell">Proje</th>
-              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Durum</th>
-              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold hidden sm:table-cell">Bitiş</th>
-              <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Kalan</th>
-            </tr></thead>
-            <tbody>
-              ${[...ip, ...pl, ...dn].map(t => `<tr class="border-b border-gray-50">
-                <td class="px-2 py-1.5 font-medium text-gray-800">${escapeHtml(t.title)}</td>
-                <td class="px-2 py-1.5 hidden sm:table-cell">${t.projectId ? clickableProject(t.projectId, t.project) : escapeHtml(t.project || '')}</td>
-                <td class="px-2 py-1.5">${taskBadge(t.status)}</td>
-                <td class="px-2 py-1.5 text-gray-400 hidden sm:table-cell">${t.endDate || '—'}</td>
-                <td class="px-2 py-1.5">${remainBadge(t.endDate, t.status)}</td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-        <!-- Mini Gantt -->
-        <div class="bg-gray-50 rounded-xl p-3">
-          <div class="flex mb-1">
-            ${months.map(m => `<div class="flex-1 text-xs text-gray-400 text-center">${m}</div>`).join('')}
-          </div>
-          <div class="space-y-1.5">
-            ${tasks.map(t => {
-              const left = pctLeft(t.startDate);
-              const w = pctWidth(t.startDate, t.endDate);
-              const color = t.status === 'done' ? 'bg-emerald-400' : t.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300';
-              return `<div class="relative h-5 bg-white rounded-full overflow-hidden border border-gray-200" title="${escapeHtml(t.title)}">
-                <div class="${color} absolute h-full rounded-full flex items-center px-1 overflow-hidden" style="left:${left}%; width:${w}%; min-width:4px;">
-                  <span class="text-white text-xs truncate hidden sm:block">${escapeHtml(t.title)}</span>
-                </div>
-              </div>`;
-            }).join('')}
-          </div>
-        </div>` : '<div class="text-xs text-gray-400 text-center py-3">Bu kişiye henüz görev atanmamış.</div>'}
+        ${tasks.length>0?`<div class="overflow-x-auto mb-3"><table class="w-full text-xs data-table"><thead><tr>
+            <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Görev</th>
+            <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold hidden sm:table-cell">Proje</th>
+            <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Durum</th>
+            <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold hidden sm:table-cell">Bitiş</th>
+            <th class="text-left px-2 py-1.5 text-gray-400 uppercase font-semibold">Kalan</th>
+          </tr></thead><tbody>
+            ${[...ip,...pl,...dn].map(t=>`<tr class="border-b border-gray-50">
+              <td class="px-2 py-1.5 font-medium text-gray-800">${escapeHtml(t.title)}</td>
+              <td class="px-2 py-1.5 hidden sm:table-cell">${t.projectId?clickableProject(t.projectId,t.project):escapeHtml(t.project||'')}</td>
+              <td class="px-2 py-1.5">${taskBadge(t.status)}</td>
+              <td class="px-2 py-1.5 text-gray-400 hidden sm:table-cell">${t.endDate||'—'}</td>
+              <td class="px-2 py-1.5">${remainBadge(t.endDate,t.status)}</td>
+            </tr>`).join('')}
+          </tbody></table></div>
+          <div class="bg-gray-50 rounded-xl p-3"><div class="flex mb-1">${months.map(m=>`<div class="flex-1 text-xs text-gray-400 text-center">${m}</div>`).join('')}</div>
+          <div class="space-y-1.5">${tasks.map(t=>{const left=pctLeft(t.startDate);const w=pctWidth(t.startDate,t.endDate);const color=t.status==='done'?'bg-emerald-400':t.status==='in_progress'?'bg-blue-500':'bg-gray-300';return `<div class="relative h-5 bg-white rounded-full overflow-hidden border border-gray-200" title="${escapeHtml(t.title)}"><div class="${color} absolute h-full rounded-full flex items-center px-1" style="left:${left}%;width:${w}%;min-width:4px;"><span class="text-white text-xs truncate hidden sm:block">${escapeHtml(t.title)}</span></div></div>`;}).join('')}</div></div>`
+          :'<div class="text-xs text-gray-400 text-center py-3">Bu kişiye henüz görev atanmamış.</div>'}
       </div>`;
-    }).join('') + `<div class="text-xs text-gray-400 mt-1 text-right">${list.length} kişi listeleniyor.</div>`;
+    }).join('')+`<div class="text-xs text-gray-400 mt-1 text-right">${list.length} kişi listeleniyor.</div>`;
   }
 
   function renderPersonDetail(person, container) {
-    const tasks = person.tasks || [];
-    const inProgress = tasks.filter(t => t.status === 'in_progress');
-    const planned = tasks.filter(t => t.status === 'planned');
-    const done = tasks.filter(t => t.status === 'done');
-    const notes = NOTES.filter(n => n.authorId === person.id);
-    const risks = NOTES.filter(n => n.authorId === person.id && n.category === 'risk');
-    const today = DEMO_TODAY; // from app.js
-
-    function daysBetween(dateStr) {
-      const d = new Date(dateStr);
-      const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
-      return diff;
-    }
-
+    const tasks = person.tasks||[];
+    const inProgress = tasks.filter(t=>t.status==='in_progress');
+    const planned = tasks.filter(t=>t.status==='planned');
+    const done = tasks.filter(t=>t.status==='done');
+    const notes = NOTES.filter(n=>n.authorId===person.id);
+    const risks = NOTES.filter(n=>n.authorId===person.id&&n.category==='risk');
+    const today = DEMO_TODAY;
     function taskStatusBadge(s) {
-      if (s === 'in_progress') return '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">🔄 Devam Ediyor</span>';
-      if (s === 'planned') return '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">📅 Planlanan</span>';
+      if (s==='in_progress') return '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">🔄 Devam Ediyor</span>';
+      if (s==='planned') return '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">📅 Planlanan</span>';
       return '<span class="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">✅ Tamamlandı</span>';
     }
-
     function remainingDaysBadge(endDate, status) {
-      if (status === 'done') return '<span class="text-xs text-green-600">Tamamlandı</span>';
-      const days = daysBetween(endDate);
-      if (days < 0) return `<span class="text-xs text-red-500 font-semibold">⚠️ ${Math.abs(days)} gün geçti</span>`;
-      if (days <= 7) return `<span class="text-xs text-orange-500 font-semibold">⏰ ${days} gün kaldı</span>`;
+      if (status==='done') return '<span class="text-xs text-green-600">Tamamlandı</span>';
+      const days = Math.ceil((new Date(endDate)-today)/(1000*60*60*24));
+      if (days<0) return `<span class="text-xs text-red-500 font-semibold">⚠️ ${Math.abs(days)} gün geçti</span>`;
+      if (days<=7) return `<span class="text-xs text-orange-500 font-semibold">⏰ ${days} gün kaldı</span>`;
       return `<span class="text-xs text-gray-500">${days} gün kaldı</span>`;
     }
-
-    // Mini Gantt verisi
     const ganttStart = PERSONNEL_GANTT_START;
-    const ganttEnd = PERSONNEL_GANTT_END;
     const totalDays = PERSONNEL_GANTT_TOTAL_DAYS;
     const months = PERSONNEL_GANTT_MONTHS;
-
-    function pct(dateStr) {
-      const d = new Date(dateStr);
-      const days = Math.max(0, Math.ceil((d - ganttStart) / (1000 * 60 * 60 * 24)));
-      return Math.min(100, Math.round(days / totalDays * 100));
-    }
-    function width(startStr, endStr) {
-      const s = new Date(startStr);
-      const e = new Date(endStr);
-      const days = Math.ceil((e - s) / (1000 * 60 * 60 * 24));
-      return Math.max(2, Math.round(days / totalDays * 100));
-    }
+    function pct(dateStr) { const d=new Date(dateStr); return Math.min(100,Math.round(Math.max(0,Math.ceil((d-ganttStart)/(1000*60*60*24)))/totalDays*100)); }
+    function width(s,e) { return Math.max(2,Math.round(Math.ceil((new Date(e)-new Date(s))/(1000*60*60*24))/totalDays*100)); }
 
     container.innerHTML = `
-      <!-- Kişi Kartı -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4 flex flex-wrap items-center gap-4">
-        <div class="w-14 h-14 rounded-full ${person.role_level === 'lead' ? 'bg-purple-600' : 'bg-blue-600'} flex items-center justify-center text-white text-xl font-bold flex-shrink-0">${escapeHtml(person.avatar)}</div>
+      <div class="apple-card p-5 mb-4 flex flex-wrap items-center gap-4">
+        <div class="w-14 h-14 rounded-full ${person.role_level==='lead'?'bg-purple-600':'bg-blue-600'} flex items-center justify-center text-white text-xl font-bold flex-shrink-0">${escapeHtml(person.avatar.slice(0,2))}</div>
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 flex-wrap">
-            <div class="text-lg font-bold text-gray-800">${escapeHtml(person.name)}</div>
-            ${getRoleBadge(person.role_level)}
-          </div>
+          <div class="flex items-center gap-2 flex-wrap"><div class="text-lg font-bold text-gray-800">${escapeHtml(person.name)}</div>${getRoleBadge(person.role_level)}</div>
           <div class="text-sm text-gray-500">${escapeHtml(person.role)}</div>
           <div class="text-xs text-blue-600 mt-0.5">${escapeHtml(person.deptName)}</div>
         </div>
         <div class="flex gap-4">
-          <div class="text-center">
-            <div class="text-xl font-bold text-blue-600">${inProgress.length}</div>
-            <div class="text-xs text-gray-400">Devam</div>
-          </div>
-          <div class="text-center">
-            <div class="text-xl font-bold text-slate-500">${planned.length}</div>
-            <div class="text-xs text-gray-400">Planlanan</div>
-          </div>
-          <div class="text-center">
-            <div class="text-xl font-bold text-emerald-600">${done.length}</div>
-            <div class="text-xs text-gray-400">Tamamlanan</div>
-          </div>
-          <div class="text-center">
-            <div class="text-xl font-bold text-red-500">${risks.length}</div>
-            <div class="text-xs text-gray-400">Risk</div>
-          </div>
+          <div class="text-center"><div class="text-xl font-bold text-blue-600">${inProgress.length}</div><div class="text-xs text-gray-400">Devam</div></div>
+          <div class="text-center"><div class="text-xl font-bold text-slate-500">${planned.length}</div><div class="text-xs text-gray-400">Planlanan</div></div>
+          <div class="text-center"><div class="text-xl font-bold text-emerald-600">${done.length}</div><div class="text-xs text-gray-400">Tamamlanan</div></div>
+          <div class="text-center"><div class="text-xl font-bold text-red-500">${risks.length}</div><div class="text-xs text-gray-400">Risk</div></div>
         </div>
         <div class="flex flex-col gap-2 flex-shrink-0">
           <button onclick="document.getElementById('personnel-person-filter').value=''; renderPersonnel();"
-            class="text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-blue-200">
-            ← Listeye Dön
-          </button>
+            class="text-xs text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors">← Listeye Dön</button>
           <button onclick="openAssignTaskModalForPerson(${person.id})"
-            class="text-xs text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 px-3 py-1.5 rounded-lg transition-colors border border-emerald-200">
-            ✅ Görev Ata
-          </button>
+            class="text-xs text-emerald-600 hover:bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 transition-colors">✅ Görev Ata</button>
         </div>
       </div>
-
-      <!-- Görev Listesi -->
-      ${tasks.length > 0 ? `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
-        <h3 class="font-semibold text-gray-800 mb-4">📋 Görevler</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm data-table">
-            <thead>
-              <tr>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Görev</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Proje</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Durum</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Başlangıç</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Bitiş</th>
-                <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Kalan</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${[...inProgress, ...planned, ...done].map(t => `
-                <tr class="border-b border-gray-50 hover:bg-gray-50">
-                  <td class="px-3 py-2.5 font-medium text-gray-800">${escapeHtml(t.title)}</td>
-                  <td class="px-3 py-2.5 hidden md:table-cell text-xs">${t.projectId ? clickableProject(t.projectId, t.project) : `<span class="text-blue-600">${escapeHtml(t.project)}</span>`}</td>
-                  <td class="px-3 py-2.5">${taskStatusBadge(t.status)}</td>
-                  <td class="px-3 py-2.5 hidden sm:table-cell text-xs text-gray-500">${t.startDate}</td>
-                  <td class="px-3 py-2.5 hidden sm:table-cell text-xs text-gray-500">${t.endDate}</td>
-                  <td class="px-3 py-2.5">${remainingDaysBadge(t.endDate, t.status)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>` : ''}
-
-      <!-- Mini Gantt -->
-      ${tasks.length > 0 ? `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
-        <h3 class="font-semibold text-gray-800 mb-4">📅 Zaman Çizelgesi</h3>
-        <!-- Ay başlıkları -->
-        <div class="flex mb-1 ml-0">
-          ${months.map(m => `<div class="flex-1 text-xs text-gray-400 text-center">${m}</div>`).join('')}
-        </div>
-        <div class="space-y-2">
-          ${tasks.map(t => {
-            const left = pct(t.startDate);
-            const w = width(t.startDate, t.endDate);
-            const color = t.status === 'done' ? 'bg-green-400' : t.status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-300';
-            const statusLabel = t.status === 'done' ? 'Tamamlandı' : t.status === 'in_progress' ? 'Devam Ediyor' : 'Planlanan';
-            return `<div class="relative h-6 bg-gray-100 rounded-full overflow-hidden" title="${escapeHtml(t.title)} — ${statusLabel}" role="img" aria-label="${escapeHtml(t.title)}: ${statusLabel}">
-              <div class="${color} h-full rounded-full flex items-center px-2 overflow-hidden" style="margin-left:${left}%; width:${w}%; min-width:4px;">
-                <span class="text-xs text-white font-medium truncate hidden sm:block">${escapeHtml(t.title)}</span>
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-        <div class="flex gap-4 mt-3 text-xs text-gray-500">
-          <span class="flex items-center gap-1"><span class="w-3 h-2 rounded bg-green-400 inline-block"></span> Tamamlandı</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-2 rounded bg-blue-500 inline-block"></span> Devam Ediyor</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-2 rounded bg-gray-300 inline-block"></span> Planlanan</span>
-        </div>
-      </div>` : ''}
-
-      <!-- Notlar -->
-      ${notes.length > 0 ? `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4">
-        <h3 class="font-semibold text-gray-800 mb-4">📝 Notlar <span class="text-xs font-normal text-gray-400">(${notes.length} not)</span></h3>
-        <div class="space-y-3">
-          ${notes.slice(0, 5).map(n => `
-            <div class="border-b border-gray-50 pb-3 last:border-0 last:pb-0">
-              <div class="flex items-center gap-2 mb-1">
-                ${getCategoryBadge(n.category)}
-                ${n.severity ? getSeverityBadge(n.severity) : ''}
-                <span class="text-xs text-gray-400 ml-auto">${n.date}</span>
-              </div>
-              <p class="text-sm text-gray-700">${escapeHtml(n.text.replace('⚠️ ', '').slice(0, 120))}${n.text.length > 120 ? '...' : ''}</p>
-              <div class="text-xs mt-1">${n.projectId ? clickableProject(n.projectId, n.project) : `<span class="text-blue-600">${escapeHtml(n.project)}</span>`}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>` : `<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-4 text-center text-gray-400 text-sm">Bu kişiye ait not bulunamadı.</div>`}
-
-      <!-- Riskler -->
-      ${risks.length > 0 ? `
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <h3 class="font-semibold text-gray-800 mb-4">⚠️ Riskler <span class="text-xs font-normal text-gray-400">(${risks.length} risk)</span></h3>
-        <div class="space-y-3">
-          ${risks.map(r => `
-            <div class="border border-red-100 bg-red-50 rounded-xl p-3">
-              <div class="flex items-center gap-2 mb-1">
-                ${getSeverityBadge(r.severity)}
-                <span class="text-xs text-gray-400 ml-auto">${r.date}</span>
-              </div>
-              <p class="text-sm text-gray-700">${escapeHtml(r.text.replace('⚠️ ', ''))}</p>
-              <div class="text-xs mt-1">${r.projectId ? clickableProject(r.projectId, r.project) : `<span class="text-blue-600">${escapeHtml(r.project)}</span>`}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>` : ''}
-    `;
+      ${tasks.length>0?`<div class="apple-card p-5 mb-4"><h3 class="font-semibold text-gray-800 mb-4">📋 Görevler</h3><div class="overflow-x-auto"><table class="w-full text-sm data-table"><thead><tr>
+        <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Görev</th>
+        <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden md:table-cell">Proje</th>
+        <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Durum</th>
+        <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Başlangıç</th>
+        <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase hidden sm:table-cell">Bitiş</th>
+        <th class="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Kalan</th>
+      </tr></thead><tbody>
+        ${[...inProgress,...planned,...done].map(t=>`<tr class="border-b border-gray-50 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-medium text-gray-800">${escapeHtml(t.title)}</td>
+          <td class="px-3 py-2.5 hidden md:table-cell text-xs">${t.projectId?clickableProject(t.projectId,t.project):`<span class="text-blue-600">${escapeHtml(t.project||'')}</span>`}</td>
+          <td class="px-3 py-2.5">${taskStatusBadge(t.status)}</td>
+          <td class="px-3 py-2.5 hidden sm:table-cell text-xs text-gray-500">${t.startDate||''}</td>
+          <td class="px-3 py-2.5 hidden sm:table-cell text-xs text-gray-500">${t.endDate||''}</td>
+          <td class="px-3 py-2.5">${remainingDaysBadge(t.endDate,t.status)}</td>
+        </tr>`).join('')}
+      </tbody></table></div></div>
+      <div class="apple-card p-5 mb-4"><h3 class="font-semibold text-gray-800 mb-4">📅 Zaman Çizelgesi</h3>
+        <div class="flex mb-1">${months.map(m=>`<div class="flex-1 text-xs text-gray-400 text-center">${m}</div>`).join('')}</div>
+        <div class="space-y-2">${tasks.map(t=>{const l=pct(t.startDate);const w=width(t.startDate,t.endDate);const color=t.status==='done'?'bg-green-400':t.status==='in_progress'?'bg-blue-500':'bg-gray-300';return `<div class="relative h-6 bg-gray-100 rounded-full overflow-hidden" title="${escapeHtml(t.title)}"><div class="${color} h-full rounded-full flex items-center px-2 overflow-hidden" style="margin-left:${l}%;width:${w}%;min-width:4px;"><span class="text-xs text-white font-medium truncate hidden sm:block">${escapeHtml(t.title)}</span></div></div>`;}).join('')}</div>
+        <div class="flex gap-4 mt-3 text-xs text-gray-500"><span class="flex items-center gap-1"><span class="w-3 h-2 rounded bg-green-400 inline-block"></span>Tamamlandı</span><span class="flex items-center gap-1"><span class="w-3 h-2 rounded bg-blue-500 inline-block"></span>Devam</span><span class="flex items-center gap-1"><span class="w-3 h-2 rounded bg-gray-300 inline-block"></span>Planlanan</span></div>
+      </div>`:``}
+      ${notes.length>0?`<div class="apple-card p-5 mb-4"><h3 class="font-semibold text-gray-800 mb-4">📝 Notlar <span class="text-xs font-normal text-gray-400">(${notes.length} not)</span></h3><div class="space-y-3">${notes.slice(0,5).map(n=>`<div class="border-b border-gray-50 pb-3 last:border-0"><div class="flex items-center gap-2 mb-1">${getCategoryBadge(n.category)}${n.severity?getSeverityBadge(n.severity):''}<span class="text-xs text-gray-400 ml-auto">${n.date}</span></div><p class="text-sm text-gray-700">${escapeHtml(n.text.replace('⚠️ ','').slice(0,120))}${n.text.length>120?'...':''}</p><div class="text-xs mt-1">${n.projectId?clickableProject(n.projectId,n.project):`<span class="text-blue-600">${escapeHtml(n.project)}</span>`}</div></div>`).join('')}</div></div>`:''}
+      ${risks.length>0?`<div class="apple-card p-5"><h3 class="font-semibold text-gray-800 mb-4">⚠️ Riskler <span class="text-xs font-normal text-gray-400">(${risks.length})</span></h3><div class="space-y-3">${risks.map(r=>`<div class="border border-red-100 bg-red-50 rounded-xl p-3"><div class="flex items-center gap-2 mb-1">${getSeverityBadge(r.severity)}<span class="text-xs text-gray-400 ml-auto">${r.date}</span></div><p class="text-sm text-gray-700">${escapeHtml(r.text.replace('⚠️ ',''))}</p><div class="text-xs mt-1">${r.projectId?clickableProject(r.projectId,r.project):`<span class="text-blue-600">${escapeHtml(r.project)}</span>`}</div></div>`).join('')}</div></div>`:''}`;
   }
 
-  // ---- BAĞIMLILIKLAR INIT ----
-  window.init_dependencies = function() {
-    const typeColors = {
-      bekliyor: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200', line: '#f97316' },
-      entegrasyon: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200', line: '#3b82f6' },
-      paralel: { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', line: '#8b5cf6' }
-    };
-
-    const projectColors = {};
-    PROJECTS.forEach((p, i) => {
-      const colors = ['bg-blue-500','bg-purple-500','bg-green-500','bg-yellow-500','bg-red-500','bg-cyan-500','bg-indigo-500','bg-pink-500','bg-teal-500','bg-orange-500','bg-lime-500','bg-rose-500'];
-      projectColors[p.name] = colors[i % colors.length];
-    });
-
-    document.getElementById('dependencies-content').innerHTML = `
-      <!-- Bağımlılık listesi -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
-        ${DEPENDENCIES.map(dep => {
-          const c = typeColors[dep.type] || typeColors.bekliyor;
-          return `
-          <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:border-blue-200 transition-colors">
-            <div class="flex items-center gap-3 mb-2">
-              <div class="flex-1 text-sm font-medium text-gray-800 text-right truncate">${escapeHtml(dep.from)}</div>
-              <div class="flex-shrink-0">
-                <span class="px-2 py-0.5 rounded-full text-xs font-medium ${c.bg} ${c.text} border ${c.border}">
-                  ${dep.type === 'bekliyor' ? '⏳ Bekliyor' : dep.type === 'entegrasyon' ? '🔗 Entegrasyon' : '⚡ Paralel'}
-                </span>
-              </div>
-              <div class="flex-1 text-sm font-medium text-blue-700 truncate">${escapeHtml(dep.to)}</div>
-            </div>
-            <p class="text-xs text-gray-500 text-center">${escapeHtml(dep.desc)}</p>
-          </div>
-          `;
-        }).join('')}
-      </div>
-
-      <!-- Görsel bağımlılık haritası (SVG) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-        <h3 class="font-semibold text-gray-800 mb-4">Bağımlılık Haritası</h3>
-        <div class="overflow-x-auto">
-          <svg id="dep-svg" width="800" height="340" viewBox="0 0 800 340" class="w-full">
-            <!-- Arka plan -->
-            <rect width="800" height="340" fill="#f8fafc" rx="12"/>
-
-            <!-- Proje düğümleri — sol kolon (bağımlı) -->
-            ${[
-              { name: "T7PAC Firmware v6", x: 30, y: 30 },
-              { name: "IIoT Gateway & Bulut", x: 30, y: 100 },
-              { name: "LABx Next Laboratuvar", x: 30, y: 170 },
-              { name: "LABx Next Laboratuvar", x: 30, y: 240 },
-              { name: "PPD Baskı Boya Mutfağı v3", x: 30, y: 310 }
-            ].map((n, i) => `
-              <rect x="${n.x}" y="${n.y}" width="160" height="28" rx="6" fill="#dbeafe" stroke="#93c5fd" stroke-width="1"/>
-              <text x="${n.x + 80}" y="${n.y + 17}" text-anchor="middle" font-size="9" fill="#1e40af" font-family="system-ui">${escapeHtml(n.name.slice(0,22))}</text>
-            `).join('')}
-
-            <!-- Hedef düğümler — sağ kolon -->
-            ${[
-              { name: "T7 Operatör Panel 10\"", x: 610, y: 30 },
-              { name: "Teleskop v5 Boyahane", x: 610, y: 100 },
-              { name: "PMT140 pH Sensörü v2", x: 610, y: 170 },
-              { name: "ICT200 İletkenlik", x: 610, y: 240 },
-              { name: "T9 PLC v3 Ana Kart", x: 610, y: 310 }
-            ].map(n => `
-              <rect x="${n.x}" y="${n.y}" width="160" height="28" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1"/>
-              <text x="${n.x + 80}" y="${n.y + 17}" text-anchor="middle" font-size="9" fill="#166534" font-family="system-ui">${escapeHtml(n.name.slice(0,22))}</text>
-            `).join('')}
-
-            <!-- Oklar -->
-            <defs>
-              <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <polygon points="0 0, 8 3, 0 6" fill="#3b82f6" opacity="0.7"/>
-              </marker>
-              <marker id="arrowOrange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <polygon points="0 0, 8 3, 0 6" fill="#f97316" opacity="0.7"/>
-              </marker>
-            </defs>
-            <line x1="190" y1="44" x2="608" y2="44" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-            <line x1="190" y1="114" x2="608" y2="114" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
-            <line x1="190" y1="184" x2="608" y2="184" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-            <line x1="190" y1="254" x2="608" y2="254" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowBlue)"/>
-            <line x1="190" y1="324" x2="608" y2="324" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-
-            <!-- Etiketler -->
-            <text x="400" y="40" text-anchor="middle" font-size="8" fill="#92400e" font-family="system-ui">⏳ bekliyor</text>
-            <text x="400" y="110" text-anchor="middle" font-size="8" fill="#1e3a8a" font-family="system-ui">🔗 entegrasyon</text>
-            <text x="400" y="180" text-anchor="middle" font-size="8" fill="#92400e" font-family="system-ui">⏳ bekliyor</text>
-            <text x="400" y="250" text-anchor="middle" font-size="8" fill="#1e3a8a" font-family="system-ui">🔗 entegrasyon</text>
-            <text x="400" y="320" text-anchor="middle" font-size="8" fill="#92400e" font-family="system-ui">⏳ bekliyor</text>
-          </svg>
-        </div>
-
-        <!-- Açıklama -->
-        <div class="flex flex-wrap gap-4 mt-3">
-          <div class="flex items-center gap-2"><div class="w-6 h-0.5 border-t-2 border-orange-400 border-dashed"></div><span class="text-xs text-gray-600">Bekliyor</span></div>
-          <div class="flex items-center gap-2"><div class="w-6 h-0.5 border-t-2 border-blue-400 border-dashed"></div><span class="text-xs text-gray-600">Entegrasyon</span></div>
-          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></div><span class="text-xs text-gray-600">Bağımlı Proje</span></div>
-          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded bg-green-100 border border-green-300"></div><span class="text-xs text-gray-600">Hedef Proje</span></div>
-        </div>
-      </div>
-    `;
-  };
-
-  // ---- YENİ PROJE MODAL ----
+  // ---- MODALS: Yeni Proje ----
   function openNewProjectModal() {
-    // Departman checkboxları
     document.getElementById('np-depts').innerHTML = DEPARTMENTS.map(d =>
       `<label class="flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-lg hover:bg-gray-100">
-        <input type="checkbox" value="${d.id}" class="np-dept-cb rounded text-blue-600"> 
+        <input type="checkbox" value="${d.id}" class="np-dept-cb rounded text-blue-600">
         <span class="text-xs text-gray-700">${escapeHtml(d.name)}</span>
-      </label>`
-    ).join('');
-    // Personel multi-select
+      </label>`).join('');
     document.getElementById('np-members').innerHTML = PERSONNEL.map(p =>
-      `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName.split(' ')[0])}</option>`
-    ).join('');
-    // Default tarihler
+      `<option value="${p.id}">${escapeHtml(p.name)} — ${escapeHtml(p.deptName.split(' ')[0])}</option>`).join('');
     document.getElementById('np-start').value = '2026-05-01';
     document.getElementById('np-end').value = '2026-12-31';
     document.getElementById('np-name').value = '';
     document.getElementById('np-desc').value = '';
     document.getElementById('modal-new-project').classList.remove('hidden');
   }
+  window.openNewProjectModal = openNewProjectModal;
 
   function submitNewProject() {
     const name = document.getElementById('np-name').value.trim();
     if (!name) { showToast('Proje adı zorunludur!', 'warning'); return; }
-    const deptIds = Array.from(document.querySelectorAll('.np-dept-cb:checked')).map(cb => parseInt(cb.value));
-    const memberIds = Array.from(document.getElementById('np-members').selectedOptions).map(o => parseInt(o.value));
+    const deptIds = Array.from(document.querySelectorAll('.np-dept-cb:checked')).map(cb=>parseInt(cb.value));
+    const memberIds = Array.from(document.getElementById('np-members').selectedOptions).map(o=>parseInt(o.value));
     const startDate = document.getElementById('np-start').value;
     const endDate = document.getElementById('np-end').value;
     const desc = document.getElementById('np-desc').value.trim();
-    const newId = Math.max(...PROJECTS.map(p => p.id)) + 1;
-    const newProject = {
-      id: newId,
-      name,
-      desc: desc || 'Açıklama eklenmedi.',
-      depts: deptIds.length ? deptIds : [1],
-      status: 'planlanan',
-      startDate: startDate ? new Date(startDate).toLocaleDateString('tr-TR', {day:'numeric',month:'long',year:'numeric'}) : '2026',
-      endDate: endDate ? new Date(endDate).toLocaleDateString('tr-TR', {day:'numeric',month:'long',year:'numeric'}) : '2026',
-      budget: 0, spent: 0,
-      members: memberIds,
-      tags: ['Yeni']
-    };
-    PROJECTS.push(newProject);
+    const newId = Math.max(...PROJECTS.map(p=>p.id))+1;
+    PROJECTS.push({
+      id: newId, name, desc: desc||'Açıklama eklenmedi.',
+      depts: deptIds.length?deptIds:[1], status:'planlanan',
+      startDate: startDate?new Date(startDate).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'}):'2026',
+      endDate: endDate?new Date(endDate).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'}):'2026',
+      budget:0, spent:0, members:memberIds, tags:['Yeni']
+    });
     document.getElementById('modal-new-project').classList.add('hidden');
     showToast(`✅ "${name}" projesi oluşturuldu!`, 'success');
-    // Dashboard güncelle
-    if (Nav.current === 'dashboard') {
-      Nav.initialized.delete('dashboard');
-      window.init_dashboard();
-    }
+    if (Nav.current==='dashboard') { Nav.initialized.delete('dashboard'); window.init_dashboard(); }
+    if (Nav.current==='projects') renderProjCards();
   }
+  window.submitNewProject = submitNewProject;
 
-  // ---- GÖREV ATA MODAL ----
-  function openAssignTaskModal() {
-    populateAssignTaskModal(null);
-    document.getElementById('modal-assign-task').classList.remove('hidden');
-  }
-
-  function openAssignTaskModalForPerson(personId) {
-    populateAssignTaskModal(personId);
-    document.getElementById('modal-assign-task').classList.remove('hidden');
-  }
+  // ---- MODALS: Görev Ata ----
+  function openAssignTaskModal() { populateAssignTaskModal(null); document.getElementById('modal-assign-task').classList.remove('hidden'); }
+  function openAssignTaskModalForPerson(personId) { populateAssignTaskModal(personId); document.getElementById('modal-assign-task').classList.remove('hidden'); }
+  window.openAssignTaskModal = openAssignTaskModal;
+  window.openAssignTaskModalForPerson = openAssignTaskModalForPerson;
 
   function populateAssignTaskModal(preselectedPersonId) {
-    const personSel = document.getElementById('at-person');
-    personSel.innerHTML = '<option value="">— Personel seçin —</option>' +
-      PERSONNEL.map(p => `<option value="${p.id}" ${p.id === preselectedPersonId ? 'selected' : ''}>${escapeHtml(p.name)} — ${escapeHtml(p.deptName.split(' ')[0])}</option>`).join('');
+    document.getElementById('at-person').innerHTML = '<option value="">— Personel seçin —</option>' +
+      PERSONNEL.map(p=>`<option value="${p.id}" ${p.id===preselectedPersonId?'selected':''}>${escapeHtml(p.name)} — ${escapeHtml(p.deptName.split(' ')[0])}</option>`).join('');
     document.getElementById('at-project').innerHTML = '<option value="">— Proje seçin —</option>' +
-      PROJECTS.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+      PROJECTS.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
     document.getElementById('at-title').value = '';
     document.getElementById('at-start').value = '2026-05-01';
     document.getElementById('at-end').value = '2026-12-31';
@@ -1667,82 +958,77 @@
     if (!personId) { showToast('Personel seçin!', 'warning'); return; }
     if (!projectId) { showToast('Proje seçin!', 'warning'); return; }
     if (!title) { showToast('Görev başlığı zorunludur!', 'warning'); return; }
-    const person = PERSONNEL.find(p => p.id === personId);
-    const project = PROJECTS.find(p => p.id === projectId);
-    if (!person || !project) return;
-    const newTask = {
-      title,
-      projectId,
-      project: project.name,
-      status: document.getElementById('at-status').value,
-      startDate: document.getElementById('at-start').value,
-      endDate: document.getElementById('at-end').value
-    };
+    const person = PERSONNEL.find(p=>p.id===personId);
+    const project = PROJECTS.find(p=>p.id===projectId);
+    if (!person||!project) return;
+    const newTask = { title, projectId, project:project.name, status:document.getElementById('at-status').value, startDate:document.getElementById('at-start').value, endDate:document.getElementById('at-end').value };
     if (!person.tasks) person.tasks = [];
     person.tasks.push(newTask);
-    // Also add person to project members if not already
     if (!project.members.includes(personId)) project.members.push(personId);
     document.getElementById('modal-assign-task').classList.add('hidden');
     showToast(`✅ "${title}" görevi ${escapeHtml(person.name)}'a atandı!`, 'success');
-    // Personel detayını yenile
     const personFilter = document.getElementById('personnel-person-filter');
-    if (personFilter && personFilter.value === String(personId)) renderPersonnel();
+    if (personFilter && personFilter.value===String(personId)) renderPersonnel();
   }
+  window.submitAssignTask = submitAssignTask;
 
-  // ---- YETKİ YÖNETİMİ MODAL ----
+  // ---- MODALS: Yetki Yönetimi ----
   function openRoleModal() {
     const list = document.getElementById('role-mgmt-list');
     list.innerHTML = PERSONNEL.map(p => `
       <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
         <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full ${p.role_level === 'lead' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'} flex items-center justify-center text-xs font-bold">${escapeHtml(p.avatar.slice(0,2))}</div>
-          <div>
-            <div class="text-sm font-medium text-gray-800">${escapeHtml(p.name)}</div>
-            <div class="text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</div>
-          </div>
+          <div class="w-7 h-7 rounded-full ${p.role_level==='lead'?'bg-purple-100 text-purple-700':'bg-blue-100 text-blue-700'} flex items-center justify-center text-xs font-bold">${escapeHtml(p.avatar.slice(0,2))}</div>
+          <div><div class="text-sm font-medium text-gray-800">${escapeHtml(p.name)}</div><div class="text-xs text-gray-500">${escapeHtml(p.deptName.split(' ')[0])}</div></div>
         </div>
         <label class="flex items-center gap-2 cursor-pointer">
-          <span class="text-xs ${p.role_level === 'lead' ? 'text-purple-700 font-semibold' : 'text-gray-400'}">Takım Lideri</span>
+          <span class="text-xs ${p.role_level==='lead'?'text-purple-700 font-semibold':'text-gray-400'}">Takım Lideri</span>
           <div class="relative">
-            <input type="checkbox" class="sr-only role-toggle" data-person-id="${p.id}" ${p.role_level === 'lead' ? 'checked' : ''}>
-            <div class="toggle-bg w-9 h-5 rounded-full cursor-pointer ${p.role_level === 'lead' ? 'bg-purple-600' : 'bg-gray-300'} transition-colors duration-200"></div>
-            <div class="toggle-dot absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${p.role_level === 'lead' ? 'translate-x-4' : ''}"></div>
+            <input type="checkbox" class="sr-only role-toggle" data-person-id="${p.id}" ${p.role_level==='lead'?'checked':''}>
+            <div class="toggle-bg w-9 h-5 rounded-full cursor-pointer ${p.role_level==='lead'?'bg-purple-600':'bg-gray-300'} transition-colors duration-200"></div>
+            <div class="toggle-dot absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${p.role_level==='lead'?'translate-x-4':''}"></div>
           </div>
         </label>
-      </div>
-    `).join('');
-
-    // Toggle event listeners
+      </div>`).join('');
     list.querySelectorAll('.role-toggle').forEach(cb => {
       cb.addEventListener('change', function() {
         const personId = parseInt(this.getAttribute('data-person-id'));
-        const person = PERSONNEL.find(p => p.id === personId);
+        const person = PERSONNEL.find(p=>p.id===personId);
         if (!person) return;
-        person.role_level = this.checked ? 'lead' : 'member';
-        const bg = this.nextElementSibling;
-        const dot = bg.nextElementSibling;
-        bg.className = `toggle-bg w-9 h-5 rounded-full cursor-pointer ${person.role_level === 'lead' ? 'bg-purple-600' : 'bg-gray-300'} transition-colors duration-200`;
-        dot.className = `toggle-dot absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${person.role_level === 'lead' ? 'translate-x-4' : ''}`;
-        const label = this.parentElement.querySelector('span');
-        label.className = `text-xs ${person.role_level === 'lead' ? 'text-purple-700 font-semibold' : 'text-gray-400'}`;
-        showToast(`${escapeHtml(person.name)} ${person.role_level === 'lead' ? 'Takım Lideri yapıldı ⭐' : 'normal üye olarak güncellendi'}`, 'success');
-        // Refresh personnel list if visible
-        if (Nav.current === 'personnel') {
-          const personFilter = document.getElementById('personnel-person-filter');
-          if (personFilter && personFilter.value === String(personId)) {
-            renderPersonDetail(person, document.getElementById('personnel-content'));
-          } else {
-            renderPersonnel();
-          }
-        }
+        person.role_level = this.checked?'lead':'member';
+        const bg=this.nextElementSibling; const dot=bg.nextElementSibling;
+        bg.className=`toggle-bg w-9 h-5 rounded-full cursor-pointer ${person.role_level==='lead'?'bg-purple-600':'bg-gray-300'} transition-colors duration-200`;
+        dot.className=`toggle-dot absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${person.role_level==='lead'?'translate-x-4':''}`;
+        this.parentElement.querySelector('span').className=`text-xs ${person.role_level==='lead'?'text-purple-700 font-semibold':'text-gray-400'}`;
+        showToast(`${escapeHtml(person.name)} ${person.role_level==='lead'?'Takım Lideri yapıldı ⭐':'normal üye olarak güncellendi'}`, 'success');
+        if (Nav.current==='team') { const pf=document.getElementById('personnel-person-filter'); if(pf&&pf.value===String(personId)) renderPersonDetail(person,document.getElementById('personnel-content')); else renderPersonnel(); }
       });
     });
-
     document.getElementById('modal-role-mgmt').classList.remove('hidden');
   }
+  window.openRoleModal = openRoleModal;
 
-  // Re-init current section: Nav.init runs before window.init_* are defined,
-  // so we need to trigger the init for the default section after all functions are defined.
+  // Modal close handlers
+  document.getElementById('modal-close').onclick = () => Modal.hide();
+  document.getElementById('modal').addEventListener('click', e => { if (e.target===document.getElementById('modal')) Modal.hide(); });
+
+  // Modal link delegates
+  document.addEventListener('click', function(e) {
+    const personLink = e.target.closest('[data-modal-person-id]');
+    if (personLink) { e.preventDefault(); showPersonDetail(parseInt(personLink.getAttribute('data-modal-person-id'))); }
+    const projectLink = e.target.closest('[data-modal-project-id]');
+    if (projectLink) { e.preventDefault(); showProjectDetail(parseInt(projectLink.getAttribute('data-modal-project-id'))); }
+  });
+
+  // Sidebar toggle (mobile)
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    });
+  }
+
+  // Re-init: Nav.init runs before window.init_* are defined
   if (Nav.current && !Nav.initialized.has(Nav.current)) {
     Nav.show(Nav.current);
   }
