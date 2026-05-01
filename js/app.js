@@ -180,13 +180,15 @@ const Modal = {
 // Tıklanabilir personel linki
 function clickablePerson(personId, name) {
   const id = parseInt(personId, 10);
-  return `<a href="#" onclick="event.preventDefault(); Modal.hide(); setTimeout(() => showPersonDetail(${id}), 100)" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
+  if (!id) return escapeHtml(name);
+  return `<a href="#" data-modal-person-id="${id}" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
 }
 
 // Tıklanabilir proje linki
 function clickableProject(projectId, name) {
   const id = parseInt(projectId, 10);
-  return `<a href="#" onclick="event.preventDefault(); Modal.hide(); setTimeout(() => showProjectDetail(${id}), 100)" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
+  if (!id) return escapeHtml(name);
+  return `<a href="#" data-modal-project-id="${id}" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
 }
 
 // Personel detay modal
@@ -422,5 +424,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (modalClose) modalClose.addEventListener('click', () => Modal.hide());
   if (modalOverlay) modalOverlay.addEventListener('click', e => {
     if (e.target === modalOverlay) Modal.hide();
+  });
+  // Tıklanabilir personel ve proje linkleri için event delegation
+  document.addEventListener('click', e => {
+    const personLink = e.target.closest('[data-modal-person-id]');
+    if (personLink) {
+      e.preventDefault();
+      Modal.hide();
+      const pid = parseInt(personLink.getAttribute('data-modal-person-id'), 10);
+      setTimeout(() => showPersonDetail(pid), 100);
+      return;
+    }
+    const projectLink = e.target.closest('[data-modal-project-id]');
+    if (projectLink) {
+      e.preventDefault();
+      Modal.hide();
+      const pid = parseInt(projectLink.getAttribute('data-modal-project-id'), 10);
+      setTimeout(() => showProjectDetail(pid), 100);
+    }
   });
 });
