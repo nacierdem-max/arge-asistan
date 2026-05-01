@@ -441,7 +441,7 @@
     const todo = userTasks.filter(t => t.status === 'planned');
     const doing = userTasks.filter(t => t.status === 'in_progress');
     const done = userTasks.filter(t => t.status === 'done');
-    const today = new Date('2026-05-01');
+    const today = DEMO_TODAY; // from app.js
 
     function remainBadge(endDate, status) {
       if (status === 'done') return '<span class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-700">✅ Tamamlandı</span>';

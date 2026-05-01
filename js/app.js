@@ -2,6 +2,9 @@
 // app.js — Genel fonksiyonlar, navigasyon, auth
 // ============================================================
 
+// Demo/gösterim tarihi — tüm modüllerde kullanılan ortak referans tarihi
+const DEMO_TODAY = new Date('2026-05-01');
+
 // Oturum yönetimi
 const Auth = {
   currentUser: null,

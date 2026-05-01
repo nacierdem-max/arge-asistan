@@ -852,12 +852,11 @@
     renderPersonnel();
   };
 
-  // Shared personnel view date constants
+  // Shared personnel view date constants (DEMO_TODAY from app.js)
   const PERSONNEL_GANTT_START = new Date('2026-02-01');
   const PERSONNEL_GANTT_END = new Date('2026-11-30');
   const PERSONNEL_GANTT_TOTAL_DAYS = Math.ceil((PERSONNEL_GANTT_END - PERSONNEL_GANTT_START) / (1000 * 60 * 60 * 24));
   const PERSONNEL_GANTT_MONTHS = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
-  const DEMO_TODAY = new Date('2026-05-01');
 
   function renderPersonnel() {
     const deptId = document.getElementById('personnel-dept-filter').value;
@@ -1106,7 +1105,7 @@
     const done = tasks.filter(t => t.status === 'done');
     const notes = NOTES.filter(n => n.authorId === person.id);
     const risks = NOTES.filter(n => n.authorId === person.id && n.category === 'risk');
-    const today = new Date('2026-05-01');
+    const today = DEMO_TODAY; // from app.js
 
     function daysBetween(dateStr) {
       const d = new Date(dateStr);
@@ -1129,10 +1128,10 @@
     }
 
     // Mini Gantt verisi
-    const ganttStart = new Date('2026-02-01');
-    const ganttEnd = new Date('2026-11-30');
-    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
-    const months = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+    const ganttStart = PERSONNEL_GANTT_START;
+    const ganttEnd = PERSONNEL_GANTT_END;
+    const totalDays = PERSONNEL_GANTT_TOTAL_DAYS;
+    const months = PERSONNEL_GANTT_MONTHS;
 
     function pct(dateStr) {
       const d = new Date(dateStr);

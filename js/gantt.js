@@ -2,6 +2,8 @@
 // gantt.js — Gantt Chart çizimi ve filtreleme
 // ============================================================
 
+const GANTT_LEFT_COL_PX = 224; // Width of the project name column (matches w-56 = 14rem at 16px)
+
 const GanttChart = {
   filtered: [...PROJECTS],
   tooltip: null,
@@ -79,7 +81,7 @@ const GanttChart = {
     const totalCols = GANTT_VISIBLE_MONTHS;
 
     // Dynamic today position
-    const demoToday = new Date('2026-05-01');
+    const demoToday = DEMO_TODAY;
     const ganttStartDate = new Date(2026, GANTT_START_OFFSET, 1);
     const ganttEndDate = new Date(2026, GANTT_START_OFFSET + GANTT_VISIBLE_MONTHS, 1);
     const ganttTotalMs = ganttEndDate - ganttStartDate;
@@ -108,7 +110,7 @@ const GanttChart = {
         </div>
         <!-- Project rows container with today line overlay -->
         <div class="relative">
-          ${todayVisible ? `<div class="absolute top-0 bottom-0 w-0.5 bg-red-400/40 z-10 pointer-events-none" style="left: calc(224px + ${todayPct}% * (100% - 224px) / 100)" title="Bugün"></div>` : ''}
+          ${todayVisible ? `<div class="absolute top-0 bottom-0 w-0.5 bg-red-400/40 z-10 pointer-events-none" style="left: calc(${GANTT_LEFT_COL_PX}px + ${todayPct}% * (100% - ${GANTT_LEFT_COL_PX}px) / 100)" title="Bugün"></div>` : ''}
     `;
 
     if (this.filtered.length === 0) {
