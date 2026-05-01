@@ -852,6 +852,13 @@
     renderPersonnel();
   };
 
+  // Shared personnel view date constants
+  const PERSONNEL_GANTT_START = new Date('2026-02-01');
+  const PERSONNEL_GANTT_END = new Date('2026-11-30');
+  const PERSONNEL_GANTT_TOTAL_DAYS = Math.ceil((PERSONNEL_GANTT_END - PERSONNEL_GANTT_START) / (1000 * 60 * 60 * 24));
+  const PERSONNEL_GANTT_MONTHS = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+  const DEMO_TODAY = new Date('2026-05-01');
+
   function renderPersonnel() {
     const deptId = document.getElementById('personnel-dept-filter').value;
     const personId = document.getElementById('personnel-person-filter').value;
@@ -875,12 +882,6 @@
   }
 
   function renderPersonnelCompact(list, container) {
-    // Gantt date helpers for mini progress
-    const ganttStart = new Date('2026-02-01');
-    const ganttEnd = new Date('2026-11-30');
-    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
-    const today = new Date('2026-05-01');
-
     container.innerHTML = `
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
         <table class="w-full text-sm data-table">
@@ -939,11 +940,9 @@
   }
 
   function renderPersonnelMedium(list, container) {
-    // Timeline helpers
-    const ganttStart = new Date('2026-02-01');
-    const ganttEnd = new Date('2026-11-30');
-    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
-    const months = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+    const ganttStart = PERSONNEL_GANTT_START;
+    const totalDays = PERSONNEL_GANTT_TOTAL_DAYS;
+    const months = PERSONNEL_GANTT_MONTHS;
 
     function pctLeft(dateStr) {
       const d = new Date(dateStr);
@@ -1001,11 +1000,10 @@
   }
 
   function renderPersonnelWide(list, container) {
-    const today = new Date('2026-05-01');
-    const ganttStart = new Date('2026-02-01');
-    const ganttEnd = new Date('2026-11-30');
-    const totalDays = Math.ceil((ganttEnd - ganttStart) / (1000 * 60 * 60 * 24));
-    const months = ['Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas'];
+    const today = DEMO_TODAY;
+    const ganttStart = PERSONNEL_GANTT_START;
+    const totalDays = PERSONNEL_GANTT_TOTAL_DAYS;
+    const months = PERSONNEL_GANTT_MONTHS;
 
     function pctLeft(dateStr) {
       const d = new Date(dateStr);
