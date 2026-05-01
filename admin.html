@@ -606,6 +606,9 @@
     `).join('');
   };
 
+  // Current reference date for Personnel Management module (mock date)
+  const PM_TODAY = new Date('2026-05-01');
+
   // ---- PERSONEL YÖNETİMİ INIT ----
   window.init_personnel_mgmt = function() {
     const container = document.getElementById('personnel-mgmt-content');
@@ -689,13 +692,14 @@
 
   function filterTasksByTimeRange(tasks, timeRange) {
     if (!tasks || timeRange === 'all') return tasks || [];
-    const now = new Date('2026-05-01');
+    const now = PM_TODAY;
+    const y = now.getFullYear(), mo = now.getMonth(), d = now.getDate();
     const ranges = {
-      this_week: [new Date(now), new Date(new Date(now).setDate(now.getDate() + 7))],
-      this_month: [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)],
-      next_2weeks: [new Date(now), new Date(new Date(now).setDate(now.getDate() + 14))],
-      next_1month: [new Date(now), new Date(new Date(now).setMonth(now.getMonth() + 1))],
-      next_3months: [new Date(now), new Date(new Date(now).setMonth(now.getMonth() + 3))]
+      this_week:    [new Date(y, mo, d),     new Date(y, mo, d + 7)],
+      this_month:   [new Date(y, mo, 1),     new Date(y, mo + 1, 0)],
+      next_2weeks:  [new Date(y, mo, d),     new Date(y, mo, d + 14)],
+      next_1month:  [new Date(y, mo, d),     new Date(y, mo + 1, d)],
+      next_3months: [new Date(y, mo, d),     new Date(y, mo + 3, d)]
     };
     const [from, to] = ranges[timeRange] || [null, null];
     if (!from) return tasks;
@@ -707,11 +711,8 @@
   }
 
   function trMonthToEn(str) {
-    return str
-      .replace(/Ocak/g, 'Jan').replace(/Şubat/g, 'Feb').replace(/Mart/g, 'Mar')
-      .replace(/Nisan/g, 'Apr').replace(/Mayıs/g, 'May').replace(/Haziran/g, 'Jun')
-      .replace(/Temmuz/g, 'Jul').replace(/Ağustos/g, 'Aug').replace(/Eylül/g, 'Sep')
-      .replace(/Ekim/g, 'Oct').replace(/Kasım/g, 'Nov').replace(/Aralık/g, 'Dec');
+    const map = { Ocak:'Jan', Şubat:'Feb', Mart:'Mar', Nisan:'Apr', Mayıs:'May', Haziran:'Jun', Temmuz:'Jul', Ağustos:'Aug', Eylül:'Sep', Ekim:'Oct', Kasım:'Nov', Aralık:'Dec' };
+    return str.replace(/Ocak|Şubat|Mart|Nisan|Mayıs|Haziran|Temmuz|Ağustos|Eylül|Ekim|Kasım|Aralık/g, m => map[m] || m);
   }
 
   function renderPersonnelSummary(deptFilter, timeRange) {
@@ -815,18 +816,18 @@
     const activeProjects = personProjects.filter(pr => pr.status === 'devam');
 
     // Build mini gantt data
-    const now = new Date('2026-05-01');
+    const now = PM_TODAY;
     const ganttTasks = tasks.length > 0 ? tasks : allTasks.slice(0, 6);
 
     // Determine gantt date range based on timeRange
     let ganttStart, ganttMonths;
     const rangeConfig = {
-      this_week: { start: new Date('2026-04-28'), months: 2 },
-      this_month: { start: new Date('2026-05-01'), months: 2 },
-      next_2weeks: { start: new Date('2026-05-01'), months: 2 },
-      next_1month: { start: new Date('2026-05-01'), months: 2 },
-      next_3months: { start: new Date('2026-04-01'), months: 4 },
-      all: { start: new Date('2026-01-01'), months: 12 }
+      this_week:    { start: new Date(PM_TODAY.getFullYear(), PM_TODAY.getMonth(), PM_TODAY.getDate() - 3), months: 2 },
+      this_month:   { start: new Date(PM_TODAY.getFullYear(), PM_TODAY.getMonth(), 1), months: 2 },
+      next_2weeks:  { start: new Date(PM_TODAY.getFullYear(), PM_TODAY.getMonth(), 1), months: 2 },
+      next_1month:  { start: new Date(PM_TODAY.getFullYear(), PM_TODAY.getMonth(), 1), months: 2 },
+      next_3months: { start: new Date(PM_TODAY.getFullYear(), PM_TODAY.getMonth() - 1, 1), months: 4 },
+      all:          { start: new Date(PM_TODAY.getFullYear(), 0, 1), months: 12 }
     };
     const rc = rangeConfig[timeRange] || rangeConfig.all;
     ganttStart = rc.start;
@@ -858,7 +859,7 @@
     }
 
     // "Today" marker
-    const todayPct = pct(dayOffset('2026-05-01'));
+    const todayPct = pct(dayOffset(PM_TODAY.toISOString().slice(0, 10)));
 
     mainEl.innerHTML = `
       <!-- Back button -->
