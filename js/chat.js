@@ -540,8 +540,8 @@ function generatePersonnelResponse(text, currentUser) {
     return { text: '🔒 Bu bilgiye erişiminiz yok. Sadece kendi projelerinizle ilgili bilgi alabilirsiniz.' };
   }
 
-  // ---- Engellenen: başka kişi sorgusu ----
-  if (lower.match(/kim.*yapıyor|ne.*yapıyor/) && !lower.includes('ben')) {
+  // ---- Engellenen: başka kişi sorgusu (kim yapıyor, X ne yapıyor gibi kişi odaklı sorgular) ----
+  if (lower.match(/\bkim\b.*yapıyor|\bkimin\b|\bkimler\b/) && !lower.includes('ben')) {
     return { text: '🔒 Diğer personelin görevlerini sorgulayamazsınız. Mesaj göndermek isterseniz "... mesaj gönder" yazabilirsiniz.' };
   }
   // Başka bir personel ismi geçiyorsa ve mesaj göndermekten bahsetmiyorsa engelle

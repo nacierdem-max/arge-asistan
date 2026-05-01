@@ -1028,10 +1028,9 @@
 
     renderPersonnelChatHistoryList();
     // Kişiselleştirilmiş karşılama — personel AI tonu
-    const userPerson = user;
-    const myProjects = userPerson ? PROJECTS.filter(p => p.members.includes(userPerson.id)) : [];
-    const inProgressTasks = userPerson ? (userPerson.tasks || []).filter(t => t.status === 'in_progress') : [];
-    myChat.addMessage('ai', `Merhaba ${userPerson ? userPerson.name : ''}! 👋 Kişisel asistanınım.\n\n${inProgressTasks.length > 0 ? `Şu an **${inProgressTasks.length} aktif göreviniz** var.` : ''} ${myProjects.length > 0 ? `**${myProjects.length} projeye** dahilsiniz.` : ''}\n\nSadece kendi görev ve projeleriniz hakkında bilgi alabiliriz. Mesaj göndermek ve not eklemek de serbest. 💪`);
+    const myProjects = user ? PROJECTS.filter(p => p.members.includes(user.id)) : [];
+    const inProgressTasks = user ? (user.tasks || []).filter(t => t.status === 'in_progress') : [];
+    myChat.addMessage('ai', `Merhaba ${user ? user.name : ''}! 👋 Kişisel asistanınım.\n\n${inProgressTasks.length > 0 ? `Şu an **${inProgressTasks.length} aktif göreviniz** var.` : ''} ${myProjects.length > 0 ? `**${myProjects.length} projeye** dahilsiniz.` : ''}\n\nSadece kendi görev ve projeleriniz hakkında bilgi alabiliriz. Mesaj göndermek ve not eklemek de serbest. 💪`);
   };
 
 
