@@ -497,3 +497,158 @@ Detaylı bilgi için **Tedarik** bölümüne gidin.`
     };
   }
 };
+
+// ============================================================
+// Personel AI — kısıtlı erişim, sadece kendi verisine
+// ============================================================
+function generatePersonnelResponse(text, currentUser) {
+  const lower = text.toLowerCase();
+
+  if (!currentUser) {
+    return { text: 'Oturum bilgisi alınamadı. Lütfen tekrar giriş yapın.' };
+  }
+
+  // Kullanıcının projeleri
+  const myProjects = PROJECTS.filter(p => p.members.includes(currentUser.id));
+  const myProjectIds = myProjects.map(p => p.id);
+
+  // ---- İzin verilen: mesaj gönder ----
+  if (lower.includes('mesaj gönder') || lower.includes('mesaj yaz') ||
+      (lower.includes('söyle') && lower.includes('mesaj'))) {
+    setTimeout(() => typeof showToast === 'function' && showToast('📨 Mesaj gönderildi!', 'success'), 500);
+    return { text: '**Mesaj Gönderildi** 📨\n\nMesajınız başarıyla iletildi.\n\n• Alıcı belirlendi ✅\n• Mesaj iletildi ✅\n• Bildirim gönderildi ✅\n\nMesaj geçmişi için **Mesajlarım** bölümüne bakabilirsiniz.' };
+  }
+
+  // ---- İzin verilen: not ekle ----
+  if (lower.includes('not ekle') || lower.includes('not yaz') || lower.includes('kaydet')) {
+    setTimeout(() => typeof showToast === 'function' && showToast('📝 Not kaydedildi!', 'success'), 500);
+    return { text: `**Not Kaydedildi** 📝\n\nNotunuz sisteme eklendi.\n\n• Yazar: ${escapeHtml(currentUser.name)} ✅\n• Tarih: ${DEMO_TODAY.toLocaleDateString('tr-TR')} ✅\n• Proje ile ilişkilendirildi ✅\n\nNotlarınız için **Notlarım** bölümüne bakabilirsiniz.` };
+  }
+
+  // ---- Engellenen: yönetici işlemleri ----
+  if (lower.includes('görev ata') || lower.includes('yeni proje') ||
+      lower.includes('proje aç') || lower.includes('proje oluştur') ||
+      lower.includes('yetki ver') || lower.includes('yetki al')) {
+    return { text: '⛔ Bu işlem yönetici yetkisi gerektirir.' };
+  }
+
+  // ---- Engellenen: yönetici verisi ----
+  if (lower.includes('departman performans') || lower.includes('bütçe') ||
+      lower.includes('harcama') || lower.includes('maliyet') ||
+      lower.includes('iş yükü analizi') || lower.includes('audit') ||
+      lower.includes('tüm personel') || lower.includes('tüm proje')) {
+    return { text: '🔒 Bu bilgiye erişiminiz yok. Sadece kendi projelerinizle ilgili bilgi alabilirsiniz.' };
+  }
+
+  // ---- Engellenen: başka kişi sorgusu ----
+  if (lower.match(/kim.*yapıyor|ne.*yapıyor/) && !lower.includes('ben')) {
+    return { text: '🔒 Diğer personelin görevlerini sorgulayamazsınız. Mesaj göndermek isterseniz "... mesaj gönder" yazabilirsiniz.' };
+  }
+  // Başka bir personel ismi geçiyorsa ve mesaj göndermekten bahsetmiyorsa engelle
+  const userFirstName = currentUser.name.split(' ')[0].toLowerCase();
+  const otherPersonMentioned = PERSONNEL.some(p => {
+    const firstName = p.name.split(' ')[0].toLowerCase();
+    return firstName !== userFirstName && lower.includes(firstName) &&
+           !lower.includes('mesaj') && p.id !== currentUser.id;
+  });
+  if (otherPersonMentioned) {
+    return { text: '🔒 Bu bilgiye erişiminiz yok. Sadece kendi görevlerinizi sorgulayabilirsiniz.\n\nMesaj göndermek isterseniz "...\'a mesaj gönder: ..." yazabilirsiniz.' };
+  }
+
+  // ---- Kendi görevleri ----
+  if ((lower.includes('görev') || lower.includes('task')) &&
+      (lower.includes('benim') || lower.includes('ben') || lower.includes('görevler') ||
+       lower.includes('ne') || lower.includes('var'))) {
+    const myTasks = currentUser.tasks || [];
+    if (myTasks.length === 0) {
+      return { text: 'Henüz size atanmış görev bulunmuyor. Takım liderinizle iletişime geçebilirsiniz.' };
+    }
+    const inProgress = myTasks.filter(t => t.status === 'in_progress');
+    const planned = myTasks.filter(t => t.status === 'planned');
+    const done = myTasks.filter(t => t.status === 'done');
+    const nextDeadline = [...inProgress, ...planned]
+      .filter(t => t.endDate)
+      .sort((a, b) => new Date(a.endDate) - new Date(b.endDate))[0];
+    return {
+      text: `**Görevleriniz** 📋\n\n🔄 **Devam Eden (${inProgress.length}):**\n${inProgress.map(t => `• ${t.title} — ${t.project} (Bitiş: ${t.endDate})`).join('\n') || '— yok'}\n\n📅 **Yapılacak (${planned.length}):**\n${planned.map(t => `• ${t.title} — ${t.project}`).join('\n') || '— yok'}\n\n✅ **Tamamlanan:** ${done.length} görev\n\n${nextDeadline ? `⏰ **Yaklaşan Deadline:** ${nextDeadline.title} — ${nextDeadline.endDate}` : ''}`
+    };
+  }
+
+  // ---- Bu hafta / özet ----
+  if (lower.includes('bu hafta') || lower.includes('haftalık') || lower.includes('özet')) {
+    const myTasks = currentUser.tasks || [];
+    const done = myTasks.filter(t => t.status === 'done');
+    const inProgress = myTasks.filter(t => t.status === 'in_progress');
+    const myNotes = NOTES.filter(n => n.authorId === currentUser.id).slice(0, 3);
+    return {
+      text: `**Bu Haftaki Aktiviteleriniz** 📋\n\n✅ **Tamamlanan Görevler:** ${done.length}\n🔄 **Devam Eden:** ${inProgress.length}\n📝 **Son Notlarınız:** ${myNotes.length} not\n\n**Projeleriniz:** ${myProjects.map(p => p.name).join(', ') || '—'}\n\nHarika ilerliyorsunuz! 💪 Sorularınız için buradayım.`
+    };
+  }
+
+  // ---- Proje sorgusu — sadece kendi projeleri ----
+  // Proje anahtar kelimeleri → proje ID eşleşmesi
+  const projectKeywords = [
+    { keys: ['t9', 'plc'], id: 1 },
+    { keys: ['t7', 'panel', 'operatör'], id: 2 },
+    { keys: ['t7pac', 'firmware v6'], id: 3 },
+    { keys: ['teleskop', 'scada', 'mes', 'boyahane'], id: 4 },
+    { keys: ['rd96', 'sıvı dozaj', 'dozajlama'], id: 5 },
+    { keys: ['adw', 'toz boyar', 'tartım'], id: 6 },
+    { keys: ['labx', 'laboratuvar'], id: 7 },
+    { keys: ['pmt140', 'ph sensör'], id: 8 },
+    { keys: ['ict200', 'iletkenlik'], id: 9 },
+    { keys: ['sat210', 'spektro'], id: 10 },
+    { keys: ['iiot', 'gateway', 'mqtt', 'bulut', 'aws'], id: 11 },
+    { keys: ['ppd', 'baskı boya'], id: 12 }
+  ];
+
+  for (const entry of projectKeywords) {
+    if (entry.keys.some(k => lower.includes(k))) {
+      if (!myProjectIds.includes(entry.id)) {
+        return { text: `🔒 Bu projeye erişiminiz yok. Sadece dahil olduğunuz projeleri sorgulayabilirsiniz.\n\n**Projeleriniz:**\n${myProjects.map(p => `• ${p.name}`).join('\n') || '— Henüz bir projeye atanmadınız'}` };
+      }
+      // Kullanıcı bu projedeyse bilgi ver
+      const proj = PROJECTS.find(p => p.id === entry.id);
+      if (!proj) break;
+      const myProjectTasks = (currentUser.tasks || []).filter(t => t.projectId === entry.id);
+      const risks = NOTES.filter(n => n.category === 'risk' && n.projectId === entry.id);
+      const statusMap = { devam: '🔵 Devam Ediyor', tamamlandi: '✅ Tamamlandı', planlanan: '⚪ Planlanan' };
+      const taskStatusMap = { in_progress: '🔄 Devam Ediyor', done: '✅ Bitti', planned: '📅 Planlandı' };
+      return {
+        text: `**${proj.name}** — Proje Durumu\n\n**Durum:** ${statusMap[proj.status] || proj.status}\n**Dönem:** ${proj.startDate} — ${proj.endDate}\n\n**Bu Projedeki Görevleriniz:**\n${myProjectTasks.length > 0 ? myProjectTasks.map(t => `• ${t.title} (${taskStatusMap[t.status] || t.status})`).join('\n') : '— Bu projede atanmış göreviniz yok'}\n\n${risks.length > 0 ? `**⚠️ Aktif Riskler (${risks.length}):**\n${risks.slice(0, 2).map(r => `• ${r.text.replace('⚠️ ', '').slice(0, 80)}...`).join('\n')}` : '✅ Aktif risk yok'}`
+      };
+    }
+  }
+
+  // ---- Risk sorgusu — sadece kendi projeleri ----
+  if (lower.includes('risk') || lower.includes('gecik') || lower.includes('sorun') || lower.includes('blocker')) {
+    const myRisks = NOTES.filter(n => n.category === 'risk' && myProjectIds.includes(n.projectId));
+    if (myRisks.length === 0) {
+      return { text: 'Projelerinizde aktif risk bildirimi bulunmuyor. ✅ Her şey yolunda görünüyor!' };
+    }
+    return {
+      text: `**Projelerinizdeki Riskler** ⚠️\n\n${myRisks.map(r => `• **${r.project}:** ${r.text.replace('⚠️ ', '').slice(0, 80)}...`).join('\n')}\n\nRisk hakkında not eklemek için "not ekle: ..." yazabilirsiniz.`
+    };
+  }
+
+  // ---- Proje listesi ----
+  if (lower.includes('proje') || lower.includes('project')) {
+    if (myProjects.length === 0) {
+      return { text: 'Şu anda dahil olduğunuz aktif proje bulunmuyor.' };
+    }
+    const statusMap = { devam: '🔵 Devam', tamamlandi: '✅ Tamamlandı', planlanan: '⚪ Planlanan' };
+    return {
+      text: `**Projeleriniz** 🗂️\n\n${myProjects.map(p => `• **${p.name}**\n  ${statusMap[p.status] || p.status} | ${p.startDate} → ${p.endDate}`).join('\n\n')}`
+    };
+  }
+
+  // ---- Varsayılan yardım ----
+  const myTasks = currentUser.tasks || [];
+  const inProgress = myTasks.filter(t => t.status === 'in_progress');
+  const nextDeadline = inProgress
+    .filter(t => t.endDate)
+    .sort((a, b) => new Date(a.endDate) - new Date(b.endDate))[0];
+  return {
+    text: `Merhaba ${escapeHtml(currentUser.name)}! 👋 Size yardımcı olabileceğim konular:\n\n- 📋 **Görevlerim** — "görevlerim neler?" diyebilirsiniz\n- 🗂️ **Projelerim** — "projelerim ne durumda?" diyebilirsiniz\n- ⚠️ **Riskler** — "projelerimde risk var mı?" diyebilirsiniz\n- 📝 **Not ekle** — "not ekle: ..." yazabilirsiniz\n- 📨 **Mesaj gönder** — "Burak'a mesaj gönder: ..." yazabilirsiniz\n- 📊 **Bu hafta** — "bu hafta ne yaptım?" diyebilirsiniz\n\n${nextDeadline ? `⏰ **Yaklaşan Deadline:** ${nextDeadline.title} — ${nextDeadline.endDate}` : '✅ Yaklaşan kritik deadline yok'}\n\nHarika çalışıyorsunuz! 💪`
+  };
+}

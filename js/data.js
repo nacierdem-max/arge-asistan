@@ -923,21 +923,21 @@ const AUDIT_LOG = [
 ];
 
 const NOTIFICATIONS = [
-  { id: 1, title: "Risk Bildirimi", text: "T9 PLC FPGA tedarik süresi 8 haftaya çıktı. Proje takvimi etkilenebilir.", type: "risk", time: "10 dk önce", date: "2026-05-01", read: false },
-  { id: 2, title: "Bağımlılık Güncellendi", text: "Elif Kaya 'T9 PLC güç katı tasarımı' görevini tamamladı. EMC test planı etkileniyor.", type: "dependency", time: "30 dk önce", date: "2026-04-28", read: false },
-  { id: 3, title: "Deadline Yaklaşıyor", text: "T9 PLC 'PCB layout finalizasyonu' görevi 3 gün içinde bitiyor.", type: "deadline", time: "1 saat önce", date: "2026-04-29", read: false },
-  { id: 4, title: "Yeni Mesaj", text: "Ahmet Yılmaz size 'T9 PLC — FPGA pin ataması' hakkında mesaj gönderdi.", type: "message", time: "2 saat önce", date: "2026-04-20", read: false },
-  { id: 5, title: "Görev Tamamlandı", text: "Serkan Ateş 'ICT200 kalibrasyon algoritması' görevini tamamladı. Doğrulama bekleniyor.", type: "completion", time: "3 saat önce", date: "2026-04-29", read: false },
-  { id: 6, title: "Risk Bildirimi", text: "RD96 projesi: pompa test sonuçları beklentinin altında. Servo timing ayarı gerekiyor.", type: "risk", time: "4 saat önce", date: "2026-04-30", read: false },
-  { id: 7, title: "Proje Güncellemesi", text: "Teleskop v5 — migration riski yüksek olarak işaretlendi.", type: "warning", time: "5 saat önce", date: "2026-04-23", read: false },
-  { id: 8, title: "Yeni Not", text: "Ahmet Yılmaz T9 PLC projesine kritik not ekledi.", type: "info", time: "6 saat önce", date: "2026-04-27", read: true },
-  { id: 9, title: "Deadline Uyarısı", text: "ADW Toz Boyarmadde — Haziran teslimatı için 4 hafta kaldı.", type: "deadline", time: "1 gün önce", date: "2026-04-28", read: true },
-  { id: 10, title: "Dosya Yüklendi", text: "Teleskop_v5_API_Doc.pdf — Kaan Yıldırım yükledi.", type: "file", time: "1 gün önce", date: "2026-04-20", read: true },
-  { id: 11, title: "Risk Bildirimi", text: "SAT210 optik filtre tedarikçisi fiyat %30 artırdı. Bütçe revizyon gerekebilir.", type: "risk", time: "2 gün önce", date: "2026-04-25", read: true },
-  { id: 12, title: "Yeni Mesaj", text: "Burak Demir size FPGA voltage mismatch riski hakkında mesaj gönderdi.", type: "message", time: "2 gün önce", date: "2026-04-20", read: true },
-  { id: 13, title: "Görev Atandı", text: "Size yeni görev atandı: 'T9 PLC EMC test hazırlığı' — Kemal Turan tarafından.", type: "info", time: "3 gün önce", date: "2026-04-27", read: true },
-  { id: 14, title: "Bağımlılık Uyarısı", text: "ADW Toz Boyarmadde firmware modülü T7PAC projesine bağımlı. T7PAC %70 tamamlandı.", type: "dependency", time: "3 gün önce", date: "2026-04-28", read: true },
-  { id: 15, title: "Dosya Güncellendi", text: "T9_FPGA_PinMap_v4.xlsx — Ahmet Yılmaz tarafından güncellendi.", type: "file", time: "4 gün önce", date: "2026-04-20", read: true }
+  { id: 1, title: "Risk Bildirimi", text: "T9 PLC FPGA tedarik süresi 8 haftaya çıktı. Proje takvimi etkilenebilir.", type: "risk", time: "10 dk önce", date: "2026-05-01", read: false, targetPersonIds: [1, 2, 3, 5, 9, 13, 19, 23] },
+  { id: 2, title: "Bağımlılık Güncellendi", text: "Elif Kaya 'T9 PLC güç katı tasarımı' görevini tamamladı. EMC test planı etkileniyor.", type: "dependency", time: "30 dk önce", date: "2026-04-28", read: false, targetPersonIds: [1, 9, 13, 70, 74] },
+  { id: 3, title: "Deadline Yaklaşıyor", text: "T9 PLC 'PCB layout finalizasyonu' görevi 3 gün içinde bitiyor.", type: "deadline", time: "1 saat önce", date: "2026-04-29", read: false, targetPersonIds: [1, 3, 9] },
+  { id: 4, title: "Yeni Mesaj", text: "Ahmet Yılmaz size 'T9 PLC — FPGA pin ataması' hakkında mesaj gönderdi.", type: "message", time: "2 saat önce", date: "2026-04-20", read: false, targetPersonIds: [19] },
+  { id: 5, title: "Görev Tamamlandı", text: "Serkan Ateş 'ICT200 kalibrasyon algoritması' görevini tamamladı. Doğrulama bekleniyor.", type: "completion", time: "3 saat önce", date: "2026-04-29", read: false, targetPersonIds: [52, 70, 78] },
+  { id: 6, title: "Risk Bildirimi", text: "RD96 projesi: pompa test sonuçları beklentinin altında. Servo timing ayarı gerekiyor.", type: "risk", time: "4 saat önce", date: "2026-04-30", read: false, targetPersonIds: [60, 62, 64, 66] },
+  { id: 7, title: "Proje Güncellemesi", text: "Teleskop v5 — migration riski yüksek olarak işaretlendi.", type: "warning", time: "5 saat önce", date: "2026-04-23", read: false, targetPersonIds: [34, 35, 36, 38, 41, 46] },
+  { id: 8, title: "Yeni Not", text: "Ahmet Yılmaz T9 PLC projesine kritik not ekledi.", type: "info", time: "6 saat önce", date: "2026-04-27", read: true, targetPersonIds: [1, 2, 3, 9, 19, 23] },
+  { id: 9, title: "Deadline Uyarısı", text: "ADW Toz Boyarmadde — Haziran teslimatı için 4 hafta kaldı.", type: "deadline", time: "1 gün önce", date: "2026-04-28", read: true, targetPersonIds: [60, 61, 63, 64, 65, 24] },
+  { id: 10, title: "Dosya Yüklendi", text: "Teleskop_v5_API_Doc.pdf — Kaan Yıldırım yükledi.", type: "file", time: "1 gün önce", date: "2026-04-20", read: true, targetPersonIds: [34, 36, 38, 41, 46] },
+  { id: 11, title: "Risk Bildirimi", text: "SAT210 optik filtre tedarikçisi fiyat %30 artırdı. Bütçe revizyon gerekebilir.", type: "risk", time: "2 gün önce", date: "2026-04-25", read: true, targetPersonIds: [49, 50, 51, 53, 56, 58, 70] },
+  { id: 12, title: "Yeni Mesaj", text: "Burak Demir size FPGA voltage mismatch riski hakkında mesaj gönderdi.", type: "message", time: "2 gün önce", date: "2026-04-20", read: true, targetPersonIds: [1] },
+  { id: 13, title: "Görev Atandı", text: "Size yeni görev atandı: 'T9 PLC EMC test hazırlığı' — Kemal Turan tarafından.", type: "info", time: "3 gün önce", date: "2026-04-27", read: true, targetPersonIds: [13] },
+  { id: 14, title: "Bağımlılık Uyarısı", text: "ADW Toz Boyarmadde firmware modülü T7PAC projesine bağımlı. T7PAC %70 tamamlandı.", type: "dependency", time: "3 gün önce", date: "2026-04-28", read: true, targetPersonIds: [60, 64, 19, 27] },
+  { id: 15, title: "Dosya Güncellendi", text: "T9_FPGA_PinMap_v4.xlsx — Ahmet Yılmaz tarafından güncellendi.", type: "file", time: "4 gün önce", date: "2026-04-20", read: true, targetPersonIds: [1, 5, 19, 23] }
 ];
 
 const DEPENDENCIES = [
@@ -1231,3 +1231,66 @@ const MESSAGES = [
     relatedProjectId: 1
   }
 ];
+
+// Personele özgü AI sohbet geçmişi — her personel sadece kendi geçmişini görür
+const PERSONNEL_CHAT_HISTORY = {
+  1: [ // Ahmet Yılmaz — T9 PLC Elektronik
+    {
+      id: 101, title: 'T9 PCB layout deadline', date: '2026-04-26',
+      messages: [
+        { role: 'user', text: 'T9 PLC PCB layout deadline\'im ne zaman?', time: '09:00' },
+        { role: 'ai', text: 'T9 PLC v3 PCB layout finalizasyonu göreviniz **4 Mayıs 2026** tarihinde bitiyor. 3 gün kaldı! EMC filtre katmanı eklendi, geriye sinyal bütünlüğü doğrulaması var. Harika gidiyorsunuz! 💪', time: '09:01' }
+      ]
+    },
+    {
+      id: 102, title: 'FPGA tedarik riski', date: '2026-04-28',
+      messages: [
+        { role: 'user', text: 'FPGA tedarik süresi ne kadar etkiler beni?', time: '14:30' },
+        { role: 'ai', text: 'T9 PLC projenizde Xilinx Artix-7 tedarik süresi 8 haftaya çıktı. Bu Temmuz hedefi için risk oluşturuyor. Alternatif olarak Intel Cyclone V inceleniyor — pin uyumluluk analizini Burak ile koordine edebilirsiniz. Tarık bey\'e bildirim göndereyim mi?', time: '14:31' }
+      ]
+    }
+  ],
+  3: [ // Burak Demir — PCB Tasarım
+    {
+      id: 201, title: 'PCB Rev4 durum', date: '2026-04-27',
+      messages: [
+        { role: 'user', text: 'PCB Rev4 layout ne durumda?', time: '10:15' },
+        { role: 'ai', text: 'T9 PLC v3 PCB Rev4 layout göreviniz devam ediyor. Bitiş: **4 Mayıs 2026**. EMC filtre katmanı eklendi ✅, güç katı onaylandı ✅. Sinyal bütünlüğü kontrolü bekleniyor. Harika ilerliyorsunuz! 💪', time: '10:16' }
+      ]
+    }
+  ],
+  19: [ // Onur Tekin — Firmware
+    {
+      id: 301, title: 'T7PAC v6 başlangıç', date: '2026-04-25',
+      messages: [
+        { role: 'user', text: 'T7PAC v6 firmware ne zaman başlıyor?', time: '11:00' },
+        { role: 'ai', text: 'T7PAC Firmware v6 projeniz **Haziran 2026** başında başlıyor. Sprint planlaması tamamlandı, EtherCAT master stack lisansı alındı ✅. 6 kişilik ekibinizle tam hazırsınız. 🎯', time: '11:01' }
+      ]
+    },
+    {
+      id: 302, title: 'T9 FPGA pin ataması', date: '2026-04-20',
+      messages: [
+        { role: 'user', text: 'Ahmet\'in gönderdiği FPGA pin atamasını aldım, ne yapmalıyım?', time: '15:30' },
+        { role: 'ai', text: 'Ahmet Yılmaz\'ın gönderdiği T9_FPGA_PinMap_v4.xlsx dosyasını incelemeniz gerekiyor. EtherCAT portları Bank 34\'e taşındı. SPI konfigürasyonunu güncellemeniz ve voltage mismatch riskini (3.3V / 1.8V) kontrol etmeniz öneriliyor. Ahmet\'e mesaj göndermemi ister misiniz?', time: '15:31' }
+      ]
+    }
+  ],
+  34: [ // Kaan Yıldırım — Yazılım Mimarı
+    {
+      id: 401, title: 'Teleskop v5 ilerleme', date: '2026-04-28',
+      messages: [
+        { role: 'user', text: 'Teleskop v5 ne durumda?', time: '15:00' },
+        { role: 'ai', text: 'Teleskop v5 Boyahane Yönetim projeniz iyi gidiyor! WebSocket modülü 500 eş zamanlı bağlantıyla test başarılı ✅. PostgreSQL migration tamamlandı ✅. Mobil app **Haziran** beta\'ya çıkıyor. Devam edin! 💪', time: '15:01' }
+      ]
+    }
+  ],
+  48: [ // Fikret Akbulut — Sensör
+    {
+      id: 501, title: 'PMT140 ATEX durumu', date: '2026-04-24',
+      messages: [
+        { role: 'user', text: 'PMT140 ATEX başvurusu ne durumda?', time: '09:30' },
+        { role: 'ai', text: 'PMT140 pH Sensörü v2 projenizde ATEX başvurusu yapıldı ✅ TÜV incelemesi **15 Haziran 2026** tarihinde. Ex ia IIC T4 Ga sınıfı hedefleniyor. Belgeler hazır, harika ilerliyorsunuz! 🎉', time: '09:31' }
+      ]
+    }
+  ]
+};
