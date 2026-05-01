@@ -179,12 +179,14 @@ const Modal = {
 
 // Tıklanabilir personel linki
 function clickablePerson(personId, name) {
-  return `<a href="#" onclick="event.preventDefault(); Modal.hide(); setTimeout(() => showPersonDetail(${personId}), 100)" class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-medium">${escapeHtml(name)}</a>`;
+  const id = parseInt(personId, 10);
+  return `<a href="#" onclick="event.preventDefault(); Modal.hide(); setTimeout(() => showPersonDetail(${id}), 100)" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
 }
 
 // Tıklanabilir proje linki
 function clickableProject(projectId, name) {
-  return `<a href="#" onclick="event.preventDefault(); Modal.hide(); setTimeout(() => showProjectDetail(${projectId}), 100)" class="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer font-medium">${escapeHtml(name)}</a>`;
+  const id = parseInt(projectId, 10);
+  return `<a href="#" onclick="event.preventDefault(); Modal.hide(); setTimeout(() => showProjectDetail(${id}), 100)" class="text-blue-600 hover:text-blue-800 hover:underline font-medium">${escapeHtml(name)}</a>`;
 }
 
 // Personel detay modal
