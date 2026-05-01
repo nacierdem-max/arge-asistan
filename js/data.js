@@ -461,3 +461,467 @@ const PERFORMANCE_DATA = {
 const GANTT_MONTHS = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
 const GANTT_START_OFFSET = 1; // Show from Şubat (index 1)
 const GANTT_VISIBLE_MONTHS = 8; // Show 8 months
+
+// ============================================================
+// Personel — Proje & Görev Atamaları
+// ============================================================
+(function assignPersonnelData() {
+  // Step 1: Derive projects from PROJECTS.members
+  PROJECTS.forEach(project => {
+    (project.members || []).forEach(memberId => {
+      const person = PERSONNEL.find(p => p.id === memberId);
+      if (person) {
+        if (!person.projects) person.projects = [];
+        if (!person.projects.includes(project.id)) person.projects.push(project.id);
+      }
+    });
+  });
+  // Ensure every person has a projects array
+  PERSONNEL.forEach(p => { if (!p.projects) p.projects = []; });
+
+  // Step 2: Task assignments (2-5 tasks per person)
+  const taskData = {
+    // ---- Dept 1: Elektronik & Donanım ----
+    1: [ // Ahmet Yılmaz
+      { title: 'Şematik review', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-15' },
+      { title: 'EMC filtre tasarımı', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'CE belgelendirme hazırlığı', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    2: [ // Elif Kaya
+      { title: 'Termal analiz simülasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-03-31' },
+      { title: 'Güç dağıtım simülasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-05-31' },
+      { title: 'PCB katman optimizasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-15' }
+    ],
+    3: [ // Burak Demir
+      { title: 'PCB stack analizi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-01' },
+      { title: '6 katman PCB layout', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-03-01', endDate: '2026-05-31' },
+      { title: 'DFM review ve üretim paketi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-06-30' }
+    ],
+    4: [ // Selin Arslan
+      { title: 'LCD sürücü seçimi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-01' },
+      { title: 'Donanım entegrasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Panel kalite testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    5: [ // Murat Öztürk
+      { title: 'Güç katı tasarımı', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-31' },
+      { title: 'T7 donanım testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'Saha test desteği', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    6: [ // Zeynep Çelik
+      { title: 'Şematik kontrol', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-10', endDate: '2026-03-20' },
+      { title: 'Konnektör tasarımı', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-15' },
+      { title: 'DRC review', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-05-20', endDate: '2026-06-30' }
+    ],
+    7: [ // Can Aydın
+      { title: 'Güç yönetimi tasarımı', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'LCD panel testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-15' },
+      { title: 'Termal test', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-06-15', endDate: '2026-08-31' }
+    ],
+    8: [ // Derya Koç
+      { title: 'Komponent seçimi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-15' },
+      { title: 'BOM hazırlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-03-15', endDate: '2026-05-15' },
+      { title: 'Tedarik takibi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-05-15', endDate: '2026-07-31' }
+    ],
+    9: [ // Fatih Şahin
+      { title: 'PCB kural seti tanımlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-01' },
+      { title: 'PCB layout tamamlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-03-01', endDate: '2026-05-31' },
+      { title: 'Üretim paketi hazırlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-06-30' }
+    ],
+    10: [ // Emre Yıldız
+      { title: 'Panel şematik review', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-01' },
+      { title: 'Güç kartı entegrasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Panel sistem testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    11: [ // Hakan Güneş
+      { title: 'Ar-Ge araştırması', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-15' },
+      { title: 'Prototip testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Performans optimizasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    12: [ // Ayşe Korkmaz
+      { title: 'Sinyal bütünlüğü simülasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-03-31' },
+      { title: 'Analiz raporu hazırlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'Tasarım revizyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-15' }
+    ],
+    13: [ // Tolga Eren
+      { title: 'EMC tasarım güncelleme', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-04-01' },
+      { title: 'Pre-compliance testi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'CE başvurusu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-07-01', endDate: '2026-07-31' }
+    ],
+    14: [ // Nur Aktaş
+      { title: 'Parça kataloğu hazırlama', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'BOM güncelleme', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-05-31' },
+      { title: 'Tedarik siparişleri', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    15: [ // Cem Polat
+      { title: 'Sinyal analizi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-03-31' },
+      { title: 'Filtre devresi tasarımı', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'Filtre testi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-15' }
+    ],
+    16: [ // Sibel Doğan
+      { title: 'Panel şematik çizimi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'Kablo tasarımı', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' },
+      { title: 'Elektriksel test', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    17: [ // Oğuz Kartal
+      { title: 'PCB analizi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-03-15' },
+      { title: 'T7 PCB layout', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-03-15', endDate: '2026-06-30' },
+      { title: 'Kalite onayı', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    18: [ // İrem Başar
+      { title: 'Komponent analizi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'Test devresi tasarımı', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' },
+      { title: 'Doğrulama testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    // ---- Dept 2: Gömülü Yazılım / Firmware ----
+    19: [ // Onur Tekin
+      { title: 'Touchscreen Linux driver', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-20' },
+      { title: 'Boot süresi optimizasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'T7PAC EtherCAT stack', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-31' }
+    ],
+    20: [ // Seda Uçar
+      { title: 'T7PAC gereksinim analizi', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Protokol mimari tasarımı', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-15' },
+      { title: 'Firmware implementasyonu', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-08-15', endDate: '2026-10-31' }
+    ],
+    21: [ // Barış Kaplan
+      { title: 'Linux kernel entegrasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-20' },
+      { title: 'Boot optimizasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Test otomasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-31' }
+    ],
+    22: [ // Melis Tunç
+      { title: 'EtherCAT araştırması', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Tasarım dokümanı', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' },
+      { title: 'Firmware geliştirme', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-31' }
+    ],
+    23: [ // Serkan Ateş
+      { title: 'Ethernet/IP implementasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-04-15' },
+      { title: 'CIP protokol geliştirme', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' },
+      { title: 'T7PAC EtherCAT master', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-09-30' }
+    ],
+    24: [ // Gamze Özkan
+      { title: 'ADW HMI tasarımı', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-01', endDate: '2026-03-15' },
+      { title: 'Kullanıcı testi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'HMI güncelleme', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' }
+    ],
+    25: [ // Arda Sezer
+      { title: 'RTOS konfigürasyonu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-04-01' },
+      { title: 'Görev yönetimi modülü', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'IO driver geliştirme', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-15' }
+    ],
+    26: [ // Deniz Acar
+      { title: 'Protokol araştırması', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Stack seçimi ve test', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-01' },
+      { title: 'Implementasyon', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-31' }
+    ],
+    27: [ // Kerem Yalçın
+      { title: 'T7PAC gereksinim hazırlama', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'T7PAC mimari tasarımı', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-31' },
+      { title: 'T7 Panel entegrasyon', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' }
+    ],
+    28: [ // Pınar Güler
+      { title: 'T7PAC araştırması', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Modül tasarımı', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-15' },
+      { title: 'Kod yazma', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-08-15', endDate: '2026-10-31' }
+    ],
+    29: [ // Taner Kurt
+      { title: 'Sistem analizi', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Entegrasyon tasarımı', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-08-31' },
+      { title: 'Test planı', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-09-01', endDate: '2026-10-31' }
+    ],
+    30: [ // Aslı Çetin
+      { title: 'Test senaryoları hazırlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-04-01' },
+      { title: 'Test uygulaması', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Test raporlama', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    31: [ // Bora Kılıç
+      { title: 'EtherCAT analizi', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Prototip geliştirme', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-09-01' },
+      { title: 'Entegrasyon testi', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-09-01', endDate: '2026-10-31' }
+    ],
+    32: [ // Ece Taş
+      { title: 'Panel driver geliştirme', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'Performans optimizasyonu', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' },
+      { title: 'Doğrulama testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    33: [ // Volkan Erdoğan
+      { title: 'EtherCAT stack seçimi', project: 'T7PAC Firmware v6', projectId: 3, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Master implementasyonu', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-09-15' },
+      { title: 'Performans testi', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-09-15', endDate: '2026-10-31' }
+    ],
+    // ---- Dept 3: Üst Yazılım ----
+    34: [ // Kaan Yıldırım
+      { title: 'WebSocket mimari tasarımı', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-01', endDate: '2026-03-01' },
+      { title: 'Mobil app geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'PPD proje koordinasyonu', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-31' }
+    ],
+    35: [ // Merve Aksoy
+      { title: 'React Native kurulum', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-03-15' },
+      { title: 'Push notification entegrasyonu', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'iOS beta yayını', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' }
+    ],
+    36: [ // Ozan Türk
+      { title: 'Modbus TCP entegrasyonu', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-01', endDate: '2026-03-01' },
+      { title: 'SCADA panel geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'IIoT OPC-UA geliştirme', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    37: [ // Büşra Kara
+      { title: 'Veritabanı şema tasarımı', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-01', endDate: '2026-03-01' },
+      { title: 'Web HMI geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'API entegrasyonu', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' }
+    ],
+    38: [ // Caner Özdemir
+      { title: 'PostgreSQL migration', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-01', endDate: '2026-03-15' },
+      { title: 'İndeks optimizasyonu', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'Yedekleme sistemi', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    39: [ // Duygu Şen
+      { title: 'Frontend bileşenler', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-03-31' },
+      { title: 'Alarm arayüzü', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Mobil arayüz geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' }
+    ],
+    40: [ // Erdem Bayrak
+      { title: 'AWS IoT Core kurulum', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'OPC-UA implementasyonu', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'API gateway tasarımı', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' }
+    ],
+    41: [ // Gizem Aslan
+      { title: 'Alarm yönetim modülü', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-03-31' },
+      { title: 'UI geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Mobil erişim', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    42: [ // Hakan Korur
+      { title: 'IEC 62443 analizi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Pentest hazırlığı', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' },
+      { title: 'Sertifikasyon süreci', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' }
+    ],
+    43: [ // İlker Duman
+      { title: 'API entegrasyon testi', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-04-01' },
+      { title: 'IIoT test senaryoları', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'Güvenlik review', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' }
+    ],
+    44: [ // Aylin Yavuz
+      { title: 'UI/UX tasarımı', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-01', endDate: '2026-03-31' },
+      { title: 'Kullanıcı testi', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'Mobil UI geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' }
+    ],
+    45: [ // Berk Çağlar
+      { title: 'AWS IoT Core kurulum', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Sertifika altyapısı', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'done', startDate: '2026-04-15', endDate: '2026-04-30' },
+      { title: 'Bulut mimari geliştirme', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-08-31' }
+    ],
+    46: [ // Cemre Aydoğan
+      { title: 'Rapor modülü geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-03-31' },
+      { title: 'Dashboard geliştirme', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Analitik modülü', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    47: [ // Dilara Usta
+      { title: 'MQTT yük testi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Entegrasyon testi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'Üretim deploy', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'planned', startDate: '2026-08-01', endDate: '2026-09-30' }
+    ],
+    // ---- Dept 4: Sensör Geliştirme ----
+    48: [ // Fikret Akbulut
+      { title: 'Cam elektrot karakterizasyon', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'IP68 muhafaza tasarımı', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' },
+      { title: 'Müşteri demo hazırlığı', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'planned', startDate: '2026-06-15', endDate: '2026-07-31' }
+    ],
+    49: [ // Gülşen Erdal
+      { title: 'Optik modül testi', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-02-01', endDate: '2026-03-31' },
+      { title: 'Termal stabilite testi', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'Müşteri pilot hazırlığı', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    50: [ // Halil Çetin
+      { title: 'DSP algoritma optimizasyonu', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-02-01', endDate: '2026-04-18' },
+      { title: 'Tarama hızı artırma', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Referans hücre tasarımı', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    51: [ // İpek Sarı
+      { title: 'Saha test hazırlığı', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-02-15', endDate: '2026-04-01' },
+      { title: 'Demo sunumu', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-04-20', endDate: '2026-04-30' },
+      { title: 'LOI takibi ve müşteri iletişim', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-08-31' }
+    ],
+    52: [ // Kadir Varol
+      { title: 'Final kalibrasyon', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2025-12-01', endDate: '2026-01-15' },
+      { title: 'TÜRKAK akreditasyonu', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2026-01-15', endDate: '2026-02-28' },
+      { title: 'Üretim süreci desteği', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2026-02-15', endDate: '2026-02-28' }
+    ],
+    53: [ // Leyla Durmuş
+      { title: 'Referans hücre tasarımı', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-02-01', endDate: '2026-04-11' },
+      { title: 'Kalibrasyon optimizasyonu', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-04-11', endDate: '2026-06-30' },
+      { title: 'Test raporlama', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'planned', startDate: '2026-06-15', endDate: '2026-08-31' }
+    ],
+    54: [ // Mustafa Bayar
+      { title: 'Gümrük takibi', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'done', startDate: '2026-03-15', endDate: '2026-04-15' },
+      { title: 'Alternatif tedarik çözümü', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Depo ve stok yönetimi', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    55: [ // Neslihan Özer
+      { title: 'ICT200 saha testi', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2025-12-01', endDate: '2026-01-31' },
+      { title: 'Teknik rapor hazırlama', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2026-01-15', endDate: '2026-02-28' },
+      { title: 'TSE belgesi alımı', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2026-02-01', endDate: '2026-02-28' }
+    ],
+    56: [ // Orhan Koç
+      { title: 'Dalga boyu kalibrasyon', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-02-01', endDate: '2026-04-01' },
+      { title: 'Sensör entegrasyon testi', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Akreditasyon hazırlığı', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    57: [ // Selma Tuncer
+      { title: 'ICT200 kalibrasyon', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2025-12-01', endDate: '2026-01-31' },
+      { title: 'Sertifika başvurusu', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2026-01-15', endDate: '2026-02-15' },
+      { title: 'Yeni proje hazırlığı', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' }
+    ],
+    58: [ // Ümit Korkut
+      { title: 'PMT140 elektronik tasarım', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'SAT210 devre testi', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' },
+      { title: 'Elektronik revizyon', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'planned', startDate: '2026-06-15', endDate: '2026-07-31' }
+    ],
+    59: [ // Yasemin Bal
+      { title: 'Test prosedürü hazırlama', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2025-12-01', endDate: '2026-01-15' },
+      { title: 'Doğrulama testi', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2026-01-15', endDate: '2026-02-28' },
+      { title: 'Teknik doküman güncelleme', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' }
+    ],
+    // ---- Dept 5: Mekatronik & Robotik ----
+    60: [ // Ali Rıza Çam
+      { title: 'ADW servo kalibrasyon', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-01', endDate: '2026-04-15' },
+      { title: 'RD96 tamamlama desteği', project: 'RD96 Sıvı Dozajlama v2', projectId: 5, status: 'done', startDate: '2025-11-01', endDate: '2026-03-31' },
+      { title: 'PPD mekanik araştırma', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-31' }
+    ],
+    61: [ // Betül Kırıcı
+      { title: 'ADW mekanik tasarım', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-01', endDate: '2026-04-08' },
+      { title: 'SOLIDWORKS model', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-04-08', endDate: '2026-05-31' },
+      { title: 'Üretim çizimi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'planned', startDate: '2026-06-01', endDate: '2026-06-30' }
+    ],
+    62: [ // Cenk Yücel
+      { title: 'RD96 impeller tasarımı', project: 'RD96 Sıvı Dozajlama v2', projectId: 5, status: 'done', startDate: '2025-11-01', endDate: '2026-01-31' },
+      { title: 'Kavitasyon testi', project: 'RD96 Sıvı Dozajlama v2', projectId: 5, status: 'done', startDate: '2026-01-01', endDate: '2026-03-31' },
+      { title: 'LABx prototip tasarımı', project: 'LABx Next Laboratuvar', projectId: 7, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-01' }
+    ],
+    63: [ // Damla Öğüt
+      { title: 'Vibrasyon analizi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-15', endDate: '2026-04-26' },
+      { title: 'Dampfer testi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'Hassasiyet testi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' }
+    ],
+    64: [ // Erhan Soylu
+      { title: 'RD96 pompa testi', project: 'RD96 Sıvı Dozajlama v2', projectId: 5, status: 'done', startDate: '2025-11-01', endDate: '2026-03-31' },
+      { title: 'ADW PID optimizasyonu', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-15', endDate: '2026-03-25' },
+      { title: 'ADW test süreci', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' }
+    ],
+    65: [ // Ferhat Güngör
+      { title: 'Konveyör tasarımı', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-01', endDate: '2026-03-31' },
+      { title: 'Motor seçimi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-03-01', endDate: '2026-04-15' },
+      { title: 'Mekanik test', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-06-30' }
+    ],
+    66: [ // Gökhan Arıkan
+      { title: 'PMT140 IP68 testi', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'done', startDate: '2026-03-01', endDate: '2026-03-08' },
+      { title: 'Muhafaza tasarımı', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Saha montaj desteği', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    67: [ // Hatice Ülker
+      { title: 'Robotik analiz', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-01', endDate: '2026-03-31' },
+      { title: 'Pnömatik sistem tasarımı', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-05-31' },
+      { title: 'Entegrasyon testi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'planned', startDate: '2026-06-01', endDate: '2026-06-30' }
+    ],
+    68: [ // İsmail Keskin
+      { title: 'LABx gereksinim analizi', project: 'LABx Next Laboratuvar', projectId: 7, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'LABx robotik tasarım', project: 'LABx Next Laboratuvar', projectId: 7, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' },
+      { title: 'PPD modül tasarımı', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-09-01', endDate: '2026-11-30' }
+    ],
+    69: [ // Jale Türkmen
+      { title: 'Güvenlik analizi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-01', endDate: '2026-03-31' },
+      { title: 'CE gereksinim analizi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'Makine yönergesi hazırlama', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-06-30' }
+    ],
+    // ---- Dept 6: Test & Kalite ----
+    70: [ // Kemal Turan
+      { title: 'T9 EMC testi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-04-08' },
+      { title: 'SAT210 optik kalite testi', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'T9 CE başvurusu desteği', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' }
+    ],
+    71: [ // Lale Demirtaş
+      { title: 'ICT200 kalite testi', project: 'ICT200 İletkenlik Sensörü', projectId: 9, status: 'done', startDate: '2025-12-01', endDate: '2026-02-28' },
+      { title: 'PMT140 test planı', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Kalite belgeleri', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'planned', startDate: '2026-06-15', endDate: '2026-07-31' }
+    ],
+    72: [ // Mehmet Akif Ceylan
+      { title: 'T9 PLC sistem testi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-04-30' },
+      { title: 'ADW kalite güvence', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'ISO 9001 hazırlık', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    73: [ // Nihal Yazıcı
+      { title: 'Teleskop entegrasyon testi', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-04-01' },
+      { title: 'IIoT test senaryoları', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-07-31' },
+      { title: 'Güvenlik denetimi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' }
+    ],
+    74: [ // Osman Kılınç
+      { title: 'T9 PLC EMC testi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-15', endDate: '2026-03-31' },
+      { title: 'T7 Panel EMC testi', project: 'T7 Operatör Panel 10"', projectId: 2, status: 'done', startDate: '2026-03-15', endDate: '2026-04-30' },
+      { title: 'CE test raporu', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-15' }
+    ],
+    75: [ // Perihan Boz
+      { title: 'RD96 kalite denetimi', project: 'RD96 Sıvı Dozajlama v2', projectId: 5, status: 'done', startDate: '2025-11-01', endDate: '2026-03-31' },
+      { title: 'PMT140 saha testi', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Kalite raporlama', project: 'PMT140 pH Sensörü v2', projectId: 8, status: 'planned', startDate: '2026-06-15', endDate: '2026-07-31' }
+    ],
+    76: [ // Ramazan Acar
+      { title: 'ADW doğrulama testi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-15', endDate: '2026-04-30' },
+      { title: 'SAT210 doğrulama', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'Akreditasyon başvurusu', project: 'SAT210 Spektrofotometrik Sensör', projectId: 10, status: 'planned', startDate: '2026-07-01', endDate: '2026-08-31' }
+    ],
+    77: [ // Sevgi Ertürk
+      { title: 'Test otomasyon çerçevesi', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-03-31' },
+      { title: 'T7PAC entegrasyon testi', project: 'T7PAC Firmware v6', projectId: 3, status: 'planned', startDate: '2026-06-01', endDate: '2026-09-30' },
+      { title: 'Regresyon test suite', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'planned', startDate: '2026-06-01', endDate: '2026-07-31' }
+    ],
+    // ---- Dept 7: Sistem & Proje Mühendisliği ----
+    78: [ // Tarık Güneyli
+      { title: 'LABx Next kickoff', project: 'LABx Next Laboratuvar', projectId: 7, status: 'done', startDate: '2026-03-01', endDate: '2026-04-30' },
+      { title: 'LABx proje planlama', project: 'LABx Next Laboratuvar', projectId: 7, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'PPD fizibilite koordinasyonu', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' }
+    ],
+    79: [ // Ufuk Yıldırım
+      { title: 'Teleskop sistem desteği', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-04-01' },
+      { title: 'Sistem entegrasyon analizi', project: 'LABx Next Laboratuvar', projectId: 7, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'LABx arşiv hazırlama', project: 'LABx Next Laboratuvar', projectId: 7, status: 'planned', startDate: '2026-08-01', endDate: '2026-11-30' }
+    ],
+    80: [ // Vahit Ergün
+      { title: 'T9 PLC sistem entegrasyon analizi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-04-01' },
+      { title: 'IIoT sistem testi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-04-15', endDate: '2026-07-31' },
+      { title: 'Sistem entegrasyon raporu', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'planned', startDate: '2026-08-01', endDate: '2026-09-30' }
+    ],
+    81: [ // Yeliz Çakır
+      { title: 'ADW kullanıcı eğitimi', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-02-15', endDate: '2026-04-14' },
+      { title: 'Eğitim dökümanı güncelleme', project: 'ADW Toz Boyarmadde Otomasyon', projectId: 6, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'PPD proje koordinasyonu', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-31' }
+    ],
+    82: [ // Zafer Bulut
+      { title: 'PPD fizibilite raporu', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'done', startDate: '2026-03-01', endDate: '2026-04-25' },
+      { title: 'LABx proje planı', project: 'LABx Next Laboratuvar', projectId: 7, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'PPD gereksinim analizi', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-07-01', endDate: '2026-09-30' }
+    ],
+    83: [ // Ayça Köse
+      { title: 'Teleskop izleme raporları', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'done', startDate: '2026-01-15', endDate: '2026-04-01' },
+      { title: 'Teleskop proje raporu', project: 'Teleskop v5 Boyahane Yönetim', projectId: 4, status: 'in_progress', startDate: '2026-04-01', endDate: '2026-06-30' },
+      { title: 'PPD proje desteği', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-08-01', endDate: '2026-12-31' }
+    ],
+    84: [ // Bilge Tanrıverdi
+      { title: 'T9 PLC sistem analizi', project: 'T9 PLC v3 Ana Kart', projectId: 1, status: 'done', startDate: '2026-02-01', endDate: '2026-04-01' },
+      { title: 'LABx mimari analizi', project: 'LABx Next Laboratuvar', projectId: 7, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-08-15' },
+      { title: 'Entegrasyon review', project: 'LABx Next Laboratuvar', projectId: 7, status: 'planned', startDate: '2026-09-01', endDate: '2026-11-30' }
+    ],
+    85: [ // Cengiz Yılmazer
+      { title: 'IIoT gereksinim analizi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'done', startDate: '2026-04-01', endDate: '2026-04-30' },
+      { title: 'Protokol analizi', project: 'IIoT Gateway & Bulut', projectId: 11, status: 'in_progress', startDate: '2026-05-01', endDate: '2026-07-31' },
+      { title: 'PPD proje planlaması', project: 'PPD Baskı Boya Mutfağı v3', projectId: 12, status: 'planned', startDate: '2026-08-01', endDate: '2026-10-31' }
+    ]
+  };
+
+  PERSONNEL.forEach(p => {
+    p.tasks = taskData[p.id] || [];
+    // Step 3: Also add projects referenced in tasks but not already in projects array
+    p.tasks.forEach(t => {
+      if (t.projectId && !p.projects.includes(t.projectId)) {
+        p.projects.push(t.projectId);
+      }
+    });
+  });
+})();
