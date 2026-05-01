@@ -232,12 +232,136 @@ body {
   }
 }
 
-/* Print stili */
-@media print {
-  #sidebar, #sidebar-toggle, .no-print {
-    display: none !important;
-  }
-  .section-panel {
-    animation: none;
+/* Progress ring (donut) */
+.progress-ring {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.progress-ring span {
+  font-size: 9px;
+  font-weight: 700;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #374151;
+}
+
+/* Kanban sütunlar */
+.kanban-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.kanban-col-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 12px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kanban-card {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border-left: 3px solid;
+}
+
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.kanban-card.todo { border-left-color: #94a3b8; }
+.kanban-card.doing { border-left-color: #3b82f6; }
+.kanban-card.done { border-left-color: #10b981; }
+
+/* Avatar group */
+.avatar-group {
+  display: flex;
+}
+
+.avatar-group .avatar-item {
+  transition: transform 0.15s ease;
+}
+
+.avatar-group .avatar-item:hover {
+  transform: translateY(-2px);
+  z-index: 10;
+  position: relative;
+}
+
+/* Sidebar aktif item iyileştirme */
+.nav-item {
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-item.active-nav {
+  border-left-color: white;
+  background: rgba(255,255,255,0.15);
+}
+
+/* KPI kart trend göstergesi */
+.kpi-trend-up { color: #10b981; }
+.kpi-trend-down { color: #ef4444; }
+
+/* Lead-only butonlar */
+.lead-btn {
+  display: none;
+}
+
+.lead-btn.visible {
+  display: inline-flex;
+}
+
+/* Düzgün modal form */
+.modal-form-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.modal-form-input {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background: #f9fafb;
+}
+
+.modal-form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  background: white;
+}
+
+/* Responsive kanban */
+@media (max-width: 640px) {
+  .kanban-board {
+    flex-direction: column;
   }
 }
+

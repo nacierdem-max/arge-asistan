@@ -826,6 +826,14 @@ const PERSONNEL_TASKS = {
 // Görevleri personele ekle
 PERSONNEL.forEach(p => { p.tasks = PERSONNEL_TASKS[p.id] || []; });
 
+// Rol seviyelerini ata (member = normal personel, lead = takım lideri)
+PERSONNEL.forEach(p => { p.role_level = 'member'; });
+// Kıdemli ve lider unvanlı personeli takım lideri yap
+[1, 9, 19, 23, 33, 34, 36, 48, 60, 70, 78].forEach(id => {
+  const p = PERSONNEL.find(x => x.id === id);
+  if (p) p.role_level = 'lead';
+});
+
 const FILES = [
   { id: 1, name: "T9_PLC_Schematic_Rev4.pdf", dept: "Elektronik & Donanım", author: "Ahmet Yılmaz", authorId: 1, size: "2.4MB", project: "T9 PLC v3 Ana Kart", date: "28 Nisan 2026", type: "pdf" },
   { id: 2, name: "T7_Panel_LCD_Datasheet.pdf", dept: "Elektronik & Donanım", author: "Selin Arslan", authorId: 4, size: "1.8MB", project: "T7 Operatör Panel 10\"", date: "22 Nisan 2026", type: "pdf" },
