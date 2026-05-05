@@ -43,12 +43,9 @@
     <!-- Giriş Kartı -->
     <div class="bg-white rounded-2xl shadow-2xl p-8">
       <form id="login-form">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Kullanıcı Seçimi</label>
-        <select id="user-select" class="w-full mb-4 p-2 border rounded-lg bg-gray-50">
-          <option value="">Kullanıcı Seçin</option>
-          <option value="derya">Derya Koç (Ar-Ge Merkezi Yöneticisi)</option>
-          <option value="burak">Burak Yılmaz (Elektronik Lideri)</option>
-          <option value="ayse">Ayşe Demir (Ar-Ge Personeli)</option>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Personel Seçimi</label>
+        <select id="personnel-select" class="w-full mb-4 p-2 border rounded-lg bg-gray-50">
+          <option value="">— Personel seçin —</option>
         </select>
         <label class="block text-sm font-medium text-gray-700 mb-2">Parola</label>
         <input type="password" id="password" class="w-full mb-4 p-2 border rounded-lg bg-gray-50" placeholder="Parolanızı girin">
@@ -79,6 +76,26 @@
       showSlide(current);
     };
     showSlide(current);
+
+    // Dinamik personel select (örnek veriyle)
+    const PERSONNEL = [
+      { id: 'derya', name: 'Derya Koç', role: 'Ar-Ge Merkezi Yöneticisi', dept: 'Elektronik' },
+      { id: 'burak', name: 'Burak Yılmaz', role: 'Elektronik Lideri', dept: 'Elektronik' },
+      { id: 'ayse', name: 'Ayşe Demir', role: 'Ar-Ge Personeli', dept: 'Yazılım' }
+    ];
+    function initPersonnelSelect() {
+      const sel = document.getElementById('personnel-select');
+      sel.innerHTML = '<option value="">— Personel seçin —</option>';
+      PERSONNEL.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} — ${p.role} (${p.dept})`;
+        sel.appendChild(opt);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      initPersonnelSelect();
+    });
     </script>
   </div>
           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-gray-50 mb-4">
