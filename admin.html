@@ -30,18 +30,24 @@
     </div>
   </div>
   <nav class="flex-1 px-3 py-4 space-y-1">
+    <a href="#" data-nav="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">📊</span><span>Genel Bakış</span>
+    </a>
     <a href="#" data-nav="team" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
       <span class="text-base">👥</span><span>Ekip</span>
     </a>
     <a href="#" data-nav="projects" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
       <span class="text-base">📅</span><span>Projeler & Görevler</span>
     </a>
+    <a href="#" data-nav="log" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">🗄️</span><span>Log/Mesaj/Dosya</span>
+    </a>
     <a href="#" data-nav="assistant" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
       <span class="text-base">💬</span><span>Asistan</span>
       <span class="ml-auto text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium">AI</span>
     </a>
-    <a href="#" data-nav="dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
-      <span class="text-base">📊</span><span>Genel Bakış</span>
+    <a href="#" data-nav="help" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">❓</span><span>Yardım</span>
     </a>
   </nav>
   <div class="px-3 pb-2">
@@ -77,7 +83,42 @@
 
     <!-- ===== GENEL BAKIŞ (DASHBOARD) ===== -->
     <div id="section-dashboard" class="section-panel hidden">
-      <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold mb-4">Genel Bakış</h2>
+      <div id="dashboard-cards" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"></div>
+      <div id="dashboard-charts" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </div>
+
+    <!-- ===== EKİP ===== -->
+    <div id="section-team" class="section-panel hidden">
+      <h2 class="text-2xl font-bold mb-4">Ekip ve Organizasyon</h2>
+      <div id="team-list"></div>
+    </div>
+
+    <!-- ===== PROJELER & GÖREVLER ===== -->
+    <div id="section-projects" class="section-panel hidden">
+      <h2 class="text-2xl font-bold mb-4">Projeler ve Görevler</h2>
+      <div id="project-list"></div>
+      <div id="kanban-board"></div>
+      <div id="gantt-chart"></div>
+    </div>
+
+    <!-- ===== LOG/MESAJ/DOSYA ===== -->
+    <div id="section-log" class="section-panel hidden">
+      <h2 class="text-2xl font-bold mb-4">Log, Mesaj ve Dosya Geçmişi</h2>
+      <div id="log-list"></div>
+    </div>
+
+    <!-- ===== ASİSTAN ===== -->
+    <div id="section-assistant" class="section-panel hidden">
+      <h2 class="text-2xl font-bold mb-4">AI Asistanı</h2>
+      <div id="ai-chat"></div>
+    </div>
+
+    <!-- ===== YARDIM ===== -->
+    <div id="section-help" class="section-panel hidden">
+      <h2 class="text-2xl font-bold mb-4">Yardım ve Kılavuz</h2>
+      <div id="help-content"></div>
+    </div>
         <div>
           <h2 class="text-2xl font-bold" style="color:#1a1a2e;">Genel Bakış</h2>
           <p class="text-sm text-gray-500 mt-0.5">Ar-Ge departmanı özeti</p>

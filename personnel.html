@@ -45,22 +45,54 @@
       <span class="text-base">✅</span>
       <span>Görevlerim</span>
     </a>
-    <a href="#" data-nav="ai-chat" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
-      <span class="text-base">💬</span>
-      <span>Asistan</span>
-      <span class="ml-auto text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium">AI</span>
-    </a>
     <a href="#" data-nav="messages" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
       <span class="text-base">📨</span>
       <span>Mesajlarım</span>
       <span id="msg-badge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden"></span>
     </a>
-    <!-- Bildirimler -->
-    <button onclick="Nav.show('notifications')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-white/70 hover:bg-white/10 hover:text-white transition-all">
+    <a href="#" data-nav="notifications" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
       <span class="text-base">🔔</span>
       <span>Bildirimler</span>
       <span id="notif-badge" class="ml-auto bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">3</span>
-    </button>
+    </a>
+    <a href="#" data-nav="ai-chat" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">💬</span>
+      <span>Asistan</span>
+      <span class="ml-auto text-xs bg-blue-500 text-white px-1.5 py-0.5 rounded-full font-medium">AI</span>
+    </a>
+    <a href="#" data-nav="help" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm nav-item text-white/70 hover:bg-white/10 hover:text-white transition-all">
+      <span class="text-base">❓</span>
+      <span>Yardım</span>
+    </a>
+  <!-- ===== GÖREVLERİM ===== -->
+  <div id="section-my-tasks" class="section-panel hidden">
+    <h2 class="text-2xl font-bold mb-4">Görevlerim</h2>
+    <div id="my-task-list"></div>
+  </div>
+
+  <!-- ===== MESAJLARIM ===== -->
+  <div id="section-messages" class="section-panel hidden">
+    <h2 class="text-2xl font-bold mb-4">Mesajlarım</h2>
+    <div id="my-message-list"></div>
+  </div>
+
+  <!-- ===== BİLDİRİMLER ===== -->
+  <div id="section-notifications" class="section-panel hidden">
+    <h2 class="text-2xl font-bold mb-4">Bildirimler</h2>
+    <div id="my-notif-list"></div>
+  </div>
+
+  <!-- ===== ASİSTAN ===== -->
+  <div id="section-ai-chat" class="section-panel hidden">
+    <h2 class="text-2xl font-bold mb-4">AI Asistanı</h2>
+    <div id="ai-chat"></div>
+  </div>
+
+  <!-- ===== YARDIM ===== -->
+  <div id="section-help" class="section-panel hidden">
+    <h2 class="text-2xl font-bold mb-4">Yardım ve Kılavuz</h2>
+    <div id="help-content"></div>
+  </div>
   </nav>
   <!-- Logout -->
   <div class="px-3 pb-4 border-t border-white/10 pt-3 flex-shrink-0">

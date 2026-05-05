@@ -73,43 +73,28 @@
   <script>
     const DEPT_ORDER = [1, 2, 3, 4, 5, 6, 7];
 
+    // Yeni personel select fonksiyonu (departman bazında optgroup)
     function initPersonnelSelect() {
       const sel = document.getElementById('personnel-select');
+      sel.innerHTML = '<option value="">— Personel seçin —</option>';
       DEPT_ORDER.forEach(deptId => {
         const dept = DEPARTMENTS.find(d => d.id === deptId);
         const members = PERSONNEL.filter(p => p.dept === deptId);
-        const optgroup = document.createElement('optgroup');
-        optgroup.label = dept.name + ` (${dept.count} kişi)`;
-        members.forEach(p => {
-          const opt = document.createElement('option');
-          opt.value = p.id;
-          opt.textContent = p.name + ' — ' + p.role;
-          optgroup.appendChild(opt);
-        });
-        sel.appendChild(optgroup);
+        if (members.length > 0) {
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = dept.name + ` (${dept.count} kişi)`;
+          members.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name + ' — ' + p.role;
+            optgroup.appendChild(opt);
+          });
+          sel.appendChild(optgroup);
+        }
       });
     }
 
-    function switchTab(tab) {
-      document.getElementById('panel-personnel').classList.toggle('hidden', tab !== 'personnel');
-      document.getElementById('panel-admin').classList.toggle('hidden', tab !== 'admin');
-
-      const tabPersonnel = document.getElementById('tab-personnel');
-      const tabAdmin = document.getElementById('tab-admin');
-
-      if (tab === 'personnel') {
-        tabPersonnel.classList.add('bg-white', 'shadow', 'text-blue-700');
-        tabPersonnel.classList.remove('text-gray-500', 'hover:text-gray-700');
-        tabAdmin.classList.remove('bg-white', 'shadow', 'text-blue-700');
-        tabAdmin.classList.add('text-gray-500', 'hover:text-gray-700');
-      } else {
-        tabAdmin.classList.add('bg-white', 'shadow', 'text-blue-700');
-        tabAdmin.classList.remove('text-gray-500', 'hover:text-gray-700');
-        tabPersonnel.classList.remove('bg-white', 'shadow', 'text-blue-700');
-        tabPersonnel.classList.add('text-gray-500', 'hover:text-gray-700');
-      }
-    }
-
+    // Giriş fonksiyonları
     function loginPersonnel() {
       const sel = document.getElementById('personnel-select');
       if (!sel.value) {
@@ -120,13 +105,13 @@
       Auth.login('personnel', sel.value);
       window.location.href = 'personnel.html';
     }
-
     function loginAdmin() {
       Auth.login('admin', null);
       window.location.href = 'admin.html';
     }
-
-    initPersonnelSelect();
+    document.addEventListener('DOMContentLoaded', () => {
+      initPersonnelSelect();
+    });
   </script>
 </body>
 </html>
