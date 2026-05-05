@@ -13,68 +13,68 @@ const DEPARTMENTS = [
   { id: 7, name: "Sistem & Proje Mühendisliği", short: "Sistem", count: 8, color: "#6b7280" }
 ];
 
+// Projeler
+const PROJECTS = [
+  { id: 1, name: "Teleskop SCADA", desc: "Uzaktan izleme ve kontrol sistemi.", depts: [1,3], leader: 33, members: [1,2,33,35], status: "devam", start: "2026-03-01", end: "2026-09-30", progress: 55, risks: 2, files: 8 },
+  { id: 2, name: "MES Otomasyon", desc: "Üretim yönetim sistemi.", depts: [2,3,5], leader: 29, members: [19,20,29,35,60], status: "planlanan", start: "2026-05-01", end: "2026-12-31", progress: 0, risks: 1, files: 3 },
+  { id: 3, name: "Test Donanımı", desc: "Otomatik test cihazı geliştirme.", depts: [1,6], leader: 6, members: [6,11,12,61], status: "riskli", start: "2026-01-15", end: "2026-07-15", progress: 30, risks: 3, files: 5 }
+  // ...devamı...
+];
+
+// Görevler
+const TASKS = [
+  { id: 1, projectId: 1, title: "Donanım şeması çizimi", desc: "PCB şeması hazırlanacak.", assignee: 1, assigner: 33, status: "devam", start: "2026-03-01", end: "2026-03-20", progress: 80, notes: [1], risks: [], files: [1] },
+  { id: 2, projectId: 1, title: "Firmware entegrasyonu", desc: "SCADA ile haberleşme.", assignee: 2, assigner: 33, status: "planlanan", start: "2026-04-01", end: "2026-04-30", progress: 0, notes: [], risks: [1], files: [] }
+  // ...devamı...
+];
+
+// Mesajlar
+const MESSAGES = [
+  { id: 1, from: 1, to: 33, content: "Şema hazırlandı.", time: "2026-03-18 10:15", type: "text", read: true },
+  { id: 2, from: 33, to: 1, content: "Dosyayı yükler misin?", time: "2026-03-18 10:16", type: "text", read: false }
+  // ...devamı...
+];
+
+// Dosyalar
+const FILES = [
+  { id: 1, name: "teleskop_sch.pdf", url: "files/teleskop_sch.pdf", uploader: 1, time: "2026-03-18", projectId: 1 },
+  { id: 2, name: "test_fw.hex", url: "files/test_fw.hex", uploader: 2, time: "2026-03-19", projectId: 1 }
+  // ...devamı...
+];
+
+// Notlar
+const NOTES = [
+  { id: 1, projectId: 1, content: "Kritik bileşen stokta yok.", author: 1, time: "2026-03-20", category: "risk" },
+  { id: 2, projectId: 2, content: "Test ortamı kurulmalı.", author: 6, time: "2026-04-01", category: "not" }
+  // ...devamı...
+];
+
+// Riskler
+const RISKS = [
+  { id: 1, projectId: 1, desc: "Donanım gecikmesi", level: "kritik", owner: 1, status: "açık", date: "2026-03-21" },
+  { id: 2, projectId: 3, desc: "Test cihazı arızası", level: "orta", owner: 6, status: "çözüldü", date: "2026-03-22" }
+  // ...devamı...
+];
+
+// Audit Log
+const AUDIT_LOG = [
+  { id: 1, user: 1, action: "Dosya yükleme", module: "Proje", data: "teleskop_sch.pdf", time: "2026-03-18 10:17" },
+  { id: 2, user: 33, action: "Görev atama", module: "Görev", data: "Firmware entegrasyonu", time: "2026-03-18 10:18" }
+  // ...devamı...
+];
+
+// Dashboard demo verileri
+const DASHBOARD = {
+  personnelCount: 100,
+  projectCount: 20,
+  taskCount: 500,
+  riskCount: 28,
+  fileCount: 300,
+  lastActivity: "2026-05-01"
+};
+
 // Personel
 const PERSONNEL = [
-  // Projeler
-  const PROJECTS = [
-    { id: 1, name: "Teleskop SCADA", desc: "Uzaktan izleme ve kontrol sistemi.", depts: [1,3], leader: 33, members: [1,2,33,35], status: "devam", start: "2026-03-01", end: "2026-09-30", progress: 55, risks: 2, files: 8 },
-    { id: 2, name: "MES Otomasyon", desc: "Üretim yönetim sistemi.", depts: [2,3,5], leader: 29, members: [19,20,29,35,60], status: "planlanan", start: "2026-05-01", end: "2026-12-31", progress: 0, risks: 1, files: 3 },
-    { id: 3, name: "Test Donanımı", desc: "Otomatik test cihazı geliştirme.", depts: [1,6], leader: 6, members: [6,11,12,61], status: "riskli", start: "2026-01-15", end: "2026-07-15", progress: 30, risks: 3, files: 5 }
-    // ...devamı...
-  ];
-
-  // Görevler
-  const TASKS = [
-    { id: 1, projectId: 1, title: "Donanım şeması çizimi", desc: "PCB şeması hazırlanacak.", assignee: 1, assigner: 33, status: "devam", start: "2026-03-01", end: "2026-03-20", progress: 80, notes: [1], risks: [], files: [1] },
-    { id: 2, projectId: 1, title: "Firmware entegrasyonu", desc: "SCADA ile haberleşme.", assignee: 2, assigner: 33, status: "planlanan", start: "2026-04-01", end: "2026-04-30", progress: 0, notes: [], risks: [1], files: [] }
-    // ...devamı...
-  ];
-
-  // Mesajlar
-  const MESSAGES = [
-    { id: 1, from: 1, to: 33, content: "Şema hazırlandı.", time: "2026-03-18 10:15", type: "text", read: true },
-    { id: 2, from: 33, to: 1, content: "Dosyayı yükler misin?", time: "2026-03-18 10:16", type: "text", read: false }
-    // ...devamı...
-  ];
-
-  // Dosyalar
-  const FILES = [
-    { id: 1, name: "teleskop_sch.pdf", url: "files/teleskop_sch.pdf", uploader: 1, time: "2026-03-18", projectId: 1 },
-    { id: 2, name: "test_fw.hex", url: "files/test_fw.hex", uploader: 2, time: "2026-03-19", projectId: 1 }
-    // ...devamı...
-  ];
-
-  // Notlar
-  const NOTES = [
-    { id: 1, projectId: 1, content: "Kritik bileşen stokta yok.", author: 1, time: "2026-03-20", category: "risk" },
-    { id: 2, projectId: 2, content: "Test ortamı kurulmalı.", author: 6, time: "2026-04-01", category: "not" }
-    // ...devamı...
-  ];
-
-  // Riskler
-  const RISKS = [
-    { id: 1, projectId: 1, desc: "Donanım gecikmesi", level: "kritik", owner: 1, status: "açık", date: "2026-03-21" },
-    { id: 2, projectId: 3, desc: "Test cihazı arızası", level: "orta", owner: 6, status: "çözüldü", date: "2026-03-22" }
-    // ...devamı...
-  ];
-
-  // Audit Log
-  const AUDIT_LOG = [
-    { id: 1, user: 1, action: "Dosya yükleme", module: "Proje", data: "teleskop_sch.pdf", time: "2026-03-18 10:17" },
-    { id: 2, user: 33, action: "Görev atama", module: "Görev", data: "Firmware entegrasyonu", time: "2026-03-18 10:18" }
-    // ...devamı...
-  ];
-
-  // Dashboard demo verileri
-  const DASHBOARD = {
-    personnelCount: 100,
-    projectCount: 20,
-    taskCount: 500,
-    riskCount: 28,
-    fileCount: 300,
-    lastActivity: "2026-05-01"
-  };
-  // Elektronik & Donanım (18)
   { id: 1, name: "Ahmet Yılmaz", dept: 1, deptName: "Elektronik & Donanım", role: "Kıdemli Elektronik Mühendisi", avatar: "AY" },
   { id: 2, name: "Elif Kaya", dept: 1, deptName: "Elektronik & Donanım", role: "Elektronik Mühendisi", avatar: "EK" },
   { id: 3, name: "Burak Demir", dept: 1, deptName: "Elektronik & Donanım", role: "PCB Tasarım Mühendisi", avatar: "BD" },

@@ -49,55 +49,55 @@ const Auth = {
 // Navigasyon yönetimi
 const Nav = {
   // === Ekip/Organizasyon ===
-  function getTeams() {
+  getTeams() {
     return DEPARTMENTS.map(dept => ({
       ...dept,
       members: PERSONNEL.filter(p => p.dept === dept.id)
     }));
-  }
+  },
 
   // === Proje Yönetimi ===
-  function getProjects() {
+  getProjects() {
     return PROJECTS;
-  }
+  },
 
   // === Görevler/Kanban ===
-  function getTasks(projectId) {
+  getTasks(projectId) {
     return TASKS.filter(t => !projectId || t.projectId === projectId);
-  }
+  },
 
-  function updateTaskStatus(taskId, status) {
+  updateTaskStatus(taskId, status) {
     const t = TASKS.find(t => t.id === taskId);
     if (t) t.status = status;
-  }
+  },
 
   // === Log/Mesaj/Dosya ===
-  function getMessages(userId) {
+  getMessages(userId) {
     return MESSAGES.filter(m => m.from === userId || m.to === userId);
-  }
+  },
 
-  function getFiles(projectId) {
+  getFiles(projectId) {
     return FILES.filter(f => !projectId || f.projectId === projectId);
-  }
+  },
 
   // === Not/Risk ===
-  function getNotes(projectId) {
+  getNotes(projectId) {
     return NOTES.filter(n => !projectId || n.projectId === projectId);
-  }
+  },
 
-  function getRisks(projectId) {
+  getRisks(projectId) {
     return RISKS.filter(r => !projectId || r.projectId === projectId);
-  }
+  },
 
   // === Dashboard ===
-  function getDashboardStats() {
+  getDashboardStats() {
     return DASHBOARD;
-  }
+  },
 
   // === Yardım ===
-  function showHelp() {
+  showHelp() {
     alert('Kullanıcı kılavuzu ve yardım burada gösterilecek.');
-  }
+  },
 
   // === AI Asistanı (chat.js ile entegre) ===
   // AIChat.init(), SpeechInput.init() fonksiyonları ilgili panellerde çağrılır.
