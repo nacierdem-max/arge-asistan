@@ -65,21 +65,65 @@
       <span>Yardım</span>
     </a>
   <!-- ===== GÖREVLERİM ===== -->
-  <div id="section-my-tasks" class="section-panel hidden">
+  <div id="section-my-tasks" class="section-panel">
     <h2 class="text-2xl font-bold mb-4">Görevlerim</h2>
-    <div id="my-task-list"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="apple-card p-4 flex flex-col gap-2 border-l-4 border-blue-500">
+        <span class="font-semibold text-gray-700">Rapor Hazırlama</span>
+        <span class="text-xs text-gray-500">Teslim: 10.05.2026</span>
+        <span class="text-xs text-green-600 font-bold">Durum: Tamamlandı</span>
+      </div>
+      <div class="apple-card p-4 flex flex-col gap-2 border-l-4 border-orange-500">
+        <span class="font-semibold text-gray-700">Donanım Testi</span>
+        <span class="text-xs text-gray-500">Teslim: 12.05.2026</span>
+        <span class="text-xs text-orange-600 font-bold">Durum: Devam Ediyor</span>
+      </div>
+      <div class="apple-card p-4 flex flex-col gap-2 border-l-4 border-green-500">
+        <span class="font-semibold text-gray-700">Yazılım Güncelleme</span>
+        <span class="text-xs text-gray-500">Teslim: 15.05.2026</span>
+        <span class="text-xs text-blue-600 font-bold">Durum: Planlandı</span>
+      </div>
+    </div>
   </div>
 
   <!-- ===== MESAJLARIM ===== -->
   <div id="section-messages" class="section-panel hidden">
     <h2 class="text-2xl font-bold mb-4">Mesajlarım</h2>
-    <div id="my-message-list"></div>
+    <div class="space-y-3">
+      <div class="apple-card p-3 flex items-center gap-3">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-8 h-8 rounded-full">
+        <div>
+          <div class="font-semibold text-gray-700 text-sm">Ahmet Yılmaz</div>
+          <div class="text-xs text-gray-500">"Toplantı 14:00'te, unutma!"</div>
+        </div>
+      </div>
+      <div class="apple-card p-3 flex items-center gap-3">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-8 h-8 rounded-full">
+        <div>
+          <div class="font-semibold text-gray-700 text-sm">Elif Demir</div>
+          <div class="text-xs text-gray-500">"Test sonuçlarını gönderdim."</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== BİLDİRİMLER ===== -->
   <div id="section-notifications" class="section-panel hidden">
     <h2 class="text-2xl font-bold mb-4">Bildirimler</h2>
-    <div id="my-notif-list"></div>
+    <ul class="space-y-2">
+      <li class="apple-card p-3 flex items-center gap-2">
+        <span class="text-blue-500">🔔</span>
+        <span class="text-sm text-gray-700">Yeni görev atandı: "Donanım Testi"</span>
+      </li>
+      <li class="apple-card p-3 flex items-center gap-2">
+        <span class="text-green-500">✅</span>
+        <span class="text-sm text-gray-700">"Rapor Hazırlama" görevi tamamlandı.</span>
+      </li>
+      <li class="apple-card p-3 flex items-center gap-2">
+        <span class="text-orange-500">⚠️</span>
+        <span class="text-sm text-gray-700">"Donanım Testi" teslim tarihi yaklaşıyor.</span>
+      </li>
+    </ul>
   </div>
 
   <!-- ===== ASİSTAN ===== -->
