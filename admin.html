@@ -79,6 +79,459 @@
 
 <!-- Main content -->
 <main class="lg:pl-64 pt-20 px-6 pb-8">
+                <!-- Yardım, Onboarding & Mobil Paneli -->
+                <div class="mb-8">
+                  <div class="flex items-center gap-2 mb-4">
+                    <button class="apple-btn px-4 py-2" onclick="startOnboarding()">❓ Yardım / Onboarding</button>
+                    <span class="text-xs text-gray-500">Her ekranda tooltip ve rehber desteği</span>
+                  </div>
+                  <div class="bg-white rounded-2xl shadow p-6 mb-4">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">Onboarding Turu</h3>
+                    <ul class="list-disc ml-5 text-sm text-gray-700">
+                      <li>Giriş ekranında kullanıcı/rol seçimi</li>
+                      <li>Dashboard’da widget ve grafikler</li>
+                      <li>Projeler, görevler ve riskler için detay modalları</li>
+                      <li>Her kart/ikon tıklanabilir ve açıklamalı</li>
+                      <li>Mobilde hamburger menü ve grid/kart görünümü</li>
+                    </ul>
+                    <div class="mt-4 flex gap-2">
+                      <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs" title="Widget: Büyük gösterge kutusu">Widget Tooltip</span>
+                      <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs" title="Kart: Proje detayına tıkla">Kart Tooltip</span>
+                      <span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs" title="Buton: Filtre uygula">Buton Tooltip</span>
+                    </div>
+                  </div>
+                  <div class="bg-blue-50 rounded-2xl shadow p-6 flex flex-col items-center">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">Mobil Görünüm Örneği</h3>
+                    <img src="https://dummyimage.com/320x600/1a56db/ffffff&text=Mobil+Demo" alt="Mobil Demo" class="rounded-lg border shadow mb-2">
+                    <span class="text-xs text-gray-500">Mobilde slider, hamburger menü ve kart/grid desteği</span>
+                  </div>
+                  <script>
+                    function startOnboarding() {
+                      alert('Demo: Onboarding turu başlatıldı!\nHer ekranda tooltip ve rehber gösterilecek.');
+                    }
+                  </script>
+                </div>
+              <!-- Analitik & AI Asistanı Paneli -->
+              <div class="mb-8">
+                <h2 class="text-xl font-bold text-blue-700 mb-4">Analitik & AI Asistanı</h2>
+                <div class="bg-white rounded-2xl shadow p-6 mb-4">
+                  <form id="ai-query-form" class="flex flex-col md:flex-row gap-2 items-center">
+                    <input type="text" id="ai-query" class="flex-1 p-2 border rounded-lg bg-gray-50" placeholder="Örn: Nisan’da en çok dosya yükleyen kim?">
+                    <button type="submit" class="apple-btn px-6 py-2">Sor</button>
+                  </form>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">AI Çıktısı</h3>
+                    <div class="mb-2 text-gray-600 text-sm">Tablo, özet veya grafik burada gösterilecek.</div>
+                    <div class="h-24 flex items-center justify-center text-gray-400">[AI Tablo/Grafik Placeholder]</div>
+                  </div>
+                  <div class="bg-white rounded-2xl shadow p-6">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">Top 10 Aksiyon / Gecikme</h3>
+                    <ul class="list-decimal ml-5 text-sm text-gray-700">
+                      <li>"Enerji Takip Otomasyonu" tamamlandı</li>
+                      <li>"SCADA Yazılım Geliştir" kritik olay uyarısı</li>
+                      <li>"Donanım Testi" teslim tarihi yaklaşıyor</li>
+                      <li>"Firmware IDE migration" plan dışı</li>
+                      <li>"IoT Geliştirme" yeni başlatıldı</li>
+                      <li>"test_report_revC.pdf" yüklendi</li>
+                      <li>"Enerji ölçümünde sapma" riski kapandı</li>
+                      <li>"Yorum yazıldı: Test başarılı"</li>
+                      <li>"Parça stok takibi güncellendi"</li>
+                      <li>"Haftalık takip önerisi eklendi"</li>
+                    </ul>
+                  </div>
+                </div>
+                <script>
+                  document.getElementById('ai-query-form').onsubmit = function(e) {
+                    e.preventDefault();
+                    alert('Demo: AI sorgusu gönderildi!\nSoru: ' + document.getElementById('ai-query').value);
+                  };
+                </script>
+              </div>
+            <!-- Log & Değişiklik Takibi Paneli -->
+            <div class="mb-8">
+              <h2 class="text-xl font-bold text-blue-700 mb-4">Log & Değişiklik Takibi</h2>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <button class="apple-btn px-4 py-1" onclick="alert('Tümü')">Tümü</button>
+                <button class="apple-btn px-4 py-1 bg-blue-200 text-blue-800" onclick="alert('Görev')">Görev</button>
+                <button class="apple-btn px-4 py-1 bg-green-200 text-green-800" onclick="alert('Dosya')">Dosya</button>
+                <button class="apple-btn px-4 py-1 bg-orange-200 text-orange-800" onclick="alert('Risk')">Risk</button>
+                <button class="apple-btn px-4 py-1 bg-gray-200 text-gray-800" onclick="alert('Yorum')">Yorum</button>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Timeline Placeholder -->
+                <div class="bg-white rounded-2xl shadow p-4">
+                  <h3 class="text-lg font-bold text-blue-700 mb-2">Zaman Çizelgesi</h3>
+                  <div class="h-32 flex items-center justify-center text-gray-400">[Timeline Grafik Placeholder]</div>
+                </div>
+                <!-- Satır Tabanlı Log -->
+                <div class="bg-white rounded-2xl shadow p-4">
+                  <h3 class="text-lg font-bold text-blue-700 mb-2">Değişiklik Logu</h3>
+                  <ul class="space-y-2 text-sm" id="log-list">
+                    <li class="flex items-center gap-2 cursor-pointer hover:bg-blue-50 p-2 rounded" onclick="showLogModal('scada_deadline')">
+                      <span class="text-blue-500">📝</span> SCADA Yazılımında 14 değişiklik <span class="ml-auto text-xs text-gray-400">24.06.2026</span>
+                    </li>
+                    <li class="flex items-center gap-2 cursor-pointer hover:bg-green-50 p-2 rounded" onclick="showLogModal('enerji_upload')">
+                      <span class="text-green-500">📎</span> test_report_revC.pdf yüklendi <span class="ml-auto text-xs text-gray-400">14.03.2026</span>
+                    </li>
+                    <li class="flex items-center gap-2 cursor-pointer hover:bg-orange-50 p-2 rounded" onclick="showLogModal('risk_close')">
+                      <span class="text-orange-500">⚠️</span> Enerji ölçümünde sapma riski kapandı <span class="ml-auto text-xs text-gray-400">05.04.2026</span>
+                    </li>
+                    <li class="flex items-center gap-2 cursor-pointer hover:bg-purple-500/10 p-2 rounded" onclick="showLogModal('comment')">
+                      <span class="text-purple-500">💬</span> Yorum yazıldı: "Test başarılı" <span class="ml-auto text-xs text-gray-400">25.04.2026</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Log Detay Modal (Basit) -->
+            <div id="log-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+              <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+                <button onclick="closeLogModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl">×</button>
+                <div id="log-modal-content">
+                  <!-- JS ile doldurulacak -->
+                </div>
+              </div>
+            </div>
+
+            <script>
+              function showLogModal(id) {
+                let html = '';
+                if(id==='scada_deadline') html = `<div><div class='font-bold text-lg mb-2'>SCADA Yazılımında 14 değişiklik</div><div class='mb-2 text-xs text-gray-500'>24.06.2026</div><div class='mb-2'>Son: Deadline 19.06.2026 → 24.06.2026<br>Kim: Elif Demir<br>Eski–Yeni: 19.06 → 24.06</div></div>`;
+                if(id==='enerji_upload') html = `<div><div class='font-bold text-lg mb-2'>test_report_revC.pdf yüklendi</div><div class='mb-2 text-xs text-gray-500'>14.03.2026</div><div class='mb-2'>Ekleyen: Burak Yılmaz<br>Proje: Enerji Takip Otomasyonu</div></div>`;
+                if(id==='risk_close') html = `<div><div class='font-bold text-lg mb-2'>Enerji ölçümünde sapma riski kapandı</div><div class='mb-2 text-xs text-gray-500'>05.04.2026</div><div class='mb-2'>Kapatıldı: Elif Demir<br>Proje: Enerji Takip Otomasyonu</div></div>`;
+                if(id==='comment') html = `<div><div class='font-bold text-lg mb-2'>Yorum yazıldı: "Test başarılı"</div><div class='mb-2 text-xs text-gray-500'>25.04.2026</div><div class='mb-2'>Ekleyen: Ayşe Demir<br>Görev: Donanım Testi</div></div>`;
+                document.getElementById('log-modal-content').innerHTML = html;
+                document.getElementById('log-modal').classList.remove('hidden');
+              }
+              function closeLogModal() {
+                document.getElementById('log-modal').classList.add('hidden');
+              }
+            </script>
+          <!-- Risk & Notlar Paneli -->
+          <div class="mb-8">
+            <h2 class="text-xl font-bold text-blue-700 mb-4">Risk & Notlar Paneli</h2>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button class="apple-btn px-4 py-1" onclick="alert('Tümü')">Tümü</button>
+              <button class="apple-btn px-4 py-1 bg-red-200 text-red-800" onclick="alert('Kritik')">Kritik</button>
+              <button class="apple-btn px-4 py-1 bg-yellow-200 text-yellow-800" onclick="alert('Açık')">Açık</button>
+              <button class="apple-btn px-4 py-1 bg-green-200 text-green-800" onclick="alert('Çözüldü')">Çözüldü</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <!-- Risk Kartları -->
+              <div class="apple-card p-4 flex flex-col gap-2 border-l-4 border-red-500 cursor-pointer hover:scale-105 transition" onclick="showRiskModal('olcum')">
+                <div class="font-bold">Enerji kartında ölçüm hatası</div>
+                <div class="text-xs text-gray-500">1 Nisan 2026 — Proje: Enerji Takip Otomasyonu</div>
+                <div class="flex gap-2 mt-1">
+                  <span class="text-xs bg-red-100 text-red-700 rounded px-2">Kritik</span>
+                  <span class="text-xs bg-yellow-100 text-yellow-700 rounded px-2">Açık</span>
+                </div>
+              </div>
+              <div class="apple-card p-4 flex flex-col gap-2 border-l-4 border-yellow-500 cursor-pointer hover:scale-105 transition" onclick="showRiskModal('deadline')">
+                <div class="font-bold">Kritik deadline kaçtı</div>
+                <div class="text-xs text-gray-500">24 Haziran 2026 — Proje: SCADA Yazılım Geliştir</div>
+                <div class="flex gap-2 mt-1">
+                  <span class="text-xs bg-yellow-100 text-yellow-700 rounded px-2">Açık</span>
+                </div>
+              </div>
+              <div class="apple-card p-4 flex flex-col gap-2 border-l-4 border-green-500 cursor-pointer hover:scale-105 transition" onclick="showRiskModal('donanim')">
+                <div class="font-bold">Donanım arızası</div>
+                <div class="text-xs text-gray-500">10 Mayıs 2026 — Proje: T9 PLC Revizyonu</div>
+                <div class="flex gap-2 mt-1">
+                  <span class="text-xs bg-green-100 text-green-700 rounded px-2">Çözüldü</span>
+                </div>
+              </div>
+            </div>
+            <!-- Notlar Tablosu -->
+            <div class="bg-white rounded-2xl shadow p-4">
+              <h3 class="text-lg font-bold text-blue-700 mb-2">Notlar</h3>
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="text-left text-gray-500">
+                    <th class="py-1">Tarih</th>
+                    <th class="py-1">Proje/Görev</th>
+                    <th class="py-1">Ekleyen</th>
+                    <th class="py-1">İçerik</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t">
+                    <td class="py-1">25.04.2026</td>
+                    <td class="py-1">Enerji Takip Otomasyonu</td>
+                    <td class="py-1">Ayşe Demir</td>
+                    <td class="py-1">Son testte GPIO pinlerinde atlama gözlendi</td>
+                  </tr>
+                  <tr class="border-t">
+                    <td class="py-1">20.04.2026</td>
+                    <td class="py-1">Donanım Testi</td>
+                    <td class="py-1">Burak Yılmaz</td>
+                    <td class="py-1">Test sırasında voltaj dalgalanması oluştu</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Risk Detay Modal (Basit) -->
+          <div id="risk-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+              <button onclick="closeRiskModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl">×</button>
+              <div id="risk-modal-content">
+                <!-- JS ile doldurulacak -->
+              </div>
+            </div>
+          </div>
+
+          <script>
+            function showRiskModal(id) {
+              let html = '';
+              if(id==='olcum') html = `<div><div class='font-bold text-lg mb-2'>Enerji kartında ölçüm hatası</div><div class='mb-2 text-xs text-gray-500'>1 Nisan 2026 — Proje: Enerji Takip Otomasyonu</div><div class='mb-2'>Statü: Kritik, Açık</div><div class='mb-2'>Neden: Test yüklemesi eksik<br>Aksiyon: Test yüklemesini güncelle<br>İyileştirme: Otomatik ölçüm doğrulama ekle</div></div>`;
+              if(id==='deadline') html = `<div><div class='font-bold text-lg mb-2'>Kritik deadline kaçtı</div><div class='mb-2 text-xs text-gray-500'>24 Haziran 2026 — Proje: SCADA Yazılım Geliştir</div><div class='mb-2'>Statü: Açık</div><div class='mb-2'>Neden: Geliştirme gecikti<br>Aksiyon: Faz ekibiyle toplantı<br>İyileştirme: Haftalık takip</div></div>`;
+              if(id==='donanim') html = `<div><div class='font-bold text-lg mb-2'>Donanım arızası</div><div class='mb-2 text-xs text-gray-500'>10 Mayıs 2026 — Proje: T9 PLC Revizyonu</div><div class='mb-2'>Statü: Çözüldü</div><div class='mb-2'>Neden: Parça arızası<br>Aksiyon: Yedek parça değişimi<br>İyileştirme: Parça stok takibi</div></div>`;
+              document.getElementById('risk-modal-content').innerHTML = html;
+              document.getElementById('risk-modal').classList.remove('hidden');
+            }
+            function closeRiskModal() {
+              document.getElementById('risk-modal').classList.add('hidden');
+            }
+          </script>
+        <!-- Mesaj & Dosya Paneli -->
+        <div class="mb-8">
+          <h2 class="text-xl font-bold text-blue-700 mb-4">Mesaj & Dosya Paneli</h2>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <button class="apple-btn px-4 py-1" onclick="alert('Tümü')">Tümü</button>
+            <button class="apple-btn px-4 py-1 bg-blue-200 text-blue-800" onclick="alert('Departman')">Departman</button>
+            <button class="apple-btn px-4 py-1 bg-green-200 text-green-800" onclick="alert('Kişi')">Kişi</button>
+            <button class="apple-btn px-4 py-1 bg-orange-200 text-orange-800" onclick="alert('Proje')">Proje</button>
+            <button class="apple-btn px-4 py-1 bg-gray-200 text-gray-800" onclick="alert('Dosya Türü')">Dosya Türü</button>
+          </div>
+          <div class="bg-white rounded-2xl shadow p-4">
+            <div class="space-y-3" id="message-list">
+              <!-- Örnek Mesaj/Dosya Kartları -->
+              <div class="apple-card p-3 flex items-center gap-3 cursor-pointer hover:scale-105 transition" onclick="showMsgModal('test_report')">
+                <span class="text-2xl">📄</span>
+                <div class="flex-1">
+                  <div class="font-semibold text-gray-700 text-sm">test_report_revC.pdf</div>
+                  <div class="text-xs text-gray-500">4.5 MB, 14/03/2026, Ekleyen: Burak Yılmaz</div>
+                  <div class="text-xs text-blue-700">Proje: Enerji Takip Otomasyonu</div>
+                </div>
+                <span class="text-xs bg-blue-100 text-blue-700 rounded px-2">PDF</span>
+              </div>
+              <div class="apple-card p-3 flex items-center gap-3 cursor-pointer hover:scale-105 transition" onclick="showMsgModal('scada_patch')">
+                <span class="text-2xl">🗜️</span>
+                <div class="flex-1">
+                  <div class="font-semibold text-gray-700 text-sm">SCADA_patch1.zip</div>
+                  <div class="text-xs text-gray-500">2.1 MB, 10/03/2026, Ekleyen: Elif Demir</div>
+                  <div class="text-xs text-orange-700">Proje: SCADA Yazılım Geliştir</div>
+                </div>
+                <span class="text-xs bg-orange-100 text-orange-700 rounded px-2">ZIP</span>
+              </div>
+              <div class="apple-card p-3 flex items-center gap-3 cursor-pointer hover:scale-105 transition" onclick="showMsgModal('enerji_sunumu')">
+                <span class="text-2xl">📊</span>
+                <div class="flex-1">
+                  <div class="font-semibold text-gray-700 text-sm">Enerji sunumu.pdf</div>
+                  <div class="text-xs text-gray-500">1.2 MB, 05/03/2026, Ekleyen: Derya Koç</div>
+                  <div class="text-xs text-green-700">Proje: Enerji Takip Otomasyonu</div>
+                </div>
+                <span class="text-xs bg-green-100 text-green-700 rounded px-2">PDF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mesaj/Dosya Detay Modal (Basit) -->
+        <div id="msg-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+            <button onclick="closeMsgModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl">×</button>
+            <div id="msg-modal-content">
+              <!-- JS ile doldurulacak -->
+            </div>
+          </div>
+        </div>
+
+        <script>
+          function showMsgModal(id) {
+            let html = '';
+            if(id==='test_report') html = `<div><div class='font-bold text-lg mb-2'>test_report_revC.pdf</div><div class='mb-2 text-xs text-gray-500'>4.5 MB, 14/03/2026</div><div class='mb-2'>Ekleyen: Burak Yılmaz<br>Proje: Enerji Takip Otomasyonu</div><div class='mb-2'>Tür: PDF<br>Önizleme: [PDF Placeholder]</div></div>`;
+            if(id==='scada_patch') html = `<div><div class='font-bold text-lg mb-2'>SCADA_patch1.zip</div><div class='mb-2 text-xs text-gray-500'>2.1 MB, 10/03/2026</div><div class='mb-2'>Ekleyen: Elif Demir<br>Proje: SCADA Yazılım Geliştir</div><div class='mb-2'>Tür: ZIP<br>Önizleme: [ZIP Placeholder]</div></div>`;
+            if(id==='enerji_sunumu') html = `<div><div class='font-bold text-lg mb-2'>Enerji sunumu.pdf</div><div class='mb-2 text-xs text-gray-500'>1.2 MB, 05/03/2026</div><div class='mb-2'>Ekleyen: Derya Koç<br>Proje: Enerji Takip Otomasyonu</div><div class='mb-2'>Tür: PDF<br>Önizleme: [PDF Placeholder]</div></div>`;
+            document.getElementById('msg-modal-content').innerHTML = html;
+            document.getElementById('msg-modal').classList.remove('hidden');
+          }
+          function closeMsgModal() {
+            document.getElementById('msg-modal').classList.add('hidden');
+          }
+        </script>
+      <!-- Görevler & Kanban / Gantt Modülü -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-blue-700 mb-4">Görevler & Kanban / Gantt</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Kanban Board -->
+          <div class="bg-white rounded-2xl shadow p-4">
+            <h3 class="text-lg font-bold text-blue-700 mb-2">Kanban Board</h3>
+            <div class="flex gap-2 overflow-x-auto pb-2" id="kanban-board">
+              <div class="flex-1 min-w-[180px]">
+                <div class="font-semibold text-center mb-2">Planlandı</div>
+                <div class="apple-card p-2 mb-2 cursor-pointer border-l-4 border-purple-500" onclick="showTaskModal('fw')">
+                  <div class="font-bold text-sm">Firmware IDE migration</div>
+                  <div class="text-xs text-gray-500">Mehmet Korkmaz</div>
+                  <div class="flex gap-1 mt-1"><span class="text-xs bg-purple-100 text-purple-700 rounded px-2">Plan Dışı</span></div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[180px]">
+                <div class="font-semibold text-center mb-2">Yapılıyor</div>
+                <div class="apple-card p-2 mb-2 cursor-pointer border-l-4 border-blue-500" onclick="showTaskModal('enerji')">
+                  <div class="font-bold text-sm">Enerji prototip test</div>
+                  <div class="text-xs text-gray-500">Ayşe Demir</div>
+                  <div class="flex gap-1 mt-1"><span class="text-xs bg-blue-100 text-blue-700 rounded px-2">Alt Görev</span></div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[180px]">
+                <div class="font-semibold text-center mb-2">Test</div>
+                <div class="apple-card p-2 mb-2 cursor-pointer border-l-4 border-orange-500" onclick="showTaskModal('test')">
+                  <div class="font-bold text-sm">Donanım Testi</div>
+                  <div class="text-xs text-gray-500">Burak Yılmaz</div>
+                  <div class="flex gap-1 mt-1"><span class="text-xs bg-orange-100 text-orange-700 rounded px-2">Kritik</span></div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[180px]">
+                <div class="font-semibold text-center mb-2">Tamamlandı</div>
+                <div class="apple-card p-2 mb-2 cursor-pointer border-l-4 border-green-500" onclick="showTaskModal('rapor')">
+                  <div class="font-bold text-sm">Rapor Hazırlama</div>
+                  <div class="text-xs text-gray-500">Derya Koç</div>
+                  <div class="flex gap-1 mt-1"><span class="text-xs bg-green-100 text-green-700 rounded px-2">Onaylandı</span></div>
+                </div>
+              </div>
+              <div class="flex-1 min-w-[180px]">
+                <div class="font-semibold text-center mb-2">Riskli</div>
+                <div class="apple-card p-2 mb-2 cursor-pointer border-l-4 border-red-500" onclick="showTaskModal('risk')">
+                  <div class="font-bold text-sm">Enerji ölçümünde sapma</div>
+                  <div class="text-xs text-gray-500">Elif Demir</div>
+                  <div class="flex gap-1 mt-1"><span class="text-xs bg-red-100 text-red-700 rounded px-2">Risk</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="text-xs text-gray-400 mt-2">[Sürükle-bırak demo için placeholder]</div>
+          </div>
+          <!-- Gantt Chart Placeholder -->
+          <div class="bg-white rounded-2xl shadow p-4">
+            <h3 class="text-lg font-bold text-blue-700 mb-2">Gantt Şerit</h3>
+            <div class="h-32 flex items-center justify-center text-gray-400">[Gantt Chart Grafik Placeholder]</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Görev Detay Modal (Basit) -->
+      <div id="task-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+          <button onclick="closeTaskModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl">×</button>
+          <div id="task-modal-content">
+            <!-- JS ile doldurulacak -->
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function showTaskModal(id) {
+          let html = '';
+          if(id==='fw') html = `<div><div class='font-bold text-lg mb-2'>Firmware IDE migration</div><div class='mb-2 text-xs text-gray-500'>12.03—23.04.2026</div><div class='mb-2'>Atanan: Mehmet Korkmaz<br>Plan Dışı</div><div class='mb-2'>Bağlı Görev: Donanım Testi</div><div class='mb-2'>Açıklama: IDE geçişi ve test entegrasyonu.</div></div>`;
+          if(id==='enerji') html = `<div><div class='font-bold text-lg mb-2'>Enerji prototip test</div><div class='mb-2 text-xs text-gray-500'>15.03—20.04.2026</div><div class='mb-2'>Atanan: Ayşe Demir<br>Alt Görev</div><div class='mb-2'>Bağlı Görev: Firmware IDE migration</div><div class='mb-2'>Açıklama: Prototip enerji kartı testleri.</div></div>`;
+          if(id==='test') html = `<div><div class='font-bold text-lg mb-2'>Donanım Testi</div><div class='mb-2 text-xs text-gray-500'>10.05—12.05.2026</div><div class='mb-2'>Atanan: Burak Yılmaz<br>Kritik</div><div class='mb-2'>Bağlı Görev: Enerji prototip test</div><div class='mb-2'>Açıklama: Donanım fonksiyon testleri.</div></div>`;
+          if(id==='rapor') html = `<div><div class='font-bold text-lg mb-2'>Rapor Hazırlama</div><div class='mb-2 text-xs text-gray-500'>01.05—10.05.2026</div><div class='mb-2'>Atanan: Derya Koç<br>Onaylandı</div><div class='mb-2'>Bağlı Görev: Donanım Testi</div><div class='mb-2'>Açıklama: Test raporu ve dokümantasyon.</div></div>`;
+          if(id==='risk') html = `<div><div class='font-bold text-lg mb-2'>Enerji ölçümünde sapma</div><div class='mb-2 text-xs text-gray-500'>01.04—05.04.2026</div><div class='mb-2'>Atanan: Elif Demir<br>Risk</div><div class='mb-2'>Bağlı Görev: Enerji prototip test</div><div class='mb-2'>Açıklama: Ölçüm sapması ve çözüm önerisi.</div></div>`;
+          document.getElementById('task-modal-content').innerHTML = html;
+          document.getElementById('task-modal').classList.remove('hidden');
+        }
+        function closeTaskModal() {
+          document.getElementById('task-modal').classList.add('hidden');
+        }
+      </script>
+    <!-- Projeler Modülü: Kartlar ve Tablo -->
+    <div class="mb-8">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Projeler</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="project-list">
+        <!-- Örnek Proje Kartları -->
+        <div class="apple-card p-4 flex flex-col gap-2 cursor-pointer hover:scale-105 transition border-l-4 border-blue-500" onclick="showProjectModal('t9plc')">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">T9 PLC Revizyonu</span>
+            <span class="ml-auto text-xs bg-blue-100 text-blue-700 rounded px-2">%83</span>
+          </div>
+          <div class="w-full h-2 bg-blue-100 rounded mb-1"><div class="h-2 bg-blue-500 rounded" style="width:83%"></div></div>
+          <div class="text-xs text-gray-500">Başlangıç: 01.02.2026 | Bitiş: 30.06.2026</div>
+          <div class="text-xs text-gray-700">Lider: Burak Yılmaz | Ekip: 8</div>
+          <div class="flex gap-2 mt-1">
+            <span class="text-xs bg-red-100 text-red-600 rounded px-2">Kritik</span>
+            <span class="text-xs bg-green-100 text-green-700 rounded px-2">Elektronik</span>
+          </div>
+        </div>
+        <div class="apple-card p-4 flex flex-col gap-2 cursor-pointer hover:scale-105 transition border-l-4 border-orange-500" onclick="showProjectModal('scada')">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">SCADA Yazılım Geliştir</span>
+            <span class="ml-auto text-xs bg-orange-100 text-orange-700 rounded px-2">Kritik</span>
+          </div>
+          <div class="w-full h-2 bg-orange-100 rounded mb-1"><div class="h-2 bg-orange-500 rounded" style="width:60%"></div></div>
+          <div class="text-xs text-gray-500">Başlangıç: 15.01.2026 | Bitiş: 15.07.2026</div>
+          <div class="text-xs text-gray-700">Lider: Elif Demir | Ekip: 10</div>
+          <div class="flex gap-2 mt-1">
+            <span class="text-xs bg-orange-100 text-orange-700 rounded px-2">Kritik Olay</span>
+            <span class="text-xs bg-green-100 text-green-700 rounded px-2">Yazılım</span>
+          </div>
+        </div>
+        <div class="apple-card p-4 flex flex-col gap-2 cursor-pointer hover:scale-105 transition border-l-4 border-green-500" onclick="showProjectModal('enerji')">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">Enerji Takip Otomasyonu</span>
+            <span class="ml-auto text-xs bg-green-100 text-green-700 rounded px-2">%100</span>
+          </div>
+          <div class="w-full h-2 bg-green-100 rounded mb-1"><div class="h-2 bg-green-500 rounded" style="width:100%"></div></div>
+          <div class="text-xs text-gray-500">Başlangıç: 01.03.2026 | Bitiş: 01.05.2026</div>
+          <div class="text-xs text-gray-700">Lider: Derya Koç | Ekip: 6</div>
+          <div class="flex gap-2 mt-1">
+            <span class="text-xs bg-green-100 text-green-700 rounded px-2">Tamamlandı</span>
+            <span class="text-xs bg-blue-100 text-blue-700 rounded px-2">Otomasyon</span>
+          </div>
+        </div>
+        <div class="apple-card p-4 flex flex-col gap-2 cursor-pointer hover:scale-105 transition border-l-4 border-purple-500" onclick="showProjectModal('iot')">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">IoT Geliştirme</span>
+            <span class="ml-auto text-xs bg-purple-100 text-purple-700 rounded px-2">Planlandı</span>
+          </div>
+          <div class="w-full h-2 bg-purple-100 rounded mb-1"><div class="h-2 bg-purple-500 rounded" style="width:20%"></div></div>
+          <div class="text-xs text-gray-500">Başlangıç: 15.05.2026 | Bitiş: 15.12.2026</div>
+          <div class="text-xs text-gray-700">Lider: Mehmet Kaya | Ekip: 7</div>
+          <div class="flex gap-2 mt-1">
+            <span class="text-xs bg-purple-100 text-purple-700 rounded px-2">Planlandı</span>
+            <span class="text-xs bg-orange-100 text-orange-700 rounded px-2">Diğer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proje Detay Modal (Basit) -->
+    <div id="project-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg relative">
+        <button onclick="closeProjectModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl">×</button>
+        <div id="project-modal-content">
+          <!-- JS ile doldurulacak -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showProjectModal(id) {
+        let html = '';
+        if(id==='t9plc') html = `<div><div class='font-bold text-lg mb-2'>T9 PLC Revizyonu</div><div class='mb-2 text-xs text-gray-500'>Başlangıç: 01.02.2026 | Bitiş: 30.06.2026</div><div class='mb-2'>Lider: Burak Yılmaz<br>Ekip: 8<br>Durum: %83 | Kritik</div><div class='mb-2'>Açık Risk: 1<br>Faz: Test</div><div class='mb-2'>Açıklama: PLC donanım revizyonu ve yazılım güncellemesi.</div></div>`;
+        if(id==='scada') html = `<div><div class='font-bold text-lg mb-2'>SCADA Yazılım Geliştir</div><div class='mb-2 text-xs text-gray-500'>Başlangıç: 15.01.2026 | Bitiş: 15.07.2026</div><div class='mb-2'>Lider: Elif Demir<br>Ekip: 10<br>Durum: Kritik Olay</div><div class='mb-2'>Açık Risk: 2<br>Faz: Geliştirme</div><div class='mb-2'>Açıklama: SCADA yazılımı yeni modül geliştirme ve entegrasyon.</div></div>`;
+        if(id==='enerji') html = `<div><div class='font-bold text-lg mb-2'>Enerji Takip Otomasyonu</div><div class='mb-2 text-xs text-gray-500'>Başlangıç: 01.03.2026 | Bitiş: 01.05.2026</div><div class='mb-2'>Lider: Derya Koç<br>Ekip: 6<br>Durum: Tamamlandı</div><div class='mb-2'>Açık Risk: Yok<br>Faz: Kapanış</div><div class='mb-2'>Açıklama: Enerji tüketimi izleme ve raporlama sistemi.</div></div>`;
+        if(id==='iot') html = `<div><div class='font-bold text-lg mb-2'>IoT Geliştirme</div><div class='mb-2 text-xs text-gray-500'>Başlangıç: 15.05.2026 | Bitiş: 15.12.2026</div><div class='mb-2'>Lider: Mehmet Kaya<br>Ekip: 7<br>Durum: Planlandı</div><div class='mb-2'>Açık Risk: Yok<br>Faz: Planlama</div><div class='mb-2'>Açıklama: Endüstriyel IoT cihazları ve platform geliştirme.</div></div>`;
+        document.getElementById('project-modal-content').innerHTML = html;
+        document.getElementById('project-modal').classList.remove('hidden');
+      }
+      function closeProjectModal() {
+        document.getElementById('project-modal').classList.add('hidden');
+      }
+    </script>
   <!-- Dashboard -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="apple-card p-6 flex flex-col items-center">
@@ -197,81 +650,118 @@
           <h2 class="text-2xl font-bold" style="color:#1a1a2e;">Genel Bakış</h2>
           <p class="text-sm text-gray-500 mt-0.5">Ar-Ge departmanı özeti</p>
         </div>
-        <div class="flex items-center gap-3">
-          <button onclick="Nav.show('assistant')" class="apple-btn px-4 py-2 text-sm flex items-center gap-2">💬 Asistan'a Sor</button>
-          <button onclick="openNewProjectModal()" class="bg-white border border-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm hover:border-gray-300 transition-all">➕ Yeni Proje</button>
-        </div>
-      </div>
-      <div id="kpi-cards" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
-      <div class="mb-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-semibold text-gray-800">📋 Projeler</h3>
-          <button onclick="Nav.show('projects')" class="text-sm text-blue-600 hover:underline">Tümünü gör →</button>
-        </div>
-        <div id="dashboard-project-cards" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="apple-card p-5">
-          <h3 onclick="Nav.show('team')" class="font-semibold text-gray-800 mb-4 section-header-link">👥 Departman Özeti <span class="text-xs text-blue-500 font-normal">→</span></h3>
-          <div id="dashboard-departments"></div>
-        </div>
-        <div class="apple-card p-5">
-          <h3 class="font-semibold text-gray-800 mb-4">⚠️ Dikkat Gerektiren</h3>
-          <div id="dashboard-attention"></div>
-        </div>
-      </div>
-    </div>
+        <main class="lg:pl-64 pt-20 px-6 pb-8">
+          <!-- Büyük Widget'lar -->
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+            <div class="apple-card p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="alert('Toplam Çalışan Detay')">
+              <span class="text-4xl mb-2">👥</span>
+              <span class="font-semibold text-blue-700">Çalışan</span>
+              <span class="text-2xl font-bold text-gray-700">100</span>
+            </div>
+            <div class="apple-card p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="alert('Toplam Proje Detay')">
+              <span class="text-4xl mb-2">📂</span>
+              <span class="font-semibold text-blue-700">Proje</span>
+              <span class="text-2xl font-bold text-gray-700">20</span>
+            </div>
+            <div class="apple-card p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="alert('Aktif Görev Detay')">
+              <span class="text-4xl mb-2">📝</span>
+              <span class="font-semibold text-blue-700">Aktif Görev</span>
+              <span class="text-2xl font-bold text-gray-700">350</span>
+            </div>
+            <div class="apple-card p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="alert('Açık Risk Detay')">
+              <span class="text-4xl mb-2">🚨</span>
+              <span class="font-semibold text-blue-700">Açık Risk</span>
+              <span class="text-2xl font-bold text-gray-700">7</span>
+            </div>
+            <div class="apple-card p-5 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="alert('Son Dosya Yükleme Detay')">
+              <span class="text-4xl mb-2">📎</span>
+              <span class="font-semibold text-blue-700">Son Dosya</span>
+              <span class="text-2xl font-bold text-gray-700">test_report_revC.pdf</span>
+            </div>
+          </div>
 
-    <!-- ===== ASİSTAN (AI) ===== -->
-    <div id="section-assistant" class="section-panel hidden">
-      <div style="height:calc(100vh - 120px); min-height:500px;" class="flex gap-4">
-        <div class="w-60 flex-shrink-0 apple-card flex-col hidden md:flex overflow-hidden flex">
-          <div class="px-4 py-4 border-b border-gray-100">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Konuşmalar</span>
-              <button onclick="startNewChat()" class="w-7 h-7 rounded-lg bg-blue-500 text-white flex items-center justify-center text-sm font-bold hover:bg-blue-600 transition-colors">+</button>
+          <!-- Grafikler ve Durumlar -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-2xl shadow p-6 flex flex-col items-center">
+              <h3 class="text-lg font-bold text-blue-700 mb-2">Departmanlara Göre Kişi/Proje Dağılımı</h3>
+              <canvas id="barChart" width="320" height="180"></canvas>
             </div>
-            <button onclick="startNewChat()" class="w-full text-xs py-2 rounded-xl font-medium" style="background:#007AFF;color:white;">+ Yeni Konuşma</button>
-          </div>
-          <div id="chat-history-list" class="flex-1 overflow-y-auto py-1"></div>
-        </div>
-        <div class="flex-1 apple-card flex flex-col min-w-0 overflow-hidden">
-          <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
-            <div>
-              <div id="chat-history-title" class="text-sm font-semibold text-gray-700">Yeni Konuşma</div>
-              <div class="text-xs text-gray-400">AI her şeyi yapabilir — görev ata, mesaj gönder, proje oluştur...</div>
-            </div>
-            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">● Çevrimiçi</span>
-          </div>
-          <div id="chat-messages" class="flex-1 overflow-y-auto p-5 space-y-1"></div>
-          <div class="border-t border-gray-100 p-4">
-            <div class="flex flex-wrap gap-2 mb-3">
-              <span class="text-xs text-gray-400 self-center">Hızlı:</span>
-              <div id="chat-quick-buttons" class="flex flex-wrap gap-1.5"></div>
-            </div>
-            <div class="flex gap-2">
-              <input id="chat-input" type="text" placeholder="Yazın... (görev ata, mesaj gönder, proje sor, risk bildir...)"
-                class="flex-1 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 bg-gray-50">
-              <button id="chat-mic-btn" title="Sesli sor" class="p-3 text-gray-400 hover:text-blue-600 rounded-xl hover:bg-blue-50 transition-colors text-lg">🎤</button>
-              <button id="chat-send-btn" class="px-5 py-3 rounded-2xl font-semibold text-sm shadow" style="background:#007AFF;color:white;">Gönder</button>
+            <div class="bg-white rounded-2xl shadow p-6 flex flex-col items-center">
+              <h3 class="text-lg font-bold text-blue-700 mb-2">Görevlerin Durumu</h3>
+              <canvas id="pieChart" width="320" height="180"></canvas>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- ===== PROJELER & GÖREVLER ===== -->
-    <div id="section-projects" class="section-panel hidden">
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <h2 class="text-2xl font-bold" style="color:#1a1a2e;">Projeler & Görevler</h2>
-          <p class="text-sm text-gray-500 mt-0.5">Tüm projeler ve görev durumları</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="setProjView('cards')" id="proj-view-cards" class="view-btn active">📋 Kartlar</button>
-          <button onclick="setProjView('gantt')" id="proj-view-gantt" class="view-btn">📅 Gantt</button>
-          <button onclick="setProjView('kanban')" id="proj-view-kanban" class="view-btn">✅ Kanban</button>
-        </div>
+          <!-- Kritik Uyarı ve Timeline -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-red-100 border-l-4 border-red-500 rounded-xl p-4 flex items-center gap-3">
+              <span class="text-2xl">🚨</span>
+              <div>
+                <div class="font-bold text-red-700">Kritik Risk: Enerji kartında ölçüm hatası</div>
+                <div class="text-xs text-gray-600">1 Nisan 2026 — Test yüklemesini güncelle</div>
+              </div>
+            </div>
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 rounded-xl p-4 flex items-center gap-3">
+              <span class="text-2xl">⚠️</span>
+              <div>
+                <div class="font-bold text-yellow-700">Deadline kaçtı: SCADA Yazılımı</div>
+                <div class="text-xs text-gray-600">19.06.2026 → 24.06.2026</div>
+              </div>
+            </div>
+            <div class="bg-blue-100 border-l-4 border-blue-500 rounded-xl p-4 flex items-center gap-3">
+              <span class="text-2xl">📅</span>
+              <div>
+                <div class="font-bold text-blue-700">Yeni Proje: IoT Geliştirme</div>
+                <div class="text-xs text-gray-600">Başlangıç: 15.05.2026</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline ve Son Güncellemeler -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-2xl shadow p-6">
+              <h3 class="text-lg font-bold text-blue-700 mb-4">Görev/Proje Timeline</h3>
+              <div class="h-32 flex items-center justify-center text-gray-400">[Timeline Grafik Placeholder]</div>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-6">
+              <h3 class="text-lg font-bold text-blue-700 mb-4">Son Güncellemeler</h3>
+              <ul class="space-y-2">
+                <li class="flex items-center gap-2 text-sm"><span class="text-green-500">✅</span> "Enerji Takip Otomasyonu" tamamlandı</li>
+                <li class="flex items-center gap-2 text-sm"><span class="text-blue-500">📝</span> "Firmware IDE migration" görevi güncellendi</li>
+                <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">⚠️</span> "Donanım Testi" teslim tarihi yaklaşıyor</li>
+                <li class="flex items-center gap-2 text-sm"><span class="text-purple-500">📎</span> "test_report_revC.pdf" yüklendi</li>
+              </ul>
+            </div>
+          </div>
+
+          <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+          <script>
+            // Bar Chart
+            new Chart(document.getElementById('barChart'), {
+              type: 'bar',
+              data: {
+                labels: ['Elektronik', 'Yazılım', 'Otomasyon', 'Diğer'],
+                datasets: [
+                  { label: 'Kişi', data: [14, 15, 11, 60], backgroundColor: '#1a56db' },
+                  { label: 'Proje', data: [5, 7, 3, 5], backgroundColor: '#34C759' }
+                ]
+              },
+              options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+            // Pie Chart
+            new Chart(document.getElementById('pieChart'), {
+              type: 'pie',
+              data: {
+                labels: ['Devam Eden', 'Tamamlanan', 'Bekleyen', 'Riskli'],
+                datasets: [{
+                  data: [120, 180, 30, 20],
+                  backgroundColor: ['#1a56db', '#34C759', '#FF9500', '#FF3B30']
+                }]
+              },
+              options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+          </script>
+        </main>
       </div>
       <!-- Kartlar -->
       <div id="proj-section-cards">

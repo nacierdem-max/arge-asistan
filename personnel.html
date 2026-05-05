@@ -161,7 +161,82 @@
 <div class="lg:ml-64 min-h-screen">
   <div class="pt-16 lg:pt-0 p-4 md:p-6 max-w-5xl mx-auto">
 
-    <!-- Dashboard -->
+    <!-- Personel Paneli: Kart/Grid ve Filtreler -->
+    <div class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button class="apple-btn px-4 py-1" onclick="filterDept('all')">Tümü</button>
+        <button class="apple-btn px-4 py-1 bg-blue-200 text-blue-800" onclick="filterDept('Elektronik')">Elektronik</button>
+        <button class="apple-btn px-4 py-1 bg-green-200 text-green-800" onclick="filterDept('Yazılım')">Yazılım</button>
+        <button class="apple-btn px-4 py-1 bg-orange-200 text-orange-800" onclick="filterDept('Otomasyon')">Otomasyon</button>
+        <button class="apple-btn px-4 py-1 bg-gray-200 text-gray-800" onclick="filterDept('Diğer')">Diğer</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="personel-list">
+        <!-- Örnek Personel Kartları -->
+        <div class="apple-card p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="showPersonModal('derya')">
+          <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-16 h-16 rounded-full mb-2">
+          <span class="font-bold">Derya Koç</span>
+          <span class="text-xs text-blue-700">Ar-Ge Merkezi Yöneticisi</span>
+          <span class="text-xs text-gray-500">Elektronik</span>
+          <span class="text-xs text-gray-400">Projeler: 5 | Giriş: 2015</span>
+        </div>
+        <div class="apple-card p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="showPersonModal('burak')">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-16 h-16 rounded-full mb-2">
+          <span class="font-bold">Burak Yılmaz</span>
+          <span class="text-xs text-green-700">Elektronik Lideri</span>
+          <span class="text-xs text-gray-500">Elektronik</span>
+          <span class="text-xs text-gray-400">Projeler: 3 | Giriş: 2018</span>
+        </div>
+        <div class="apple-card p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="showPersonModal('ayse')">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-16 h-16 rounded-full mb-2">
+          <span class="font-bold">Ayşe Demir</span>
+          <span class="text-xs text-orange-700">Ar-Ge Personeli</span>
+          <span class="text-xs text-gray-500">Yazılım</span>
+          <span class="text-xs text-gray-400">Projeler: 2 | Giriş: 2022</span>
+        </div>
+        <div class="apple-card p-4 flex flex-col items-center cursor-pointer hover:scale-105 transition" onclick="showPersonModal('mehmet')">
+          <img src="https://randomuser.me/api/portraits/men/65.jpg" class="w-16 h-16 rounded-full mb-2">
+          <span class="font-bold">Mehmet Kaya</span>
+          <span class="text-xs text-purple-700">Donanım Mühendisi</span>
+          <span class="text-xs text-gray-500">Otomasyon</span>
+          <span class="text-xs text-gray-400">Projeler: 4 | Giriş: 2019</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organizasyon Şeması Placeholder -->
+    <div class="bg-white rounded-2xl shadow p-6 mb-8">
+      <h3 class="text-lg font-bold text-blue-700 mb-4">Organizasyon Şeması</h3>
+      <div class="h-32 flex items-center justify-center text-gray-400">[Organizasyon Şeması Grafik Placeholder]</div>
+    </div>
+
+    <!-- Personel Detay Modal (Basit) -->
+    <div id="person-modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
+        <button onclick="closePersonModal()" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl">×</button>
+        <div id="person-modal-content">
+          <!-- JS ile doldurulacak -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+    function filterDept(dept) {
+      // Demo: Sadece uyarı
+      alert('Filtre: ' + dept);
+    }
+    function showPersonModal(id) {
+      let html = '';
+      if(id==='derya') html = `<div class='text-center'><img src='https://randomuser.me/api/portraits/women/65.jpg' class='w-20 h-20 rounded-full mx-auto mb-2'><div class='font-bold text-lg'>Derya Koç</div><div class='text-blue-700 text-sm mb-2'>Ar-Ge Merkezi Yöneticisi</div><div class='text-gray-500 text-xs mb-2'>Elektronik | Giriş: 2015</div><div class='mb-2'>Projeler: 5<br>Son Görev: "Enerji Takip Otomasyonu"<br>Risk: Yok</div><div class='text-xs text-gray-400'>İletişim: derya.koc@eliar.com</div></div>`;
+      if(id==='burak') html = `<div class='text-center'><img src='https://randomuser.me/api/portraits/men/32.jpg' class='w-20 h-20 rounded-full mx-auto mb-2'><div class='font-bold text-lg'>Burak Yılmaz</div><div class='text-green-700 text-sm mb-2'>Elektronik Lideri</div><div class='text-gray-500 text-xs mb-2'>Elektronik | Giriş: 2018</div><div class='mb-2'>Projeler: 3<br>Son Görev: "T9 PLC Revizyonu"<br>Risk: 1 Açık</div><div class='text-xs text-gray-400'>İletişim: burak.yilmaz@eliar.com</div></div>`;
+      if(id==='ayse') html = `<div class='text-center'><img src='https://randomuser.me/api/portraits/women/44.jpg' class='w-20 h-20 rounded-full mx-auto mb-2'><div class='font-bold text-lg'>Ayşe Demir</div><div class='text-orange-700 text-sm mb-2'>Ar-Ge Personeli</div><div class='text-gray-500 text-xs mb-2'>Yazılım | Giriş: 2022</div><div class='mb-2'>Projeler: 2<br>Son Görev: "Firmware IDE migration"<br>Risk: Yok</div><div class='text-xs text-gray-400'>İletişim: ayse.demir@eliar.com</div></div>`;
+      if(id==='mehmet') html = `<div class='text-center'><img src='https://randomuser.me/api/portraits/men/65.jpg' class='w-20 h-20 rounded-full mx-auto mb-2'><div class='font-bold text-lg'>Mehmet Kaya</div><div class='text-purple-700 text-sm mb-2'>Donanım Mühendisi</div><div class='text-gray-500 text-xs mb-2'>Otomasyon | Giriş: 2019</div><div class='mb-2'>Projeler: 4<br>Son Görev: "Donanım Testi"<br>Risk: 1 Açık</div><div class='text-xs text-gray-400'>İletişim: mehmet.kaya@eliar.com</div></div>`;
+      document.getElementById('person-modal-content').innerHTML = html;
+      document.getElementById('person-modal').classList.remove('hidden');
+    }
+    function closePersonModal() {
+      document.getElementById('person-modal').classList.add('hidden');
+    }
+    </script>
     <div id="section-dashboard" class="section-panel hidden">
       <h2 class="text-xl font-bold text-gray-800 mb-5">📊 Dashboard</h2>
       <div id="dashboard-content"></div>
